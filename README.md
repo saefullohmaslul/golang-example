@@ -15,4 +15,4 @@ make run
 
 ## License
 
-Hobikoding is [GPL licensed](LICENSE).
+Golang-Example is [MIT](LICENSE).
