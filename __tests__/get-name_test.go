@@ -8,6 +8,7 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/saefullohmaslul/Golang-Example/controllers"
+	"github.com/saefullohmaslul/Golang-Example/global/types"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -18,11 +19,12 @@ func TestGetName(t *testing.T) {
 	c := e.NewContext(req, rec)
 	c.SetPath("/user/name")
 
-	if assert.NoError(t, controllers.GetName(c)) {
+	controller := controllers.UserController{}
+	if assert.NoError(t, controller.GetName(c)) {
 		expect := `{"status":200,"message":"Success get name","result":"Saefulloh Maslul"}`
 
-		res := controllers.GetNameResponse{}
-		mock := controllers.GetNameResponse{}
+		res := types.GetNameResponse{}
+		mock := types.GetNameResponse{}
 
 		if err := json.Unmarshal([]byte(rec.Body.String()), &res); err != nil {
 			panic(err)

@@ -8,6 +8,7 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/saefullohmaslul/Golang-Example/controllers"
+	"github.com/saefullohmaslul/Golang-Example/global/types"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -18,11 +19,12 @@ func TestGetBiodata(t *testing.T) {
 	c := e.NewContext(req, rec)
 	c.SetPath("/user/biodata")
 
-	if assert.NoError(t, controllers.GetBiodata(c)) {
+	controller := controllers.UserController{}
+	if assert.NoError(t, controller.GetBiodata(c)) {
 		expect := `{"status":200,"message":"Success to get biodata","result": {"name": "Saefulloh Maslul","address": "Tegal"}}`
 
-		res := controllers.GetBiodataResponse{}
-		mock := controllers.GetBiodataResponse{}
+		res := types.GetBiodataResponse{}
+		mock := types.GetBiodataResponse{}
 
 		if err := json.Unmarshal([]byte(rec.Body.String()), &res); err != nil {
 			panic(err)
