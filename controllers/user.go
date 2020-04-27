@@ -7,14 +7,15 @@ import (
 	"github.com/saefullohmaslul/Golang-Example/utils"
 )
 
-type getNameResponse struct {
+// GetNameResponse handler
+type GetNameResponse struct {
 	utils.Response
 	Result string `json:"result"`
 }
 
 // GetName endpoint
 func GetName(c echo.Context) error {
-	name := getNameResponse{
+	name := GetNameResponse{
 		Result: "Saefulloh Maslul",
 		Response: utils.Response{
 			Status:  http.StatusOK,
