@@ -13,6 +13,18 @@ type GetNameResponse struct {
 	Result string `json:"result"`
 }
 
+// GetBiodataResult is return to get biodata format
+type GetBiodataResult struct {
+	Name    string `json:"name"`
+	Address string `json:"address"`
+}
+
+// GetBiodataResponse is response handler
+type GetBiodataResponse struct {
+	utils.Response
+	Result GetBiodataResult `json:"result"`
+}
+
 // GetName endpoint
 func GetName(c echo.Context) error {
 	name := GetNameResponse{
@@ -24,4 +36,20 @@ func GetName(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, name)
+}
+
+// GetBiodata is handler to get user bio
+func GetBiodata(c echo.Context) error {
+	biodata := GetBiodataResponse{
+		Response: utils.Response{
+			Status:  http.StatusOK,
+			Message: "Success to get biodata",
+		},
+		Result: GetBiodataResult{
+			Name:    "Saefulloh Maslul",
+			Address: "Tegal",
+		},
+	}
+
+	return c.JSON(http.StatusOK, biodata)
 }

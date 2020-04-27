@@ -2,18 +2,15 @@ package main
 
 import (
 	"github.com/labstack/echo/v4"
-	"github.com/saefullohmaslul/Golang-Example/routes"
+	"github.com/saefullohmaslul/Golang-Example/app"
 )
 
+// main project
 func main() {
 	e := echo.New()
 
-	userEndpoints(e)
+	app := new(app.Application)
+	app.CreateApp(e)
 
 	e.Logger.Fatal(e.Start(":8080"))
-}
-
-func userEndpoints(e *echo.Echo) {
-	g := e.Group("/user")
-	routes.Router(g)
 }
