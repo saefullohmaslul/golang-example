@@ -9,6 +9,12 @@ make install
 make run
 ```
 
+## Run tests
+
+```bash
+make test
+```
+
 ## Stay in touch
 
 * Author - [Saefulloh Maslul](https://linkedin.com/saefullohmaslul)

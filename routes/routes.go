@@ -9,4 +9,5 @@ import (
 // Router middleware
 func Router(g *echo.Group) {
 	g.GET("/name", controllers.GetName)
+	g.GET("/biodata", controllers.GetBiodata)
 }

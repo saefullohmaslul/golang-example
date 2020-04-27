@@ -10,6 +10,9 @@ kill-port:
 	@kill -9 $$(lsof -t -i:8080)
 	@echo "Port 8080 is killed"
 
+test:
+	@go test ./__tests__/ -v
+
 
 # Docker utility
 PID_FILE = /tmp/app.pid
