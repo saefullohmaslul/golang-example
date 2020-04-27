@@ -1,0 +1,36 @@
+version: '3.7'
+
+services: 
+  # production
+  production:
+    hostname: app-production
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: base
+    environment: 
+      GIN_MODE: "release"
+      SERVING_PORT: "*:8080"
+    volumes: 
+      - .:/app
+    ports: 
+      - "8080:8080"
+    command: bash -c "go mod download && go build -o /bin/app . && /bin/app"
+
+  development:
+    hostname: app-development
+    restart: unless-stopped
+    build: 
+      context: .
+      dockerfile: Dockerfile
+      target: dev
+    environment: 
+      DEBUG: "true"
+      SERVING_PORT: ":8080"
+    volumes: 
+      - .:/app
+    working_dir: /app
+    ports:
+      - "8080:8080"
+    command: bash -c "go mod download && make serve"
