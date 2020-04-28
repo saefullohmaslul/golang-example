@@ -1,6 +1,8 @@
 package types
 
-import "github.com/saefullohmaslul/Golang-Example/utils"
+import (
+	"github.com/saefullohmaslul/Golang-Example/utils"
+)
 
 // GetNameResponse is return to get name format
 type GetNameResponse struct {
@@ -18,4 +20,19 @@ type GetBiodataResult struct {
 type GetBiodataResponse struct {
 	utils.Response
 	Result GetBiodataResult `json:"result"`
+}
+
+// CreateUserResult format
+type CreateUserResult struct {
+	ID      uint   `json:"id"`
+	Name    string `json:"name"`
+	Age     int64  `json:"age"`
+	Email   string `json:"email"`
+	Address string `json:"address"`
+}
+
+// CreateUser is return to create user into database
+type CreateUser struct {
+	utils.Response
+	Result CreateUserResult `json:"result"`
 }
