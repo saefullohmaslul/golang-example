@@ -1,16 +1,22 @@
 package main
 
 import (
-	"github.com/labstack/echo/v4"
+	"github.com/gin-gonic/gin"
+	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"github.com/saefullohmaslul/Golang-Example/app"
+	"github.com/saefullohmaslul/Golang-Example/database"
+	"github.com/saefullohmaslul/Golang-Example/database/migration"
 )
 
 // main project
 func main() {
-	e := echo.New()
-
+	r := gin.Default()
 	app := new(app.Application)
-	app.CreateApp(e)
+	app.CreateApp(r)
 
-	e.Logger.Fatal(e.Start(":8080"))
+	database.Connection()
+	db := database.GetDB()
+	migration.Migrate(db)
+
+	r.Run()
 }

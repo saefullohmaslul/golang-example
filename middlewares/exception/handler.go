@@ -1,33 +1,36 @@
 package exception
 
 import (
-	"encoding/json"
 	"net/http"
 
-	"github.com/labstack/echo/v4"
+	"github.com/gin-gonic/gin"
+	"github.com/mitchellh/mapstructure"
 )
 
 // ErrorHandler to handling error
-func ErrorHandler(e *echo.Echo) {
-	e.HTTPErrorHandler = func(err error, c echo.Context) {
-		report, _ := err.(*echo.HTTPError)
+func ErrorHandler(c *gin.Context, err interface{}) {
+	res := Exception{}
+	mapstructure.Decode(err, &res)
 
-		response := Exception{}
-		if err := json.Unmarshal([]byte(err.Error()), &response); err != nil {
-			report = echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+		"status": http.StatusBadRequest,
+		"flag":   "BAD_REQUEST",
+		"errors": map[string]interface{}{
+			"message": res.Errors.Message, "flag": res.Errors.Message,
+		},
+	})
+	return
+}
 
-			c.JSON(http.StatusInternalServerError, report)
-			c.Logger().Error(report)
-			return
-		}
+// Exception type
+type Exception struct {
+	Status int64       `json:"status"`
+	Flag   string      `json:"flag"`
+	Errors ErrorDetail `json:"errors"`
+}
 
-		if response.Status == 0 {
-			c.JSON(http.StatusInternalServerError, response)
-			c.Logger().Error(response)
-			return
-		}
-
-		c.JSON(response.Status, response)
-		c.Logger().Error(report)
-	}
+// ErrorDetail type
+type ErrorDetail struct {
+	Message string `json:"message"`
+	Flag    string `json:"flag"`
 }
