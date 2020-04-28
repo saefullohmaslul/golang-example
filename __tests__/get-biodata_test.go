@@ -6,37 +6,36 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/labstack/echo/v4"
-	"github.com/saefullohmaslul/Golang-Example/controllers"
+	"github.com/gin-gonic/gin"
+	"github.com/saefullohmaslul/Golang-Example/app"
 	"github.com/saefullohmaslul/Golang-Example/global/types"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestGetBiodata(t *testing.T) {
-	e := echo.New()
-	req := httptest.NewRequest(http.MethodGet, "/user/biodata", nil)
-	rec := httptest.NewRecorder()
-	c := e.NewContext(req, rec)
-	c.SetPath("/user/biodata")
+	r := gin.Default()
+	app := new(app.Application)
+	app.CreateApp(r)
 
-	controller := controllers.UserController{}
-	if assert.NoError(t, controller.GetBiodata(c)) {
-		expect := `{"status":200,"message":"Success to get biodata","result": {"name": "Saefulloh Maslul","address": "Tegal"}}`
+	w := httptest.NewRecorder()
+	req, _ := http.NewRequest(http.MethodGet, "/user/biodata", nil)
+	r.ServeHTTP(w, req)
 
-		res := types.GetBiodataResponse{}
-		mock := types.GetBiodataResponse{}
+	e := `{"status":200,"message":"Success get biodata","result": {"name": "Saefulloh Maslul","address": "Tegal"}}`
 
-		if err := json.Unmarshal([]byte(rec.Body.String()), &res); err != nil {
-			panic(err)
-		}
+	actual := types.GetBiodataResponse{}
+	expect := types.GetBiodataResponse{}
 
-		if err := json.Unmarshal([]byte(expect), &mock); err != nil {
-			panic(err)
-		}
-
-		assert.Equal(t, http.StatusOK, rec.Code)
-		assert.Equal(t, mock.Message, res.Message)
-		assert.Equal(t, mock.Status, res.Status)
-		assert.NotZero(t, res.Result)
+	if err := json.Unmarshal([]byte(w.Body.String()), &actual); err != nil {
+		panic(err)
 	}
+	if err := json.Unmarshal([]byte(e), &expect); err != nil {
+		panic(err)
+	}
+
+	assert.Equal(t, 200, w.Code)
+	assert.Equal(t, expect.Message, actual.Message)
+	assert.Equal(t, expect.Status, actual.Status)
+	assert.Equal(t, expect.Result.Name, actual.Result.Name)
+	assert.Equal(t, expect.Result.Address, actual.Result.Address)
 }
