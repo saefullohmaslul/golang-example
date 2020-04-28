@@ -31,12 +31,16 @@ services:
     environment: 
       DEBUG: "true"
       SERVING_PORT: "*:8080"
+      DB_HOST: localhost
     volumes: 
       - .:/app
     working_dir: /app
     ports:
       - "8080:8080"
     command: bash -c "go mod download && make watch"
+    env_file: 
+      - .env
+    network_mode: host
 
   postgres:
     image: postgres:11
