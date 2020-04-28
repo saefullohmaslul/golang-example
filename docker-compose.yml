@@ -8,9 +8,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      target: base
+      target: prod
     environment: 
-      GIN_MODE: "release"
       SERVING_PORT: "*:8080"
     volumes: 
       - .:/app
@@ -37,7 +36,7 @@ services:
     working_dir: /app
     ports:
       - "8080:8080"
-    command: bash -c "go mod download && make serve"
+    command: bash -c "go mod download && make watch"
 
   postgres:
     image: postgres:11
