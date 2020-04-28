@@ -2,6 +2,7 @@ package app
 
 import (
 	"github.com/labstack/echo/v4"
+	"github.com/saefullohmaslul/Golang-Example/middlewares/exception"
 	"github.com/saefullohmaslul/Golang-Example/routes"
 )
 
@@ -11,6 +12,7 @@ type Application struct {
 
 // CreateApp method
 func (a Application) CreateApp(e *echo.Echo) {
+	exception.ErrorHandler(e)
 	configureAPIEndpoint(e)
 }
 
