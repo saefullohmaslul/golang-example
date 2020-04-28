@@ -21,7 +21,7 @@ type Errors struct {
 
 // BadRequest handler
 func BadRequest(message string, flag string) error {
-	response := Exception{
+	e := Exception{
 		Status: http.StatusBadRequest,
 		Flag:   "BAD_REQUEST",
 		Errors: Errors{
@@ -30,9 +30,11 @@ func BadRequest(message string, flag string) error {
 		},
 	}
 
-	re := &response
+	return errorHandler(e)
+}
 
-	out, err := json.Marshal(re)
+func errorHandler(e Exception) error {
+	out, err := json.Marshal(&e)
 	if err != nil {
 		return errors.New("Failed parse response error")
 	}

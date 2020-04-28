@@ -15,15 +15,15 @@ func ErrorHandler(e *echo.Echo) {
 		response := Exception{}
 		if err := json.Unmarshal([]byte(err.Error()), &response); err != nil {
 			report = echo.NewHTTPError(http.StatusInternalServerError, err.Error())
-			c.JSON(response.Status, report)
+
+			c.JSON(http.StatusInternalServerError, report)
 			c.Logger().Error(report)
 			return
 		}
 
 		if response.Status == 0 {
-			report = echo.NewHTTPError(http.StatusInternalServerError, err.Error())
-			c.JSON(response.Status, report)
-			c.Logger().Error(report)
+			c.JSON(http.StatusInternalServerError, response)
+			c.Logger().Error(response)
 			return
 		}
 
