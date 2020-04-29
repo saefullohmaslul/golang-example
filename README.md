@@ -1,6 +1,6 @@
 # Golang Example
 
-![lint](https://github.com/saefullohmaslul/Golang-Example/workflows/lint/badge.svg?branch=master) ![test](https://github.com/saefullohmaslul/Golang-Example/workflows/test/badge.svg?branch=master) [![Coverage Status](https://coveralls.io/repos/github/saefullohmaslul/Golang-Example/badge.svg?branch=master)](https://coveralls.io/github/saefullohmaslul/Golang-Example?branch=master) [![Go Report Card](https://goreportcard.com/badge/github.com/saefullohmaslul/Golang-Example)](https://goreportcard.com/report/github.com/saefullohmaslul/Golang-Example)
+![lint](https://github.com/saefullohmaslul/Golang-Example/workflows/lint/badge.svg?branch=master) ![test](https://github.com/saefullohmaslul/Golang-Example/workflows/test/badge.svg?branch=master) [![Coverage Status](https://coveralls.io/repos/github/saefullohmaslul/Golang-Example/badge.svg?branch=master)](https://coveralls.io/github/saefullohmaslul/Golang-Example?branch=master) [![Go Report Card](https://goreportcard.com/badge/github.com/saefullohmaslul/Golang-Example)](https://goreportcard.com/report/github.com/saefullohmaslul/Golang-Example) ![build](https://github.com/saefullohmaslul/Golang-Example/workflows/build/badge.svg?branch=master)
 
 Simple REST Api with golang
 
