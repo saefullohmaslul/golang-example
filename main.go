@@ -1,6 +1,8 @@
 package main
 
 import (
+	"os"
+
 	"github.com/gin-gonic/gin"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"github.com/saefullohmaslul/Golang-Example/app"
@@ -18,5 +20,6 @@ func main() {
 	db := database.GetDB()
 	migration.Migrate(db)
 
-	r.Run()
+	port := os.Getenv("APP_PORT")
+	r.Run(":" + port)
 }

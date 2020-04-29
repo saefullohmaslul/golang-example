@@ -1,12 +1,12 @@
 package controllers
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/saefullohmaslul/Golang-Example/database/entity"
 	"github.com/saefullohmaslul/Golang-Example/global/types"
+	"github.com/saefullohmaslul/Golang-Example/validation"
 )
 
 // UserController is controller for user module
@@ -42,10 +42,11 @@ func (u UserController) GetBiodata(c *gin.Context) {
 
 // CreateUser will add user into database
 func (u UserController) CreateUser(c *gin.Context) {
-	user := new(entity.User)
-	if err := c.Bind(&user); err != nil {
-		fmt.Println(err)
-	}
+	var user entity.User
+	c.BindJSON(&user)
+
+	userValidate := &validation.CreateUserSchema{Name: user.Name}
+	validation.Validate(userValidate)
 
 	// database.GetDB().Create(&user)
 
