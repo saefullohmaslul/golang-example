@@ -8,12 +8,13 @@ jobs:
         uses: actions/setup-go@v2
         with:
           go-version: 1.13.x
+        id: go
+
       - name: Checkout code
         uses: actions/checkout@v2
+
+      - name: Install golangci-lint
+        run: curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh| sh -s -- -b $(go env GOPATH)/bin v1.18.0
+
       - name: Run golangci-lint
-        uses: reviewdog/action-golangci-lint@v1
-        with:
-          github_token: ${{ secrets.token }}
-          golangci_lint_flags: "--enable-all --exclude-use-default=false"
-        env:
-          personal_token: ${{ secrets.TOKEN }}
+        run: $(go env GOPATH)/bin/golangci-lint run
