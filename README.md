@@ -11,6 +11,9 @@ There are two ways to run this application, with docker or without docker
 ```bash
 # running with docker
 
+# copy .env
+cp .env.example .env
+
 # running in development mode, you can use live-reload when safe file
 docker-compose up development
 
@@ -22,6 +25,9 @@ docker-compose exec production sh # access bash on production container
 
 ```bash
 # running in local/without docker
+
+# copy .env
+cp .env.example .env
 make install
 make run
 ```
