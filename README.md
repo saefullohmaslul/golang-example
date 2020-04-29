@@ -1,5 +1,7 @@
 # Golang Example
 
+![lint](https://github.com/saefullohmaslul/Golang-Example/workflows/lint/badge.svg?branch=master)
+
 Simple REST Api with golang
 
 ## How to run

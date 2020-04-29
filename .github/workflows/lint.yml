@@ -1,5 +1,10 @@
-on: [push, pull_request]
 name: lint
+
+on: 
+  push:
+    branchs:
+      - master
+
 jobs:
   lint:
     runs-on: ubuntu-latest
@@ -8,9 +13,13 @@ jobs:
         uses: actions/setup-go@v2
         with:
           go-version: 1.13.x
+        id: go
+
       - name: Checkout code
         uses: actions/checkout@v2
+
       - name: Install golangci-lint
-        run: |
-          export PATH=$PATH:$(go env GOPATH)/bin
-          make lint
+        run: curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh| sh -s -- -b $(go env GOPATH)/bin v1.18.0
+
+      - name: Run golangci-lint
+        run: $(go env GOPATH)/bin/golangci-lint run
