@@ -18,3 +18,6 @@ test:
 	@go tool cover -func=coverage.out
 	@go tool cover -html=coverage.out
 	@rm -f coverage.out
+
+lint:
+	@golangci-lint -E bodyclose,misspell,gocyclo,dupl,gofmt,golint,unconvert,goimports,depguard,gocritic,funlen,interfacer run

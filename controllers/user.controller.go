@@ -14,7 +14,7 @@ import (
 type UserController struct {
 }
 
-// GetName will retrive name to response body
+// GetName will retrieve name to response body
 func (u UserController) GetName(c *gin.Context) {
 	name := "Saefulloh Maslul"
 
@@ -25,7 +25,7 @@ func (u UserController) GetName(c *gin.Context) {
 	})
 }
 
-// GetBiodata will retrive name and address to response body
+// GetBiodata will retrieve name and address to response body
 func (u UserController) GetBiodata(c *gin.Context) {
 	biodata := types.GetBiodataResult{
 		Name:    "Saefulloh Maslul",
