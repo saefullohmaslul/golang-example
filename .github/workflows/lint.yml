@@ -11,4 +11,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Run golangci-lint
-        uses: actions-contrib/golangci-lint@v1
+        uses: reviewdog/action-golangci-lint@v1
+        with:
+          github_token: ${{ secrets.token }}
+          golangci_lint_flags: "--enable-all --exclude-use-default=false"
+        env:
+          personal_token: ${{ secrets.TOKEN }}
