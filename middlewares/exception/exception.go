@@ -1,10 +1,7 @@
 package exception
 
-import "fmt"
-
 // BadRequest handler
 func BadRequest(message string, flag string) {
-	fmt.Println(flag)
 	errors := map[string]interface{}{
 		"message": message, "flag": flag,
 	}
