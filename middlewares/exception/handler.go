@@ -10,7 +10,16 @@ import (
 // ErrorHandler to handling error
 func ErrorHandler(c *gin.Context, err interface{}) {
 	res := Exception{}
-	mapstructure.Decode(err, &res)
+	if err := mapstructure.Decode(err, &res); err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"status": http.StatusInternalServerError,
+			"flag":   "INTERNAL_SERVER_ERROR",
+			"errors": map[string]interface{}{
+				"message": "An error occurred on our server", "flag": "ERROR_MAP_TO_STRUCT",
+			},
+		})
+		return
+	}
 
 	c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
 		"status": res.Status,
@@ -19,7 +28,6 @@ func ErrorHandler(c *gin.Context, err interface{}) {
 			"message": res.Errors.Message, "flag": res.Errors.Flag,
 		},
 	})
-	return
 }
 
 // Exception type

@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/saefullohmaslul/Golang-Example/database/entity"
 	"github.com/saefullohmaslul/Golang-Example/global/types"
+	"github.com/saefullohmaslul/Golang-Example/middlewares/exception"
 	"github.com/saefullohmaslul/Golang-Example/validation"
 )
 
@@ -43,7 +44,9 @@ func (u UserController) GetBiodata(c *gin.Context) {
 // CreateUser will add user into database
 func (u UserController) CreateUser(c *gin.Context) {
 	var user entity.User
-	c.BindJSON(&user)
+	if err := c.BindJSON(&user); err != nil {
+		exception.BadRequest(err.Error(), "ERROR_BIND_REQUEST_JSON")
+	}
 
 	userValidate := &validation.CreateUserSchema{Name: user.Name}
 	validation.Validate(userValidate)

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -21,5 +22,7 @@ func main() {
 	migration.Migrate(db)
 
 	port := os.Getenv("APP_PORT")
-	r.Run(":" + port)
+	if err := r.Run(":" + port); err != nil {
+		fmt.Println(err.Error())
+	}
 }
