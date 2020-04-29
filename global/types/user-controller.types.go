@@ -31,8 +31,8 @@ type CreateUserResult struct {
 	Address string `json:"address"`
 }
 
-// CreateUser is return to create user into database
-type CreateUser struct {
+// CreateUserResponse is return to create user into database
+type CreateUserResponse struct {
 	utils.Response
 	Result CreateUserResult `json:"result"`
 }

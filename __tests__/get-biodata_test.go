@@ -21,21 +21,14 @@ func TestGetBiodata(t *testing.T) {
 	req, _ := http.NewRequest(http.MethodGet, "/user/biodata", nil)
 	r.ServeHTTP(w, req)
 
-	e := `{"status":200,"message":"Success get biodata","result": {"name": "Saefulloh Maslul","address": "Tegal"}}`
-
 	actual := types.GetBiodataResponse{}
-	expect := types.GetBiodataResponse{}
 
 	if err := json.Unmarshal([]byte(w.Body.String()), &actual); err != nil {
 		panic(err)
 	}
-	if err := json.Unmarshal([]byte(e), &expect); err != nil {
-		panic(err)
-	}
 
-	assert.Equal(t, 200, w.Code)
-	assert.Equal(t, expect.Message, actual.Message)
-	assert.Equal(t, expect.Status, actual.Status)
-	assert.Equal(t, expect.Result.Name, actual.Result.Name)
-	assert.Equal(t, expect.Result.Address, actual.Result.Address)
+	assert.Equal(t, http.StatusOK, w.Code)
+	assert.Equal(t, "Success get biodata", actual.Message)
+	assert.Equal(t, http.StatusOK, actual.Status)
+	assert.NotEmpty(t, actual.Result)
 }
