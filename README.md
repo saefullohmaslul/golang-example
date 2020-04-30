@@ -2,7 +2,7 @@
 
 [![lint](https://github.com/saefullohmaslul/Golang-Example/workflows/lint/badge.svg?branch=master)](https://github.com/saefullohmaslul/Golang-Example/actions?query=workflow%3Alint) [![test](https://github.com/saefullohmaslul/Golang-Example/workflows/test/badge.svg?branch=master)](https://github.com/saefullohmaslul/Golang-Example/actions?query=workflow%3Atest) [![Coverage Status](https://coveralls.io/repos/github/saefullohmaslul/Golang-Example/badge.svg?branch=master)](https://coveralls.io/github/saefullohmaslul/Golang-Example?branch=master) [![Go Report Card](https://goreportcard.com/badge/github.com/saefullohmaslul/Golang-Example)](https://goreportcard.com/report/github.com/saefullohmaslul/Golang-Example) [![build](https://github.com/saefullohmaslul/Golang-Example/workflows/build/badge.svg?branch=master)](https://github.com/saefullohmaslul/Golang-Example/actions?query=workflow%3Abuild)
 
-Simple REST Api with golang
+Simple REST API with golang (**golang boilerplate**)
 
 ## How to run
 
