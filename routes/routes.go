@@ -11,6 +11,6 @@ func Router(g *gin.RouterGroup) {
 	{
 		g.GET("/name", controller.GetName)
 		g.GET("/biodata", controller.GetBiodata)
-		g.POST("/user", controller.CreateUser)
+		g.POST("/create", controller.CreateUser)
 	}
 }
