@@ -1,13 +1,22 @@
 # Local
 install:
-	@go get -u ./
+	@go get -u ./src
 	@echo "All package installed"
 
 run:
-	@go run main.go
+	@go run ./src/main.go
 
 watch:
 	@air -c air.conf
+
+build:
+	@go build -o ./build/main ./src
+
+docker-dev:
+	@docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
+
+docker-prod:
+	@docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 
 kill-port:
 	@kill -9 $$(lsof -t -i:8080)

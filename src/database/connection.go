@@ -7,7 +7,7 @@ import (
 	"github.com/jinzhu/gorm"
 	"github.com/joho/godotenv"
 	"github.com/jpoles1/gopherbadger/logging"
-	"github.com/saefullohmaslul/Golang-Example/database/entity"
+	"github.com/saefullohmaslul/Golang-Example/src/database/entity"
 )
 
 var db *gorm.DB

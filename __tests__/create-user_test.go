@@ -9,10 +9,10 @@ import (
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
-	"github.com/saefullohmaslul/Golang-Example/app"
-	"github.com/saefullohmaslul/Golang-Example/database"
-	"github.com/saefullohmaslul/Golang-Example/global/types"
-	"github.com/saefullohmaslul/Golang-Example/middlewares/exception"
+	"github.com/saefullohmaslul/Golang-Example/src/app"
+	"github.com/saefullohmaslul/Golang-Example/src/database"
+	"github.com/saefullohmaslul/Golang-Example/src/global/types"
+	"github.com/saefullohmaslul/Golang-Example/src/middlewares/exception"
 	"github.com/stretchr/testify/assert"
 )
 

@@ -2,7 +2,7 @@ package routes
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/saefullohmaslul/Golang-Example/controllers"
+	"github.com/saefullohmaslul/Golang-Example/src/controllers"
 )
 
 // Router middleware to handler routes

@@ -2,7 +2,7 @@ package migration
 
 import (
 	"github.com/jinzhu/gorm"
-	"github.com/saefullohmaslul/Golang-Example/database/entity"
+	"github.com/saefullohmaslul/Golang-Example/src/database/entity"
 )
 
 // Migrate database table

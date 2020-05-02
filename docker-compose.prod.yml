@@ -1,0 +1,21 @@
+version: '3.7'
+
+services: 
+  app:
+    hostname: golang_example_production
+    container_name: golang_example_production
+    restart: always
+    build: 
+      context: .
+      dockerfile: Dockerfile
+      target: prod
+    environment: 
+      SERVING_PORT: "*:8080"
+      DB_HOST: localhost
+      DB_PORT: 5432
+      DB_NAME: golang_example_db
+      DB_USER: postgres
+      DB_PASS: developer
+      GIN_MODE: release
+    command: bash -c "go mod download && go build -o /bin/app/build/main ./src && /bin/app/build/main"
+    network_mode: host
