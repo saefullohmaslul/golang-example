@@ -18,7 +18,7 @@ func TestGetBiodata(t *testing.T) {
 	app.CreateApp(r)
 
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest(http.MethodGet, "/user/biodata", nil)
+	req, _ := http.NewRequest(http.MethodGet, "/biodata", nil)
 	r.ServeHTTP(w, req)
 
 	actual := types.GetBiodataResponse{}

@@ -43,9 +43,7 @@ func (u UserController) GetBiodata(c *gin.Context) {
 // CreateUser will add user into database
 func (u UserController) CreateUser(c *gin.Context) {
 	var user entity.User
-	if err := c.BindJSON(&user); err != nil {
-		exception.BadRequest(err.Error(), "ERROR_BIND_REQUEST_JSON")
-	}
+	_ = c.BindJSON(&user)
 
 	userValidate := &validation.CreateUserSchema{
 		Name:     user.Name,
@@ -70,7 +68,7 @@ func (u UserController) CreateUser(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"status":  http.StatusOK,
-		"message": "Success get name",
+		"message": "Success create user",
 		"result":  data,
 	})
 }

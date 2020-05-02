@@ -1,5 +1,7 @@
 package exception
 
+import "net/http"
+
 // BadRequest handler
 func BadRequest(message string, flag string) {
 	errors := map[string]interface{}{
@@ -7,7 +9,7 @@ func BadRequest(message string, flag string) {
 	}
 
 	response := map[string]interface{}{
-		"status": 400,
+		"status": http.StatusBadRequest,
 		"flag":   "BAD_REQUEST",
 		"errors": errors,
 	}
@@ -22,7 +24,7 @@ func InternalServerError(message string, flag string) {
 	}
 
 	response := map[string]interface{}{
-		"status": 500,
+		"status": http.StatusInternalServerError,
 		"flag":   "INTERNAL_SERVER_ERROR",
 		"errors": errors,
 	}

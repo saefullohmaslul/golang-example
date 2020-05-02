@@ -14,12 +14,10 @@ func Validate(schema interface{}) {
 	if err := validate.Struct(schema); err != nil {
 		if _, ok := err.(*validator.InvalidValidationError); ok {
 			exception.BadRequest(fmt.Sprint(err), "INVALID_BODY")
-			return
 		}
 
 		for _, err := range err.(validator.ValidationErrors) {
 			exception.BadRequest(fmt.Sprint(err), "INVALID_BODY")
 		}
-		return
 	}
 }

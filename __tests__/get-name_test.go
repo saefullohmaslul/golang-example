@@ -18,7 +18,7 @@ func TestGetName(t *testing.T) {
 	app.CreateApp(r)
 
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest(http.MethodGet, "/user/name", nil)
+	req, _ := http.NewRequest(http.MethodGet, "/name", nil)
 	r.ServeHTTP(w, req)
 
 	actual := types.GetNameResponse{}
