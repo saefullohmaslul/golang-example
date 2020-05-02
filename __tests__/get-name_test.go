@@ -15,7 +15,7 @@ import (
 func TestGetName(t *testing.T) {
 	r := gin.Default()
 	app := new(app.Application)
-	app.CreateApp(r)
+	app.CreateTest(r)
 
 	w := httptest.NewRecorder()
 	req, _ := http.NewRequest(http.MethodGet, "/name", nil)
