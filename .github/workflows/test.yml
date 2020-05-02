@@ -37,12 +37,6 @@ jobs:
 
       - name: Run tests
         run: go test ./__tests__/ -v -coverpkg=./... -covermode=count
-        env:
-          POSTGRES_PASSWORD: developer
-          POSTGRES_DB: golang_example_db
-          POSTGRES_USER: postgres
-          POSTGRES_PORT: 5432
-          POSTGRES_HOST: postgres
 
   coverage:
     runs-on: ubuntu-latest
@@ -55,6 +49,9 @@ jobs:
 
     - name: Checkout code
       uses: actions/checkout@v2
+
+    - name: Test coverage
+      run: cp .env.example .env
 
     - name: Calc coverage 
       run: |

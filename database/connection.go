@@ -15,12 +15,6 @@ var err error
 
 // Connection database instance
 func Connection() {
-	fmt.Println(os.Getenv("DB_PASS"))
-	fmt.Println(os.Getenv("DB_HOST"))
-	fmt.Println(os.Getenv("DB_PORT"))
-	fmt.Println(os.Getenv("DB_USER"))
-	fmt.Println(os.Getenv("DB_NAME"))
-
 	authDB := fmt.Sprintf("host=%s port=%s user=%s dbname=%s sslmode=disable password=%s",
 		os.Getenv("DB_HOST"),
 		os.Getenv("DB_PORT"),
