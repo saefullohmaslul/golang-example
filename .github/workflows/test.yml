@@ -32,6 +32,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Test preparation
+        run: cp .env.example .env
+
       - name: Run tests
         run: go test ./__tests__/ -v -coverpkg=./... -covermode=count
         env:
