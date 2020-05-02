@@ -28,4 +28,4 @@ jobs:
         uses: actions/upload-artifact@master
         with:
           name: binaries
-          path: bin/
+          path: bin/src/
