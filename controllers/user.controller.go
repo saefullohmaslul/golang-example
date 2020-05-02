@@ -64,7 +64,13 @@ func (u UserController) CreateUser(c *gin.Context) {
 		exception.InternalServerError("Can't create user", "DATABASE_ERROR")
 	}
 
-	data := types.CreateUserResult{ID: user.ID, Name: user.Name, Age: user.Age, Email: user.Email, Address: user.Address}
+	data := types.CreateUserResult{
+		ID:      user.ID,
+		Name:    user.Name,
+		Age:     user.Age,
+		Email:   user.Email,
+		Address: user.Address,
+	}
 
 	c.JSON(http.StatusOK, gin.H{
 		"status":  http.StatusOK,
