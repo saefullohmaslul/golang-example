@@ -9,8 +9,8 @@ import (
 func Router(g *gin.RouterGroup) {
 	controller := controllers.UserController{}
 	{
-		g.GET("/name", controller.GetName)
-		g.GET("/biodata", controller.GetBiodata)
+		g.GET("/users", controller.GetUsers)
+		g.GET("/user/:id", controller.GetUser)
 		g.POST("/user", controller.CreateUser)
 	}
 }

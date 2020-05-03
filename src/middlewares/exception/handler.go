@@ -21,6 +21,17 @@ func ErrorHandler(c *gin.Context, err interface{}) {
 		return
 	}
 
+	if res.Status == 200 {
+		c.AbortWithStatusJSON(res.Status, gin.H{
+			"status":  res.Status,
+			"message": res.Message,
+			"errors": map[string]interface{}{
+				"message": res.Errors.Message, "flag": res.Errors.Flag,
+			},
+		})
+		return
+	}
+
 	c.AbortWithStatusJSON(res.Status, gin.H{
 		"status": res.Status,
 		"flag":   res.Flag,
@@ -32,9 +43,10 @@ func ErrorHandler(c *gin.Context, err interface{}) {
 
 // Exception type
 type Exception struct {
-	Status int         `json:"status"`
-	Flag   string      `json:"flag"`
-	Errors ErrorDetail `json:"errors"`
+	Status  int         `json:"status"`
+	Flag    string      `json:"flag"`
+	Errors  ErrorDetail `json:"errors"`
+	Message string      `json:"message"`
 }
 
 // ErrorDetail type

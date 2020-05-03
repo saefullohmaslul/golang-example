@@ -1,15 +1,11 @@
 package entity
 
-import (
-	"github.com/jinzhu/gorm"
-)
-
 // User model
 type User struct {
-	gorm.Model
-	Name     string
-	Age      int64
-	Email    string `gorm:"type:varchar(100);unique_index"`
-	Address  string `gorm:"index:addr"`
-	Password string `gorm:"type:varchar(255)"`
+	ID       uint   `gorm:"primary_key" json:"id"`
+	Name     string `json:"name"`
+	Age      int64  `json:"age"`
+	Email    string `gorm:"type:varchar(100);unique_index" json:"email"`
+	Address  string `gorm:"index:addr" json:"address"`
+	Password string `gorm:"type:varchar(255)" json:"password"`
 }

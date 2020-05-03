@@ -15,28 +15,40 @@ import (
 type UserController struct {
 }
 
-// GetName will retrieve name to response body
-func (u UserController) GetName(c *gin.Context) {
-	name := "Saefulloh Maslul"
+// GetUsers will retrive all user
+func (u UserController) GetUsers(c *gin.Context) {
+	users := []entity.User{}
+	database.GetDB().Select("name, email, address, age").Find(&users)
 
 	c.JSON(http.StatusOK, gin.H{
 		"status":  http.StatusOK,
-		"message": "Success get name",
-		"result":  name,
+		"message": "Success get all users",
+		"result":  users,
 	})
 }
 
-// GetBiodata will retrieve name and address to response body
-func (u UserController) GetBiodata(c *gin.Context) {
-	biodata := types.GetBiodataResult{
-		Name:    "Saefulloh Maslul",
-		Address: "Tegal",
+type getUser struct {
+	ID int `uri:"id" binding:"required"`
+}
+
+// GetUser will retrive user
+func (u UserController) GetUser(c *gin.Context) {
+	param := getUser{}
+	if err := c.ShouldBindUri(&param); err != nil {
+		exception.BadRequest("Param must be of type integer, required", "INVALID_BODY")
+	}
+
+	user := entity.User{}
+	database.GetDB().Select("name, email, address, age").First(&user, param.ID)
+
+	if (user == entity.User{}) {
+		exception.Empty("User not found", "User with this ID not enough", "USER_NOT_FOUND")
 	}
 
 	c.JSON(http.StatusOK, gin.H{
 		"status":  http.StatusOK,
-		"message": "Success get biodata",
-		"result":  biodata,
+		"message": "Success get user",
+		"result":  user,
 	})
 }
 
