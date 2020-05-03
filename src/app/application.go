@@ -2,10 +2,10 @@ package app
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/saefullohmaslul/Golang-Example/src/database"
-	"github.com/saefullohmaslul/Golang-Example/src/database/migration"
-	"github.com/saefullohmaslul/Golang-Example/src/middlewares/exception"
-	"github.com/saefullohmaslul/Golang-Example/src/routes"
+	"github.com/saefullohmaslul/golang-example/src/database"
+	"github.com/saefullohmaslul/golang-example/src/database/migration"
+	"github.com/saefullohmaslul/golang-example/src/middlewares/exception"
+	"github.com/saefullohmaslul/golang-example/src/routes"
 )
 
 // Application struct

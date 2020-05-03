@@ -1,7 +1,7 @@
 package types
 
 import (
-	"github.com/saefullohmaslul/Golang-Example/src/utils"
+	"github.com/saefullohmaslul/golang-example/src/utils"
 )
 
 // GetNameResponse is return to get name format

@@ -7,8 +7,8 @@ import (
 	"testing"
 
 	"github.com/gin-gonic/gin"
-	"github.com/saefullohmaslul/Golang-Example/src/app"
-	"github.com/saefullohmaslul/Golang-Example/src/global/types"
+	"github.com/saefullohmaslul/golang-example/src/app"
+	"github.com/saefullohmaslul/golang-example/src/global/types"
 	"github.com/stretchr/testify/assert"
 )
 

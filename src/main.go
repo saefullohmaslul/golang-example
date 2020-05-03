@@ -7,7 +7,7 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"github.com/joho/godotenv"
 	"github.com/jpoles1/gopherbadger/logging"
-	"github.com/saefullohmaslul/Golang-Example/src/app"
+	"github.com/saefullohmaslul/golang-example/src/app"
 )
 
 // main project

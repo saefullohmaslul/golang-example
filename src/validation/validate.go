@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/go-playground/validator/v10"
-	"github.com/saefullohmaslul/Golang-Example/src/middlewares/exception"
+	"github.com/saefullohmaslul/golang-example/src/middlewares/exception"
 )
 
 // Validate -> function to validate request

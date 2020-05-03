@@ -4,11 +4,11 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/saefullohmaslul/Golang-Example/src/database"
-	"github.com/saefullohmaslul/Golang-Example/src/database/entity"
-	"github.com/saefullohmaslul/Golang-Example/src/global/types"
-	"github.com/saefullohmaslul/Golang-Example/src/middlewares/exception"
-	"github.com/saefullohmaslul/Golang-Example/src/validation"
+	"github.com/saefullohmaslul/golang-example/src/database"
+	"github.com/saefullohmaslul/golang-example/src/database/entity"
+	"github.com/saefullohmaslul/golang-example/src/global/types"
+	"github.com/saefullohmaslul/golang-example/src/middlewares/exception"
+	"github.com/saefullohmaslul/golang-example/src/validation"
 )
 
 // UserController is controller for user module
