@@ -15,12 +15,12 @@ There are two ways to run this application, with docker or without docker
 cp .env.example .env
 
 # running in development mode, you can use live-reload when safe file
-docker-compose up development
+make docker-dev
 
 # running in production image
-docker-compose up -d production
-docker-compose logs --tail=100 -f production # monitoring production container
-docker-compose exec production sh # access bash on production container
+make docker-prod
+docker logs --tail=100 -f golang_example_production # monitoring production container
+docker exec -it golang_example_production sh # access bash on production container
 ```
 
 ```bash

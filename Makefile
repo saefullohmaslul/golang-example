@@ -16,7 +16,7 @@ docker-dev:
 	@docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
 
 docker-prod:
-	@docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+	@docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
 
 kill-port:
 	@kill -9 $$(lsof -t -i:8080)
