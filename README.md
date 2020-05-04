@@ -1,4 +1,4 @@
-# Golang Example
+# Golang Example Boilerplate
 
 [![lint](https://github.com/saefullohmaslul/golang-example/workflows/lint/badge.svg?branch=master)](https://github.com/saefullohmaslul/golang-example/actions?query=workflow%3Alint) [![test](https://github.com/saefullohmaslul/golang-example/workflows/test/badge.svg?branch=master)](https://github.com/saefullohmaslul/golang-example/actions?query=workflow%3Atest) [![Coverage Status](https://coveralls.io/repos/github/saefullohmaslul/golang-example/badge.svg?branch=master)](https://coveralls.io/github/saefullohmaslul/golang-example?branch=master) [![Go Report Card](https://goreportcard.com/badge/github.com/saefullohmaslul/golang-example)](https://goreportcard.com/report/github.com/saefullohmaslul/golang-example) [![build](https://github.com/saefullohmaslul/golang-example/workflows/build/badge.svg?branch=master)](https://github.com/saefullohmaslul/golang-example/actions?query=workflow%3Abuild)
 
