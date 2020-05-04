@@ -4,10 +4,9 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/saefullohmaslul/golang-example/src/database"
 	"github.com/saefullohmaslul/golang-example/src/database/entity"
-	"github.com/saefullohmaslul/golang-example/src/global/types"
 	"github.com/saefullohmaslul/golang-example/src/middlewares/exception"
+	service "github.com/saefullohmaslul/golang-example/src/services"
 	"github.com/saefullohmaslul/golang-example/src/validation"
 )
 
@@ -15,10 +14,9 @@ import (
 type UserController struct {
 }
 
-// GetUsers will retrive all user
+// GetUsers will retrieve all user
 func (u UserController) GetUsers(c *gin.Context) {
-	users := []entity.User{}
-	database.GetDB().Select("name, email, address, age").Find(&users)
+	users := new(service.UserService).GetUsers()
 
 	c.JSON(http.StatusOK, gin.H{
 		"status":  http.StatusOK,
@@ -31,19 +29,14 @@ type getUser struct {
 	ID int `uri:"id" binding:"required"`
 }
 
-// GetUser will retrive user
+// GetUser will retrieve user
 func (u UserController) GetUser(c *gin.Context) {
 	param := getUser{}
 	if err := c.ShouldBindUri(&param); err != nil {
 		exception.BadRequest("Param must be of type integer, required", "INVALID_BODY")
 	}
 
-	user := entity.User{}
-	database.GetDB().Select("name, email, address, age").First(&user, param.ID)
-
-	if (user == entity.User{}) {
-		exception.Empty("User not found", "User with this ID not enough", "USER_NOT_FOUND")
-	}
+	user := new(service.UserService).GetUser(int64(param.ID))
 
 	c.JSON(http.StatusOK, gin.H{
 		"status":  http.StatusOK,
@@ -54,6 +47,7 @@ func (u UserController) GetUser(c *gin.Context) {
 
 // CreateUser will add user into database
 func (u UserController) CreateUser(c *gin.Context) {
+	userService := service.UserService{}
 	var user entity.User
 	_ = c.BindJSON(&user)
 
@@ -66,23 +60,7 @@ func (u UserController) CreateUser(c *gin.Context) {
 	}
 	validation.Validate(userValidate)
 
-	isUsed := entity.User{}
-	database.GetDB().Where(&entity.User{Email: user.Email}).First(&isUsed)
-	if (isUsed != entity.User{}) {
-		exception.BadRequest("User already exist", "USER_ALREADY_EXIST")
-	}
-
-	if dbc := database.GetDB().Create(&user); dbc.Error != nil {
-		exception.InternalServerError("Can't create user", "DATABASE_ERROR")
-	}
-
-	data := types.CreateUserResult{
-		ID:      user.ID,
-		Name:    user.Name,
-		Age:     user.Age,
-		Email:   user.Email,
-		Address: user.Address,
-	}
+	data := userService.CreateUser(user)
 
 	c.JSON(http.StatusOK, gin.H{
 		"status":  http.StatusOK,
