@@ -6,8 +6,12 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/saefullohmaslul/golang-example/src/database/entity"
-	service "github.com/saefullohmaslul/golang-example/src/services"
+	"github.com/saefullohmaslul/golang-example/src/services"
 	"github.com/saefullohmaslul/golang-example/src/validation"
+)
+
+var (
+	userService services.UserService = services.UserService{}
 )
 
 // UserController is controller for user module
@@ -16,7 +20,7 @@ type UserController struct {
 
 // GetUsers will retrieve all user
 func (u UserController) GetUsers(c *gin.Context) {
-	users := new(service.UserService).GetUsers()
+	users := userService.GetUsers()
 	c.JSON(http.StatusOK, gin.H{
 		"status":  http.StatusOK,
 		"message": "Success get all users",
@@ -26,7 +30,6 @@ func (u UserController) GetUsers(c *gin.Context) {
 
 // GetUser will retrieve user
 func (u UserController) GetUser(c *gin.Context) {
-	userService := service.UserService{}
 	param := validation.GetUserParamSchema{}
 	_ = c.ShouldBindUri(&param)
 
@@ -40,7 +43,6 @@ func (u UserController) GetUser(c *gin.Context) {
 
 // CreateUser will add user into database
 func (u UserController) CreateUser(c *gin.Context) {
-	userService := service.UserService{}
 	var user entity.User
 	_ = c.ShouldBindBodyWith(&user, binding.JSON)
 
