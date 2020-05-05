@@ -6,7 +6,7 @@ on:
       - master
 
 jobs:
-  test:
+  coverage:
     runs-on: ubuntu-latest
     services:
       postgres:
