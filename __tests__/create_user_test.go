@@ -11,12 +11,18 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"github.com/saefullohmaslul/golang-example/src/app"
 	"github.com/saefullohmaslul/golang-example/src/database"
-	"github.com/saefullohmaslul/golang-example/src/global/types"
 	"github.com/saefullohmaslul/golang-example/src/middlewares/exception"
+	"github.com/saefullohmaslul/golang-example/src/repository"
+	"github.com/saefullohmaslul/golang-example/src/utils"
 	"github.com/stretchr/testify/assert"
 )
 
-func initTest(body map[string]interface{}) (*httptest.ResponseRecorder, *gin.Engine) {
+type createUserSuccess struct {
+	utils.Response
+	Result repository.GetUser `json:"result"`
+}
+
+func initTestCreateUser(body map[string]interface{}) (*httptest.ResponseRecorder, *gin.Engine) {
 	r := gin.Default()
 	app := new(app.Application)
 	app.CreateTest(r)
@@ -37,9 +43,9 @@ func TestCreateUserSuccess(t *testing.T) {
 		"email":    "user@email.com",
 		"password": "123456",
 	}
-	w, _ := initTest(body)
+	w, _ := initTestCreateUser(body)
 
-	actual := types.CreateUserResponse{}
+	actual := createUserSuccess{}
 	if err := json.Unmarshal([]byte(w.Body.String()), &actual); err != nil {
 		panic(err)
 	}
@@ -57,7 +63,7 @@ func TestCreateUserExist(t *testing.T) {
 		"email":    "user@email.com",
 		"password": "123456",
 	}
-	_, r := initTest(body)
+	_, r := initTestCreateUser(body)
 
 	w := httptest.NewRecorder()
 	b, _ := json.Marshal(body)
@@ -86,7 +92,7 @@ func TestCreateUserInvalidBodyName(t *testing.T) {
 		"email":    "user@email.com",
 		"password": "123456",
 	}
-	w, _ := initTest(body)
+	w, _ := initTestCreateUser(body)
 
 	actual := exception.Exception{}
 	if err := json.Unmarshal([]byte(w.Body.String()), &actual); err != nil {
@@ -107,7 +113,7 @@ func TestCreateUserInvalidBodyEmail(t *testing.T) {
 		"email":    "useremail.com",
 		"password": "123456",
 	}
-	w, _ := initTest(body)
+	w, _ := initTestCreateUser(body)
 
 	actual := exception.Exception{}
 	if err := json.Unmarshal([]byte(w.Body.String()), &actual); err != nil {
@@ -127,7 +133,7 @@ func TestCreateUserInvalidBodyPassword(t *testing.T) {
 		"name":  "User Test",
 		"email": "user@email.com",
 	}
-	w, _ := initTest(body)
+	w, _ := initTestCreateUser(body)
 
 	actual := exception.Exception{}
 	if err := json.Unmarshal([]byte(w.Body.String()), &actual); err != nil {
