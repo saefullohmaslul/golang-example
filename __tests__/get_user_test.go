@@ -9,7 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"github.com/saefullohmaslul/golang-example/src/app"
-	"github.com/saefullohmaslul/golang-example/src/database"
+	db "github.com/saefullohmaslul/golang-example/src/database"
 	"github.com/saefullohmaslul/golang-example/src/database/entity"
 	"github.com/saefullohmaslul/golang-example/src/repository"
 	"github.com/saefullohmaslul/golang-example/src/utils"
@@ -37,7 +37,11 @@ type getUserErrorMessage struct {
 	Flag    string `json:"flag"`
 }
 
-func seedDB() {
+func initTestGetUser(id string) (*httptest.ResponseRecorder, *gin.Engine) {
+	r := gin.Default()
+	app := new(app.Application)
+	app.CreateTest(r)
+
 	userRepository := repository.UserRepository{}
 	userRepository.CreateUser(entity.User{
 		ID:       1,
@@ -47,14 +51,6 @@ func seedDB() {
 		Name:     "Saefulloh Maslul",
 		Password: "123456",
 	})
-}
-
-func initTestGetUser(id string) (*httptest.ResponseRecorder, *gin.Engine) {
-	r := gin.Default()
-	app := new(app.Application)
-	app.CreateTest(r)
-
-	seedDB()
 
 	w := httptest.NewRecorder()
 	req, _ := http.NewRequest(http.MethodGet, "/user/"+id, nil)
@@ -65,7 +61,7 @@ func initTestGetUser(id string) (*httptest.ResponseRecorder, *gin.Engine) {
 }
 
 func TestGetUserSuccess(t *testing.T) {
-	defer database.DropAllTable()
+	defer db.DropAllTable()
 	w, _ := initTestGetUser("1")
 	actual := getUser{}
 	if err := json.Unmarshal([]byte(w.Body.String()), &actual); err != nil {
@@ -79,7 +75,7 @@ func TestGetUserSuccess(t *testing.T) {
 }
 
 func TestGetUserNotFound(t *testing.T) {
-	defer database.DropAllTable()
+	defer db.DropAllTable()
 	w, _ := initTestGetUser("2")
 	actual := getUserEmpty{}
 	if err := json.Unmarshal([]byte(w.Body.String()), &actual); err != nil {
@@ -94,7 +90,7 @@ func TestGetUserNotFound(t *testing.T) {
 }
 
 func TestGetUserErrorParamID(t *testing.T) {
-	defer database.DropAllTable()
+	defer db.DropAllTable()
 	w, _ := initTestGetUser("c")
 	actual := getUserError{}
 	if err := json.Unmarshal([]byte(w.Body.String()), &actual); err != nil {

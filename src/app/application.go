@@ -2,7 +2,7 @@ package app
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/saefullohmaslul/golang-example/src/database"
+	db "github.com/saefullohmaslul/golang-example/src/database"
 	"github.com/saefullohmaslul/golang-example/src/database/migration"
 	"github.com/saefullohmaslul/golang-example/src/middlewares/exception"
 	"github.com/saefullohmaslul/golang-example/src/routes"
@@ -32,13 +32,13 @@ func configureAPIEndpoint(r *gin.Engine) {
 }
 
 func configureAppDB() {
-	database.AppConnection()
-	db := database.GetDB()
-	migration.Migrate(db)
+	db.AppConnection()
+	conn := db.GetDB()
+	migration.Migrate(conn)
 }
 
 func configureTestDB() {
-	database.TestConnection()
-	db := database.GetDB()
-	migration.Migrate(db)
+	db.TestConnection()
+	conn := db.GetDB()
+	migration.Migrate(conn)
 }

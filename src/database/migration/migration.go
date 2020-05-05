@@ -6,6 +6,6 @@ import (
 )
 
 // Migrate database table
-func Migrate(db *gorm.DB) {
-	db.AutoMigrate(entity.User{})
+func Migrate(conn *gorm.DB) {
+	conn.AutoMigrate(entity.User{})
 }

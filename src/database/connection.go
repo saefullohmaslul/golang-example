@@ -1,4 +1,4 @@
-package database
+package db
 
 import (
 	"fmt"
@@ -10,10 +10,10 @@ import (
 	"github.com/saefullohmaslul/golang-example/src/database/entity"
 )
 
-var db *gorm.DB
+var conn *gorm.DB
 var err error
 
-// Connection database instance
+// Connection conn instance
 func Connection() {
 	authDB := fmt.Sprintf("host=%s port=%s user=%s dbname=%s sslmode=disable password=%s",
 		os.Getenv("DB_HOST"),
@@ -23,7 +23,7 @@ func Connection() {
 		os.Getenv("DB_PASS"),
 	)
 
-	db, err = gorm.Open("postgres", authDB)
+	conn, err = gorm.Open("postgres", authDB)
 	if err != nil {
 		logging.Error("DB", err)
 	}
@@ -47,10 +47,10 @@ func TestConnection() {
 
 // GetDB connection
 func GetDB() *gorm.DB {
-	return db
+	return conn
 }
 
 // DropAllTable for testing
 func DropAllTable() {
-	db.DropTable(&entity.User{})
+	conn.DropTable(&entity.User{})
 }

@@ -10,7 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"github.com/saefullohmaslul/golang-example/src/app"
-	"github.com/saefullohmaslul/golang-example/src/database"
+	db "github.com/saefullohmaslul/golang-example/src/database"
 	"github.com/saefullohmaslul/golang-example/src/middlewares/exception"
 	"github.com/saefullohmaslul/golang-example/src/repository"
 	"github.com/saefullohmaslul/golang-example/src/utils"
@@ -37,7 +37,7 @@ func initTestCreateUser(body map[string]interface{}) (*httptest.ResponseRecorder
 }
 
 func TestCreateUserSuccess(t *testing.T) {
-	defer database.DropAllTable()
+	defer db.DropAllTable()
 	body := map[string]interface{}{
 		"name":     "User Test",
 		"email":    "user@email.com",
@@ -57,7 +57,7 @@ func TestCreateUserSuccess(t *testing.T) {
 }
 
 func TestCreateUserExist(t *testing.T) {
-	defer database.DropAllTable()
+	defer db.DropAllTable()
 	body := map[string]interface{}{
 		"name":     "User Test",
 		"email":    "user@email.com",
@@ -86,7 +86,7 @@ func TestCreateUserExist(t *testing.T) {
 }
 
 func TestCreateUserInvalidBodyName(t *testing.T) {
-	defer database.DropAllTable()
+	defer db.DropAllTable()
 	body := map[string]interface{}{
 		"name":     123,
 		"email":    "user@email.com",
@@ -107,7 +107,7 @@ func TestCreateUserInvalidBodyName(t *testing.T) {
 }
 
 func TestCreateUserInvalidBodyEmail(t *testing.T) {
-	defer database.DropAllTable()
+	defer db.DropAllTable()
 	body := map[string]interface{}{
 		"name":     "User Test",
 		"email":    "useremail.com",
@@ -128,7 +128,7 @@ func TestCreateUserInvalidBodyEmail(t *testing.T) {
 }
 
 func TestCreateUserInvalidBodyPassword(t *testing.T) {
-	defer database.DropAllTable()
+	defer db.DropAllTable()
 	body := map[string]interface{}{
 		"name":  "User Test",
 		"email": "user@email.com",
