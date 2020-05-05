@@ -2,6 +2,7 @@ package validation
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
 	"github.com/saefullohmaslul/golang-example/src/database/entity"
 	"github.com/saefullohmaslul/golang-example/src/middlewares/exception"
 )
@@ -18,7 +19,7 @@ type CreateUserSchema struct {
 // CreateUser validation
 func CreateUser(c *gin.Context) {
 	var user entity.User
-	_ = c.BindJSON(&user)
+	_ = c.ShouldBindBodyWith(&user, binding.JSON)
 
 	userValidate := &CreateUserSchema{
 		Name:     user.Name,

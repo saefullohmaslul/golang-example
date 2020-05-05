@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
 	"github.com/saefullohmaslul/golang-example/src/database/entity"
 	service "github.com/saefullohmaslul/golang-example/src/services"
 	"github.com/saefullohmaslul/golang-example/src/validation"
@@ -41,7 +42,7 @@ func (u UserController) GetUser(c *gin.Context) {
 func (u UserController) CreateUser(c *gin.Context) {
 	userService := service.UserService{}
 	var user entity.User
-	_ = c.BindJSON(&user)
+	_ = c.ShouldBindBodyWith(&user, binding.JSON)
 
 	data := userService.CreateUser(user)
 	c.JSON(http.StatusOK, gin.H{

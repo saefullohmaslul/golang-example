@@ -1,6 +1,7 @@
 package types
 
 import (
+	"github.com/saefullohmaslul/golang-example/src/repository"
 	"github.com/saefullohmaslul/golang-example/src/utils"
 )
 
@@ -34,5 +35,5 @@ type CreateUserResult struct {
 // CreateUserResponse is return to create user into database
 type CreateUserResponse struct {
 	utils.Response
-	Result CreateUserResult `json:"result"`
+	Result repository.GetUser `json:"result"`
 }

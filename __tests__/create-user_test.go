@@ -75,7 +75,7 @@ func TestCreateUserExist(t *testing.T) {
 	assert.Equal(t, http.StatusBadRequest, w.Code)
 	assert.Equal(t, http.StatusBadRequest, actual.Status)
 	assert.NotEmpty(t, actual.Errors)
-	assert.Equal(t, "User already exist", actual.Errors.Message)
+	assert.Equal(t, "User with this email already exist", actual.Errors.Message)
 	assert.Equal(t, "USER_ALREADY_EXIST", actual.Errors.Flag)
 }
 
