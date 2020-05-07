@@ -53,3 +53,18 @@ func (u UserController) CreateUser(c *gin.Context) {
 		"result":  data,
 	})
 }
+
+// UpdateUser will update user by id
+func (u UserController) UpdateUser(c *gin.Context) {
+	user := entity.User{}
+	param := validation.GetUserParamSchema{}
+	_ = c.ShouldBindUri(&param)
+	_ = c.ShouldBindBodyWith(&user, binding.JSON)
+
+	data := userService.UpdateUser(param.ID, user)
+	c.JSON(http.StatusOK, gin.H{
+		"status":  http.StatusOK,
+		"message": "Success update user",
+		"result":  data,
+	})
+}

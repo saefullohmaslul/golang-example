@@ -33,7 +33,7 @@ func CreateUser(c *gin.Context) {
 
 // GetUserParamSchema to check schema param
 type GetUserParamSchema struct {
-	ID int `uri:"id" binding:"required"`
+	ID uint `uri:"id" binding:"required"`
 }
 
 // GetUser validation
@@ -42,4 +42,31 @@ func GetUser(c *gin.Context) {
 	if err := c.ShouldBindUri(&param); err != nil {
 		exception.BadRequest("Param must be of type integer, required", "INVALID_BODY")
 	}
+}
+
+// UpdateUserSchema -> update user schema validation
+type UpdateUserSchema struct {
+	Name    string
+	Email   string `validate:"email"`
+	Age     int64
+	Address string
+}
+
+// UpdateUser validation
+func UpdateUser(c *gin.Context) {
+	param := GetUserParamSchema{}
+	if err := c.ShouldBindUri(&param); err != nil {
+		exception.BadRequest("Param must be of type integer, required", "INVALID_BODY")
+	}
+
+	var user entity.User
+	_ = c.ShouldBindBodyWith(&user, binding.JSON)
+
+	userValidate := &UpdateUserSchema{
+		Name:    user.Name,
+		Address: user.Address,
+		Age:     user.Age,
+		Email:   user.Email,
+	}
+	Validate(userValidate)
 }

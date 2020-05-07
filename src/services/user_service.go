@@ -33,11 +33,25 @@ func (u *UserService) GetUser(id int64) repository.GetUser {
 
 // CreateUser service
 func (u *UserService) CreateUser(user entity.User) repository.GetUser {
-	userExist := userRepository.UserExist(user.Email)
+	userExist := userRepository.UserExist(
+		repository.UserExistParams{Email: user.Email},
+	)
+
 	if (userExist != entity.User{}) {
 		exception.BadRequest("User with this email already exist", "USER_ALREADY_EXIST")
 	}
 
 	data := userRepository.CreateUser(user)
+	return data
+}
+
+// UpdateUser service
+func (u *UserService) UpdateUser(id uint, user entity.User) repository.GetUser {
+	userExist := userRepository.UserExist(repository.UserExistParams{ID: id})
+	if (userExist == entity.User{}) {
+		exception.BadRequest("User with this id not exist", "USER_NOT_FOUND")
+	}
+
+	data := userRepository.UpdateUser(id, user)
 	return data
 }

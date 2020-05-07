@@ -36,10 +36,20 @@ func (u *UserRepository) GetUser(id int64) GetUser {
 	return user
 }
 
+// UserExistParams -> Optional params for user exist
+type UserExistParams struct {
+	Email string
+	ID    uint
+}
+
 // UserExist to check if user already exist
-func (u *UserRepository) UserExist(email string) entity.User {
+func (u *UserRepository) UserExist(param UserExistParams) entity.User {
 	user := entity.User{}
-	query().Select("email").Where(&entity.User{Email: email}).First(&user)
+	if param.ID == 0 {
+		query().Select("email").Where(&entity.User{Email: param.Email}).First(&user)
+	} else {
+		query().Select("id").Where(&entity.User{ID: param.ID}).First(&user)
+	}
 	return user
 }
 
@@ -49,4 +59,12 @@ func (u *UserRepository) CreateUser(user entity.User) GetUser {
 	userCreated := GetUser{}
 	query().Select("name, email, address, age").Where("id = ?", user.ID).First(&userCreated)
 	return userCreated
+}
+
+// UpdateUser to update user in DB
+func (u *UserRepository) UpdateUser(id uint, update entity.User) GetUser {
+	query().Where("id = ?", id).Updates(update)
+	userUpdated := GetUser{}
+	query().Select("name, email, address, age").Where("id = ?", id).First(&userUpdated)
+	return userUpdated
 }
