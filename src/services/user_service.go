@@ -55,3 +55,14 @@ func (u *UserService) UpdateUser(id uint, user entity.User) repository.GetUser {
 	data := userRepository.UpdateUser(id, user)
 	return data
 }
+
+// DeleteUser service
+func (u *UserService) DeleteUser(id uint) repository.GetUser {
+	userExist := userRepository.UserExist(repository.UserExistParams{ID: id})
+	if (userExist == entity.User{}) {
+		exception.BadRequest("User with this id not exist", "USER_NOT_FOUND")
+	}
+
+	data := userRepository.DeleteUser(id)
+	return data
+}

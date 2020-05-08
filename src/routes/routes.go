@@ -16,6 +16,7 @@ func Router(g *gin.RouterGroup) {
 		g.GET("/user/:id", validation.GetUser, controller.GetUser)
 		g.POST("/user", validation.CreateUser, controller.CreateUser)
 		g.PATCH("/user/:id", validation.UpdateUser, controller.UpdateUser)
+		g.DELETE("/user/:id", validation.DeleteUser, controller.DeleteUser)
 
 		g.GET("/health", func(c *gin.Context) {
 			c.JSON(http.StatusOK, gin.H{

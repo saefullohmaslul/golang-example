@@ -70,3 +70,11 @@ func UpdateUser(c *gin.Context) {
 	}
 	Validate(userValidate)
 }
+
+// DeleteUser validation
+func DeleteUser(c *gin.Context) {
+	param := GetUserParamSchema{}
+	if err := c.ShouldBindUri(&param); err != nil {
+		exception.BadRequest("Param must be of type integer, required", "INVALID_BODY")
+	}
+}

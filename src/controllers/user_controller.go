@@ -19,7 +19,7 @@ type UserController struct {
 }
 
 // GetUsers will retrieve all user
-func (u UserController) GetUsers(c *gin.Context) {
+func (u *UserController) GetUsers(c *gin.Context) {
 	users := userService.GetUsers()
 	c.JSON(http.StatusOK, gin.H{
 		"status":  http.StatusOK,
@@ -29,7 +29,7 @@ func (u UserController) GetUsers(c *gin.Context) {
 }
 
 // GetUser will retrieve user
-func (u UserController) GetUser(c *gin.Context) {
+func (u *UserController) GetUser(c *gin.Context) {
 	param := validation.GetUserParamSchema{}
 	_ = c.ShouldBindUri(&param)
 
@@ -42,7 +42,7 @@ func (u UserController) GetUser(c *gin.Context) {
 }
 
 // CreateUser will add user into database
-func (u UserController) CreateUser(c *gin.Context) {
+func (u *UserController) CreateUser(c *gin.Context) {
 	var user entity.User
 	_ = c.ShouldBindBodyWith(&user, binding.JSON)
 
@@ -55,7 +55,7 @@ func (u UserController) CreateUser(c *gin.Context) {
 }
 
 // UpdateUser will update user by id
-func (u UserController) UpdateUser(c *gin.Context) {
+func (u *UserController) UpdateUser(c *gin.Context) {
 	user := entity.User{}
 	param := validation.GetUserParamSchema{}
 	_ = c.ShouldBindUri(&param)
@@ -65,6 +65,19 @@ func (u UserController) UpdateUser(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"status":  http.StatusOK,
 		"message": "Success update user",
+		"result":  data,
+	})
+}
+
+// DeleteUser will delete user by id
+func (u *UserController) DeleteUser(c *gin.Context) {
+	param := validation.GetUserParamSchema{}
+	_ = c.ShouldBindUri(&param)
+
+	data := userService.DeleteUser(param.ID)
+	c.JSON(http.StatusOK, gin.H{
+		"status":  http.StatusOK,
+		"message": "Success delete user",
 		"result":  data,
 	})
 }

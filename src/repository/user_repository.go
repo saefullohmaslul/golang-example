@@ -68,3 +68,11 @@ func (u *UserRepository) UpdateUser(id uint, update entity.User) GetUser {
 	query().Select("name, email, address, age").Where("id = ?", id).First(&userUpdated)
 	return userUpdated
 }
+
+// DeleteUser to delete user by id
+func (u *UserRepository) DeleteUser(id uint) GetUser {
+	deletedUser := GetUser{}
+	query().Select("name, email, address, age").Where("id = ?", id).First(&deletedUser)
+	query().Where("id = ?", id).Delete(entity.User{})
+	return deletedUser
+}
