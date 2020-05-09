@@ -9,6 +9,9 @@ import (
 
 // Validate -> function to validate request
 func Validate(schema interface{}) {
+	/**
+	 * create validator instance
+	 */
 	validate := validator.New()
 
 	if err := validate.Struct(schema); err != nil {

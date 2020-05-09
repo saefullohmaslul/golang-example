@@ -10,17 +10,18 @@ var (
 	userRepository repository.UserRepository = repository.UserRepository{}
 )
 
-// UserService layer
+// UserService -> the propose of user service
+// is handling business logic application
 type UserService struct {
 }
 
-// GetUsers service
+// GetUsers -> get users service logic
 func (u *UserService) GetUsers() []repository.GetUser {
 	users := userRepository.GetUsers()
 	return users
 }
 
-// GetUser service
+// GetUser -> get user service logic
 func (u *UserService) GetUser(id int64) repository.GetUser {
 	user := userRepository.GetUser(id)
 
@@ -31,7 +32,7 @@ func (u *UserService) GetUser(id int64) repository.GetUser {
 	return user
 }
 
-// CreateUser service
+// CreateUser -> create user service logic
 func (u *UserService) CreateUser(user entity.User) repository.GetUser {
 	userExist := userRepository.UserExist(
 		repository.UserExistParams{Email: user.Email},
@@ -45,7 +46,7 @@ func (u *UserService) CreateUser(user entity.User) repository.GetUser {
 	return data
 }
 
-// UpdateUser service
+// UpdateUser -> update user service logic
 func (u *UserService) UpdateUser(id uint, user entity.User) repository.GetUser {
 	userExist := userRepository.UserExist(repository.UserExistParams{ID: id})
 	if (userExist == entity.User{}) {
@@ -56,7 +57,7 @@ func (u *UserService) UpdateUser(id uint, user entity.User) repository.GetUser {
 	return data
 }
 
-// DeleteUser service
+// DeleteUser -> delete user service logic
 func (u *UserService) DeleteUser(id uint) repository.GetUser {
 	userExist := userRepository.UserExist(repository.UserExistParams{ID: id})
 	if (userExist == entity.User{}) {

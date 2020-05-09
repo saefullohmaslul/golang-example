@@ -13,7 +13,7 @@ import (
 var conn *gorm.DB
 var err error
 
-// Connection conn instance
+// Connection -> create connection with credentials
 func Connection() {
 	authDB := fmt.Sprintf("host=%s port=%s user=%s dbname=%s sslmode=disable password=%s",
 		os.Getenv("DB_HOST"),
@@ -29,7 +29,7 @@ func Connection() {
 	}
 }
 
-// AppConnection to handle connection db for app
+// AppConnection -> method to create connection for application
 func AppConnection() {
 	if err := godotenv.Load(); err != nil {
 		logging.Error("ENV", err)
@@ -37,7 +37,7 @@ func AppConnection() {
 	Connection()
 }
 
-// TestConnection to handle connection db for test
+// TestConnection -> method to create connection for application testing
 func TestConnection() {
 	if err := godotenv.Load("../.env"); err != nil {
 		logging.Error("ENV", err)
@@ -45,12 +45,12 @@ func TestConnection() {
 	Connection()
 }
 
-// GetDB connection
+// GetDB -> method to get connection instance
 func GetDB() *gorm.DB {
 	return conn
 }
 
-// DropAllTable for testing
+// DropAllTable -> method to drop all database table (using this only for testing)
 func DropAllTable() {
 	conn.DropTable(&entity.User{})
 }

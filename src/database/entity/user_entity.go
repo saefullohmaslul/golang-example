@@ -1,6 +1,6 @@
 package entity
 
-// User model
+// User -> user entity schema
 type User struct {
 	ID       uint   `gorm:"primary_key" json:"id"`
 	Name     string `json:"name"`

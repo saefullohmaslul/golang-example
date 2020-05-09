@@ -14,11 +14,14 @@ var (
 	userService services.UserService = services.UserService{}
 )
 
-// UserController is controller for user module
+// UserController -> the propose of user controller
+// is handling request from client and
+// forward it to specific service
 type UserController struct {
 }
 
-// GetUsers will retrieve all user
+// GetUsers -> get users routes
+// GET /users
 func (u *UserController) GetUsers(c *gin.Context) {
 	users := userService.GetUsers()
 	c.JSON(http.StatusOK, gin.H{
@@ -28,7 +31,8 @@ func (u *UserController) GetUsers(c *gin.Context) {
 	})
 }
 
-// GetUser will retrieve user
+// GetUser -> get user by id routes
+// GET /user/:id
 func (u *UserController) GetUser(c *gin.Context) {
 	param := validation.GetUserParamSchema{}
 	_ = c.ShouldBindUri(&param)
@@ -41,7 +45,8 @@ func (u *UserController) GetUser(c *gin.Context) {
 	})
 }
 
-// CreateUser will add user into database
+// CreateUser -> create user routes
+// POST /user
 func (u *UserController) CreateUser(c *gin.Context) {
 	var user entity.User
 	_ = c.ShouldBindBodyWith(&user, binding.JSON)
@@ -54,7 +59,8 @@ func (u *UserController) CreateUser(c *gin.Context) {
 	})
 }
 
-// UpdateUser will update user by id
+// UpdateUser -> update user routes by id
+// PATCH /user/:id
 func (u *UserController) UpdateUser(c *gin.Context) {
 	user := entity.User{}
 	param := validation.GetUserParamSchema{}
@@ -69,7 +75,8 @@ func (u *UserController) UpdateUser(c *gin.Context) {
 	})
 }
 
-// DeleteUser will delete user by id
+// DeleteUser -> delete user routes by id
+// DELETE /user/:id
 func (u *UserController) DeleteUser(c *gin.Context) {
 	param := validation.GetUserParamSchema{}
 	_ = c.ShouldBindUri(&param)
