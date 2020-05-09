@@ -59,8 +59,7 @@ func initTestUpdateUser(id string, body map[string]interface{}) (*httptest.Respo
 func TestUpdateUserSuccess(t *testing.T) {
 	defer db.DropAllTable()
 	body := map[string]interface{}{
-		"email": "email@email.com",
-		"age":   "35",
+		"age": 35,
 	}
 	w, _ := initTestUpdateUser("1", body)
 
@@ -78,7 +77,7 @@ func TestUpdateUserSuccess(t *testing.T) {
 func TestUpdateUserNotExist(t *testing.T) {
 	defer db.DropAllTable()
 	body := map[string]interface{}{
-		"age": "35",
+		"age": 35,
 	}
 	w, _ := initTestUpdateUser("2", body)
 
@@ -95,12 +94,50 @@ func TestUpdateUserNotExist(t *testing.T) {
 	assert.Equal(t, "User with this id not exist", actual.Errors.Message)
 }
 
+func TestUpdateUserInvalidBodyEmail(t *testing.T) {
+	defer db.DropAllTable()
+	body := map[string]interface{}{
+		"email": "bukanatemaildotcom",
+	}
+	w, _ := initTestUpdateUser("1", body)
+
+	actual := exception.Exception{}
+	if err := json.Unmarshal([]byte(w.Body.String()), &actual); err != nil {
+		panic(err)
+	}
+
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+	assert.Equal(t, "BAD_REQUEST", actual.Flag)
+	assert.NotEmpty(t, actual.Errors)
+	assert.Equal(t, "INVALID_BODY", actual.Errors.Flag)
+	assert.NotEmpty(t, actual.Errors.Message)
+}
+
 func TestUpdateUserInvalidBodyAge(t *testing.T) {
 	defer db.DropAllTable()
 	body := map[string]interface{}{
-		"age": "35th",
+		"age": "36th",
 	}
 	w, _ := initTestUpdateUser("1", body)
+
+	actual := exception.Exception{}
+	if err := json.Unmarshal([]byte(w.Body.String()), &actual); err != nil {
+		panic(err)
+	}
+
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+	assert.Equal(t, "BAD_REQUEST", actual.Flag)
+	assert.NotEmpty(t, actual.Errors)
+	assert.Equal(t, "INVALID_BODY", actual.Errors.Flag)
+	assert.NotEmpty(t, actual.Errors.Message)
+}
+
+func TestUpdateUserInvalidBodyParam(t *testing.T) {
+	defer db.DropAllTable()
+	body := map[string]interface{}{
+		"age": 10,
+	}
+	w, _ := initTestUpdateUser("x", body)
 
 	actual := exception.Exception{}
 	if err := json.Unmarshal([]byte(w.Body.String()), &actual); err != nil {

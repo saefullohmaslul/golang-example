@@ -19,7 +19,9 @@ type CreateUserSchema struct {
 // CreateUser -> validation to create user
 func CreateUser(c *gin.Context) {
 	var user entity.User
-	_ = c.ShouldBindBodyWith(&user, binding.JSON)
+	if err := c.ShouldBindBodyWith(&user, binding.JSON); err != nil {
+		exception.BadRequest(err.Error(), "INVALID_BODY")
+	}
 
 	userValidate := &CreateUserSchema{
 		Name:     user.Name,
@@ -47,8 +49,8 @@ func GetUser(c *gin.Context) {
 // UpdateUserSchema -> update user schema validation
 type UpdateUserSchema struct {
 	Name    string
-	Email   string `validate:"email"`
-	Age     int64
+	Email   string `validate:"omitempty,email"`
+	Age     int64  `validate:"omitempty,numeric,gt=0"`
 	Address string
 }
 
@@ -60,7 +62,9 @@ func UpdateUser(c *gin.Context) {
 	}
 
 	var user entity.User
-	_ = c.ShouldBindBodyWith(&user, binding.JSON)
+	if err := c.ShouldBindBodyWith(&user, binding.JSON); err != nil {
+		exception.BadRequest(err.Error(), "INVALID_BODY")
+	}
 
 	userValidate := &UpdateUserSchema{
 		Name:    user.Name,
