@@ -2,7 +2,7 @@ package exception
 
 import "net/http"
 
-// Empty handler
+// Empty -> response for empty result
 func Empty(msg string, message string, flag string) {
 	errors := map[string]interface{}{
 		"message": message, "flag": flag,
@@ -17,7 +17,7 @@ func Empty(msg string, message string, flag string) {
 	panic(response)
 }
 
-// BadRequest handler
+// BadRequest -> response for bad request
 func BadRequest(message string, flag string) {
 	errors := map[string]interface{}{
 		"message": message, "flag": flag,
@@ -32,7 +32,7 @@ func BadRequest(message string, flag string) {
 	panic(response)
 }
 
-// InternalServerError handler
+// InternalServerError -> response for internal server error
 func InternalServerError(message string, flag string) {
 	errors := map[string]interface{}{
 		"message": message, "flag": flag,
