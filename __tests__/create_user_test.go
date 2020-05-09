@@ -80,6 +80,7 @@ func TestCreateUserExist(t *testing.T) {
 
 	assert.Equal(t, http.StatusBadRequest, w.Code)
 	assert.Equal(t, http.StatusBadRequest, actual.Status)
+	assert.Equal(t, actual.Flag, "BAD_REQUEST")
 	assert.NotEmpty(t, actual.Errors)
 	assert.Equal(t, "User with this email already exist", actual.Errors.Message)
 	assert.Equal(t, "USER_ALREADY_EXIST", actual.Errors.Flag)
@@ -101,6 +102,7 @@ func TestCreateUserInvalidBodyName(t *testing.T) {
 
 	assert.Equal(t, http.StatusBadRequest, w.Code)
 	assert.Equal(t, http.StatusBadRequest, actual.Status)
+	assert.Equal(t, actual.Flag, "BAD_REQUEST")
 	assert.NotEmpty(t, actual.Errors)
 	assert.NotEmpty(t, actual.Errors.Message)
 	assert.Equal(t, "INVALID_BODY", actual.Errors.Flag)
@@ -122,6 +124,7 @@ func TestCreateUserInvalidBodyEmail(t *testing.T) {
 
 	assert.Equal(t, http.StatusBadRequest, w.Code)
 	assert.Equal(t, http.StatusBadRequest, actual.Status)
+	assert.Equal(t, actual.Flag, "BAD_REQUEST")
 	assert.NotEmpty(t, actual.Errors)
 	assert.NotEmpty(t, actual.Errors.Message)
 	assert.Equal(t, "INVALID_BODY", actual.Errors.Flag)
@@ -142,6 +145,7 @@ func TestCreateUserInvalidBodyPassword(t *testing.T) {
 
 	assert.Equal(t, http.StatusBadRequest, w.Code)
 	assert.Equal(t, http.StatusBadRequest, actual.Status)
+	assert.Equal(t, actual.Flag, "BAD_REQUEST")
 	assert.NotEmpty(t, actual.Errors)
 	assert.NotEmpty(t, actual.Errors.Message)
 	assert.Equal(t, "INVALID_BODY", actual.Errors.Flag)
