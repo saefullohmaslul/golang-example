@@ -1,8 +1,26 @@
-# Golang Example Boilerplate
+<p align="center">
+  <a href="https://cdn.ednsquare.com/s/*/4a103e29-8bfb-467c-b2f6-1e510638e9fc.png" target="blank"><img src="https://cdn.ednsquare.com/s/*/4a103e29-8bfb-467c-b2f6-1e510638e9fc.png" width="200" alt="Go" /></a>
+</p>
 
-[![lint](https://github.com/saefullohmaslul/golang-example/workflows/lint/badge.svg?branch=master)](https://github.com/saefullohmaslul/golang-example/actions?query=workflow%3Alint) [![test](https://github.com/saefullohmaslul/golang-example/workflows/test/badge.svg?branch=master)](https://github.com/saefullohmaslul/golang-example/actions?query=workflow%3Atest) [![codecov](https://codecov.io/gh/saefullohmaslul/golang-example/branch/master/graph/badge.svg)](https://codecov.io/gh/saefullohmaslul/golang-example/tree/master/src) [![Go Report Card](https://goreportcard.com/badge/github.com/saefullohmaslul/golang-example)](https://goreportcard.com/report/github.com/saefullohmaslul/golang-example) [![build](https://github.com/saefullohmaslul/golang-example/workflows/build/badge.svg?branch=master)](https://github.com/saefullohmaslul/golang-example/actions?query=workflow%3Abuild)
+<h1 align="center">Golang Example Boilerplate</h1>
 
-Simple REST API with golang (**golang boilerplate**)
+<p align="center">
+  <a href="https://github.com/saefullohmaslul/golang-example/actions?query=workflow%3Alint" target="_blank"><img src="https://github.com/saefullohmaslul/golang-example/workflows/lint/badge.svg?branch=master" alt="build" /></a>
+  <a href="https://github.com/saefullohmaslul/golang-example/actions?query=workflow%3Atest" target="_blank"><img src="https://github.com/saefullohmaslul/golang-example/workflows/test/badge.svg?branch=master" alt="license" /></a>
+  <a href="https://codecov.io/gh/saefullohmaslul/golang-example/tree/master/src" target="_blank"><img src="https://codecov.io/gh/saefullohmaslul/golang-example/branch/master/graph/badge.svg" alt="license" /></a>
+  <a href="https://goreportcard.com/report/github.com/saefullohmaslul/golang-example" target="_blank"><img src="https://goreportcard.com/badge/github.com/saefullohmaslul/golang-example" alt="license" /></a>
+  <a href="https://github.com/saefullohmaslul/golang-example/actions?query=workflow%3Abuild" target="_blank"><img src="https://github.com/saefullohmaslul/golang-example/workflows/build/badge.svg?branch=master" alt="license" /></a>
+  <a href="https://opensource.org/licenses/MIT" target="_blank"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="license" /></a>
+</p>
+
+## Feature
+
+- Clean code (DDD)
+- Gin Framework
+- Docker and docker-compose
+- ORM with gorm
+- Integration testing
+- Integration with github actions
 
 ## How to run
 
