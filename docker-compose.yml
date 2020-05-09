@@ -2,8 +2,29 @@ version: '3.7'
 
 services: 
   app:
+    hostname: golang_example_development
+    container_name: golang_example_development
+    depends_on: 
+      - postgres
+    restart: unless-stopped
+    build: 
+      context: .
+      dockerfile: Dockerfile
+      target: local
+    environment: 
+      DEBUG: "true"
+      SERVING_PORT: "*:8080"
+      DB_HOST: localhost
+    volumes: 
+      - .:/app
+    working_dir: /app
+    env_file: 
+      - .env
+    command: bash -c "go mod download && make watch"
     ports:
       - "8080:8080"
+    network_mode: host
+    tty: true
 
   postgres:
     image: postgres:11

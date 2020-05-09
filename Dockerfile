@@ -8,7 +8,7 @@ WORKDIR /app
 COPY . .
 
 # Development
-FROM prod as dev
+FROM prod as local
 RUN apk add --no-cache make
 RUN go get -u github.com/cosmtrek/air
 RUN mkdir -p /app

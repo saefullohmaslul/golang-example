@@ -15,12 +15,19 @@ There are two ways to run this application, with docker or without docker
 cp .env.example .env
 
 # running in development mode, you can use live-reload when safe file
-make docker-dev
+make run-local
+
+# remove production container
+make down-local
+
 
 # running in production image
-make docker-prod
+make run-production
 docker logs --tail=100 -f golang_example_production # monitoring production container
 docker exec -it golang_example_production sh # access bash on production container
+
+# remove production container
+make down-production
 ```
 
 ```bash
@@ -36,6 +43,42 @@ make run
 
 ```bash
 make test
+```
+
+## Run lint
+
+```bash
+make lint
+```
+
+## Project structure
+
+```bash
+.
+├── air.conf                              # air configuration (like nodemon.json)
+├── docker-compose.production.yml         # docker compose for production image
+├── docker-compose.yml                    # docker compose for local image
+├── Dockerfile                            # build app image
+├── go.mod                                # go mod
+├── go.sum                                # go sum
+├── LICENSE                               # license for this boilerplate
+├── Makefile                              # contain all command to run project
+├── README.md                             # you read this file
+├── src
+│   ├── app                               # application configuration
+│   ├── controllers                       # all controller in here
+│   ├── database                          # contain entity, migation and database instance
+│   │   ├── connection.go
+│   │   ├── entity
+│   │   └── migration
+│   ├── main.go                           # main project
+│   ├── middlewares                       # all middleware configuration
+│   ├── repository                        # repository (handler query database)
+│   ├── routes                            # all routes which is application need
+│   ├── services                          # contain all business logic
+│   ├── utils                             # utility application
+│   └── validation                        # validation request schema
+└── __tests__                             # contain all integration testing file
 ```
 
 ## Stay in touch
