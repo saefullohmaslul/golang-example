@@ -6,6 +6,7 @@ RUN apk update && apk upgrade && \
 RUN mkdir -p /app
 WORKDIR /app
 COPY . .
+EXPOSE 8080
 
 # Development
 FROM prod as local
@@ -14,3 +15,4 @@ RUN go get -u github.com/cosmtrek/air
 RUN mkdir -p /app
 WORKDIR /app
 COPY . .
+EXPOSE 8080
