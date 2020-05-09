@@ -14,16 +14,15 @@ services:
     environment: 
       DEBUG: "true"
       SERVING_PORT: "*:8080"
-      DB_HOST: localhost
+      DB_HOST: golang_example_db
     volumes: 
       - .:/app
     working_dir: /app
     env_file: 
       - .env
-    command: bash -c "go mod download && make watch"
     ports:
-      - "8080:8080"
-    network_mode: host
+      - 8080:8080
+    command: bash -c "go mod download && make watch"
     tty: true
 
   postgres:
@@ -38,12 +37,6 @@ services:
       - POSTGRES_PORT=5432
     ports:
       - 5432:5432
-    networks:
-      - net
 
 volumes: 
   golang_example:
-
-networks: 
-  net:
-    driver: bridge
