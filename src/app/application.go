@@ -10,24 +10,27 @@ import (
 	"github.com/saefullohmaslul/golang-example/src/routes"
 )
 
-// Application struct
+// Application -> application instance
 type Application struct {
 }
 
-// CreateApp method
+// CreateApp -> method to create gin application
 func (a Application) CreateApp(r *gin.Engine) {
 	r.Use(exception.Recovery(exception.ErrorHandler))
 	configureAPIEndpoint(r)
 	configureAppDB()
 }
 
-// CreateTest method
+// CreateTest -> method to create gin application with environment test
 func (a Application) CreateTest(r *gin.Engine) {
 	r.Use(exception.Recovery(exception.ErrorHandler))
 	configureAPIEndpoint(r)
 	configureTestDB()
 }
 
+/**
+ * configuration all endpoint
+ */
 func configureAPIEndpoint(r *gin.Engine) {
 	g := r.Group("/")
 	routes.Router(g)
@@ -43,12 +46,18 @@ func configureAPIEndpoint(r *gin.Engine) {
 	})
 }
 
+/**
+ * configuration database application
+ */
 func configureAppDB() {
 	db.AppConnection()
 	conn := db.GetDB()
 	migration.Migrate(conn)
 }
 
+/**
+ * configuration database application for testing
+ */
 func configureTestDB() {
 	db.TestConnection()
 	conn := db.GetDB()

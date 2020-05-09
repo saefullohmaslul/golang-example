@@ -6,15 +6,19 @@ import (
 	"github.com/saefullohmaslul/golang-example/src/database/entity"
 )
 
-// UserRepository layer
+// UserRepository -> the propose of user repository
+// is handling query for user entity
 type UserRepository struct {
 }
 
+/**
+ * get database instance with custom table name
+ */
 func query() *gorm.DB {
 	return db.GetDB().Table("users")
 }
 
-// GetUser struct
+// GetUser -> get user struct format
 type GetUser struct {
 	Name    string `json:"name"`
 	Email   string `json:"email"`
@@ -22,14 +26,14 @@ type GetUser struct {
 	Address string `json:"address"`
 }
 
-// GetUsers repository
+// GetUsers -> method to get all users in database
 func (u *UserRepository) GetUsers() []GetUser {
 	users := []GetUser{}
 	query().Select("name, email, address, age").Find(&users)
 	return users
 }
 
-// GetUser repository
+// GetUser -> method to get specific user by id
 func (u *UserRepository) GetUser(id int64) GetUser {
 	user := GetUser{}
 	query().Select("name, email, address, age").Where("id = ?", id).First(&user)
@@ -42,7 +46,7 @@ type UserExistParams struct {
 	ID    uint
 }
 
-// UserExist to check if user already exist
+// UserExist -> method to check if user already exist in database by email or id
 func (u *UserRepository) UserExist(param UserExistParams) entity.User {
 	user := entity.User{}
 	if param.ID == 0 {
@@ -53,7 +57,7 @@ func (u *UserRepository) UserExist(param UserExistParams) entity.User {
 	return user
 }
 
-// CreateUser to insert user in DB
+// CreateUser -> method to add user in database
 func (u *UserRepository) CreateUser(user entity.User) GetUser {
 	query().Create(&user)
 	userCreated := GetUser{}
@@ -61,7 +65,7 @@ func (u *UserRepository) CreateUser(user entity.User) GetUser {
 	return userCreated
 }
 
-// UpdateUser to update user in DB
+// UpdateUser -> method to update user by id
 func (u *UserRepository) UpdateUser(id uint, update entity.User) GetUser {
 	query().Where("id = ?", id).Updates(update)
 	userUpdated := GetUser{}
@@ -69,7 +73,7 @@ func (u *UserRepository) UpdateUser(id uint, update entity.User) GetUser {
 	return userUpdated
 }
 
-// DeleteUser to delete user by id
+// DeleteUser -> method to delete user by id
 func (u *UserRepository) DeleteUser(id uint) GetUser {
 	deletedUser := GetUser{}
 	query().Select("name, email, address, age").Where("id = ?", id).First(&deletedUser)

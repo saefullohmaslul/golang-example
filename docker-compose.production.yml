@@ -4,6 +4,8 @@ services:
   app:
     hostname: golang_example_production
     container_name: golang_example_production
+    depends_on: 
+      - postgres
     restart: always
     build: 
       context: .
@@ -11,11 +13,28 @@ services:
       target: prod
     environment: 
       SERVING_PORT: "*:8080"
-      DB_HOST: localhost
+      DB_HOST: golang_example_db
       DB_PORT: 5432
       DB_NAME: golang_example_db
       DB_USER: postgres
       DB_PASS: developer
       GIN_MODE: release
+    ports:
+      - 8080:8080
     command: bash -c "go mod download && go build -o /bin/app/build/main ./src && /bin/app/build/main"
-    network_mode: host
+
+  postgres:
+    image: postgres:11
+    container_name: golang_example_db
+    volumes:
+      - golang_example_production:/var/libs/postgresql/data
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=developer
+      - POSTGRES_DB=golang_example_db
+      - POSTGRES_PORT=5432
+    ports:
+      - 5432:5432
+
+volumes: 
+  golang_example_production:

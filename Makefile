@@ -1,6 +1,7 @@
 # Local
 install:
 	@go get -u ./src
+	@go mod download
 	@echo "All package installed"
 
 run:
@@ -12,11 +13,17 @@ watch:
 build:
 	@go build -o ./build/main ./src
 
-docker-dev:
-	@docker-compose -f docker-compose.yml -f docker-compose.dev.yml up --build
+run-local:
+	@docker-compose -f docker-compose.yml up --build
 
-docker-prod:
-	@docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
+down-local:
+	@docker-compose -f docker-compose.yml down
+
+run-production:
+	@docker-compose -f docker-compose.production.yml up --build -d
+
+down-production:
+	@docker-compose -f docker-compose.production.yml down
 
 kill-port:
 	@kill -9 $$(lsof -t -i:8080)

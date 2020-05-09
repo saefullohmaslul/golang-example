@@ -16,7 +16,7 @@ type CreateUserSchema struct {
 	Address  string
 }
 
-// CreateUser validation
+// CreateUser -> validation to create user
 func CreateUser(c *gin.Context) {
 	var user entity.User
 	_ = c.ShouldBindBodyWith(&user, binding.JSON)
@@ -31,12 +31,12 @@ func CreateUser(c *gin.Context) {
 	Validate(userValidate)
 }
 
-// GetUserParamSchema to check schema param
+// GetUserParamSchema -> check schema param validation
 type GetUserParamSchema struct {
 	ID uint `uri:"id" binding:"required"`
 }
 
-// GetUser validation
+// GetUser -> validation to get user by id
 func GetUser(c *gin.Context) {
 	param := GetUserParamSchema{}
 	if err := c.ShouldBindUri(&param); err != nil {
@@ -52,7 +52,7 @@ type UpdateUserSchema struct {
 	Address string
 }
 
-// UpdateUser validation
+// UpdateUser -> validation to update user by id with body
 func UpdateUser(c *gin.Context) {
 	param := GetUserParamSchema{}
 	if err := c.ShouldBindUri(&param); err != nil {
@@ -71,7 +71,7 @@ func UpdateUser(c *gin.Context) {
 	Validate(userValidate)
 }
 
-// DeleteUser validation
+// DeleteUser -> validation to delete user by id
 func DeleteUser(c *gin.Context) {
 	param := GetUserParamSchema{}
 	if err := c.ShouldBindUri(&param); err != nil {
