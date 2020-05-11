@@ -8,6 +8,7 @@ import (
 	"github.com/saefullohmaslul/golang-example/src/database/migration"
 	"github.com/saefullohmaslul/golang-example/src/middlewares/exception"
 	"github.com/saefullohmaslul/golang-example/src/routes"
+	"github.com/saefullohmaslul/golang-example/src/runner"
 )
 
 // Application -> application instance
@@ -19,6 +20,7 @@ func (a Application) CreateApp(r *gin.Engine) {
 	r.Use(exception.Recovery(exception.ErrorHandler))
 	configureAPIEndpoint(r)
 	configureAppDB()
+	runner.PubSubRunner()
 }
 
 // CreateTest -> method to create gin application with environment test
@@ -26,6 +28,7 @@ func (a Application) CreateTest(r *gin.Engine) {
 	r.Use(exception.Recovery(exception.ErrorHandler))
 	configureAPIEndpoint(r)
 	configureTestDB()
+	runner.PubSubRunner()
 }
 
 /**
