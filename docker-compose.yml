@@ -6,6 +6,8 @@ services:
     container_name: golang_example_development
     depends_on: 
       - postgres
+      - zookeeper
+      - kafka
     restart: unless-stopped
     build: 
       context: .
@@ -15,6 +17,7 @@ services:
       DEBUG: "true"
       SERVING_PORT: "*:8080"
       DB_HOST: golang_example_db
+      KAFKA_HOST: kafka:9092
     volumes: 
       - .:/app
     working_dir: /app
@@ -24,6 +27,9 @@ services:
       - 8080:8080
     command: bash -c "go mod download && make watch"
     tty: true
+    networks: 
+      - kafka
+      - golang_example_development
 
   postgres:
     image: postgres:11
@@ -37,6 +43,45 @@ services:
       - POSTGRES_PORT=5432
     ports:
       - 5432:5432
+    networks:
+      - golang_example_development
+
+  kafka:
+    image: confluentinc/cp-kafka:4.1.0
+    container_name: golang_example_kafka
+    depends_on: 
+      - zookeeper
+    environment: 
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+    ports: 
+      - 9092:9092
+    networks: 
+      - kafka
+    extra_hosts: 
+      kafka: 127.0.0.1
+    volumes:
+      - 'kafka_data:/kafka'
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:4.1.0
+    container_name: golang_example_zookeeper
+    environment: 
+      ZOOKEEPER_SERVER_ID: 1
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_INIT_LIMIT: 5
+      ZOOKEEPER_SYNC_LIMIT: 3
+    networks: 
+      - kafka
+    volumes:
+      - 'zookeeper_data:/zookeeper'
 
 volumes: 
   golang_example:
+  zookeeper_data:
+  kafka_data:
+
+networks:
+  kafka:
+  golang_example_development:
