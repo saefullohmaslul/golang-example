@@ -5,7 +5,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
-	"github.com/saefullohmaslul/golang-example/package/kafka"
 	"github.com/saefullohmaslul/golang-example/src/database/entity"
 	"github.com/saefullohmaslul/golang-example/src/services"
 	"github.com/saefullohmaslul/golang-example/src/validation"
@@ -25,10 +24,6 @@ type UserController struct {
 // GET /users
 func (u *UserController) GetUsers(c *gin.Context) {
 	users := userService.GetUsers()
-
-	topic := "test_topic"
-	message := "Aku Bulat"
-	kafka.PublishTopic(topic, message)
 
 	c.JSON(http.StatusOK, gin.H{
 		"status":  http.StatusOK,
