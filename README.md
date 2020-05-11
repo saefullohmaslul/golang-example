@@ -19,6 +19,7 @@
 - Gin Framework
 - Docker and docker-compose
 - ORM with gorm
+- Pub/Sub with kafka
 - Integration testing
 - Integration with github actions
 
