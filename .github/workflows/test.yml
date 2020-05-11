@@ -24,8 +24,6 @@ jobs:
 
       kafka:
         image: confluentinc/cp-kafka:4.1.0
-        depends_on: 
-          - zookeeper
         environment: 
           KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
           KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
