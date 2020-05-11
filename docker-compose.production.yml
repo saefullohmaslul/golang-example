@@ -7,7 +7,6 @@ services:
     depends_on: 
       - postgres
       - zookeeper
-      - kafka
     restart: always
     build: 
       context: .
@@ -20,7 +19,9 @@ services:
       DB_NAME: golang_example_db
       DB_USER: postgres
       DB_PASS: developer
-      KAFKA_HOST: kafka:9092
+      KAFKA_HOST_1: kafka_1:29092
+      KAFKA_HOST_2: kafka_2:29093
+      KAFKA_HOST_3: kafka_3:29094
       GIN_MODE: release
     ports:
       - 8080:8080
@@ -44,41 +45,68 @@ services:
     networks: 
       - golang_example_production
   
-  kafka:
-    image: confluentinc/cp-kafka:4.1.0
-    container_name: golang_example_kafka
+  zookeeper:
+    image: bitnami/zookeeper:latest
+    ports:
+      - 2181:2181
+    environment: 
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    networks: 
+      - kafka
+  
+  kafka_1:
+    image: bitnami/kafka:latest
+    container_name: kafka_1
+    ports:
+      - 29092:29092
+      - 9092:9092
+    environment: 
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      - KAFKA_LISTENERS=PLAINTEXT://:9092,PLAINTEXT_HOST://:29092
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka_1:9092,PLAINTEXT_HOST://kafka_1:29092
     depends_on: 
       - zookeeper
-    environment: 
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
-    ports: 
-      - 9092:9092
     networks: 
       - kafka
-    extra_hosts: 
-      kafka: 127.0.0.1
-    volumes:
-      - 'kafka_data:/kafka'
-
-  zookeeper:
-    image: confluentinc/cp-zookeeper:4.1.0
-    container_name: golang_example_zookeeper
+    
+  kafka_2:
+    image: bitnami/kafka:latest
+    container_name: kafka_2
+    ports:
+      - 29093:29093
+      - 9093:9092
     environment: 
-      ZOOKEEPER_SERVER_ID: 1
-      ZOOKEEPER_CLIENT_PORT: 2181
-      ZOOKEEPER_TICK_TIME: 2000
-      ZOOKEEPER_INIT_LIMIT: 5
-      ZOOKEEPER_SYNC_LIMIT: 3
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      - KAFKA_LISTENERS=PLAINTEXT://:9093,PLAINTEXT_HOST://:29093
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka_2:9093,PLAINTEXT_HOST://kafka_2:29093
+    depends_on: 
+      - zookeeper
     networks: 
       - kafka
-    volumes:
-      - 'zookeeper_data:/zookeeper'
+    
+  kafka_3:
+    image: bitnami/kafka:latest
+    container_name: kafka_3
+    ports:
+      - 29094:29094
+      - 9094:9092
+    environment: 
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      - KAFKA_LISTENERS=PLAINTEXT://:9094,PLAINTEXT_HOST://:29094
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka_3:9094,PLAINTEXT_HOST://kafka_3:29094
+    depends_on: 
+      - zookeeper
+    networks: 
+      - kafka
 
 volumes: 
   golang_example_production:
-  zookeeper_data:
-  kafka_data:
 
 networks:
   kafka:

@@ -40,7 +40,7 @@ func LogFormatter() {
 func ConsumeTopic(topic string) {
 	LogFormatter()
 	kafkaConfig := GetKafkaConfig("", "")
-	consumers, err := sarama.NewConsumer([]string{os.Getenv("KAFKA_HOST")}, kafkaConfig)
+	consumers, err := sarama.NewConsumer([]string{os.Getenv("KAFKA_HOST_1"), os.Getenv("KAFKA_HOST_2"), os.Getenv("KAFKA_HOST_3")}, kafkaConfig)
 	if err != nil {
 		logrus.Errorf("Error create kafka consumer got error %v", err)
 	}
@@ -63,7 +63,7 @@ func ConsumeTopic(topic string) {
 func PublishTopic(topic, message string) {
 	LogFormatter()
 	kafkaConfig := GetKafkaConfig("", "")
-	producers, err := sarama.NewSyncProducer([]string{os.Getenv("KAFKA_HOST")}, kafkaConfig)
+	producers, err := sarama.NewSyncProducer([]string{os.Getenv("KAFKA_HOST_1"), os.Getenv("KAFKA_HOST_2"), os.Getenv("KAFKA_HOST_3")}, kafkaConfig)
 	if err != nil {
 		logrus.Errorf("Unable to create kafka producer got error %v", err)
 		return
