@@ -22,9 +22,18 @@ jobs:
         ports:
           - 5432:5432
 
+      zookeeper:
+        image: confluentinc/cp-zookeeper:4.1.0
+        env: 
+          ZOOKEEPER_SERVER_ID: 1
+          ZOOKEEPER_CLIENT_PORT: 2181
+          ZOOKEEPER_TICK_TIME: 2000
+          ZOOKEEPER_INIT_LIMIT: 5
+          ZOOKEEPER_SYNC_LIMIT: 3
+
       kafka:
         image: confluentinc/cp-kafka:4.1.0
-        environment: 
+        env: 
           KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
           KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
         ports: 
@@ -32,15 +41,6 @@ jobs:
         extra_hosts: 
           kafka: 127.0.0.1
     
-      zookeeper:
-        image: confluentinc/cp-zookeeper:4.1.0
-        environment: 
-          ZOOKEEPER_SERVER_ID: 1
-          ZOOKEEPER_CLIENT_PORT: 2181
-          ZOOKEEPER_TICK_TIME: 2000
-          ZOOKEEPER_INIT_LIMIT: 5
-          ZOOKEEPER_SYNC_LIMIT: 3
-
     steps:
       - name: Install Go
         uses: actions/setup-go@v2
