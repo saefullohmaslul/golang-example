@@ -3,7 +3,6 @@ package validation
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
-	"github.com/saefullohmaslul/golang-example/src/database/entity"
 	"github.com/saefullohmaslul/golang-example/src/middlewares/exception"
 )
 
@@ -18,7 +17,7 @@ type CreateUserSchema struct {
 
 // CreateUser -> validation to create user
 func CreateUser(c *gin.Context) {
-	var user entity.User
+	var user CreateUserSchema
 	if err := c.ShouldBindBodyWith(&user, binding.JSON); err != nil {
 		exception.BadRequest(err.Error(), "INVALID_BODY")
 	}
@@ -61,7 +60,7 @@ func UpdateUser(c *gin.Context) {
 		exception.BadRequest("Param must be of type integer, required", "INVALID_BODY")
 	}
 
-	var user entity.User
+	var user UpdateUserSchema
 	if err := c.ShouldBindBodyWith(&user, binding.JSON); err != nil {
 		exception.BadRequest(err.Error(), "INVALID_BODY")
 	}
