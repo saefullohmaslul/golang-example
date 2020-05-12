@@ -14,5 +14,8 @@ RUN apk add --no-cache make
 RUN go get -u github.com/cosmtrek/air
 RUN mkdir -p /app
 WORKDIR /app
+COPY go.mod go.sum ./
+RUN go mod download
 COPY . .
 EXPOSE 8080
+CMD ["make", "watch"]

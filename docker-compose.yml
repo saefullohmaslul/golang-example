@@ -25,7 +25,7 @@ services:
       - .env
     ports:
       - 8080:8080
-    command: bash -c "go mod download && make watch"
+    command: make watch
     tty: true
     networks: 
       - kafka
