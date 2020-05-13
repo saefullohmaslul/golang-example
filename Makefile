@@ -29,18 +29,14 @@ kill-port:
 	@kill -9 $$(lsof -t -i:8080)
 	@echo "Port 8080 is killed"
 
-# test:
-# 	@go test ./__tests__/ -v -coverpkg=./... -coverprofile=coverage.out.tmp ./...
-# 	@cat coverage.out.tmp | grep -v "app/application.go" | grep -v "database/" | grep -v "package/" > coverage.out
-# 	@go tool cover -func=coverage.out
-# 	@go tool cover -html=coverage.out
-# 	@rm -f coverage.out coverage.out.tmp
-
 test:
 	@make test-unit
 	@make test-int
-	@grep 'mode' coverage_unit.out > coverage.out.tmp; grep 'github' coverage_unit.out >> coverage.out.tmp; grep 'github' coverage_int.out >> coverage.out.tmp
-	@cat coverage.out.tmp | grep -v "app/application.go" | grep -v "database/" > coverage.out
+	@grep 'mode' coverage_unit.out > coverage.out.tmp
+	@grep 'github' coverage_unit.out >> coverage.out.tmp
+	@grep 'github' coverage_int.out >> coverage.out.tmp
+	@grep -A10 'files:' ignore_test.yml | grep -v "files:" | sed 's/ //g' > coverage.out.list
+	@grep -v -F -f coverage.out.list coverage.out.tmp > coverage.out
 	@go tool cover -func=coverage.out
 	@go tool cover -html=coverage.out
 	@rm -f coverage*

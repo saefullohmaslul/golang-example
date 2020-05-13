@@ -6,13 +6,12 @@ import (
 	"github.com/saefullohmaslul/golang-example/src/repository"
 )
 
-// UserService -> the propose of user service
-// is handling business logic application
+// UserService -> the propose of user service is handling business logic application
 type UserService struct {
 	UserRepository repository.UserRepository
 }
 
-// UService service
+// UService -> user service instance
 func UService() UserService {
 	return UserService{
 		UserRepository: repository.URepository(),

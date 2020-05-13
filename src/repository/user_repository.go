@@ -6,13 +6,12 @@ import (
 	"github.com/saefullohmaslul/golang-example/src/database/entity"
 )
 
-// UserRepository -> the propose of user repository
-// is handling query for user entity
+// UserRepository -> the propose of user repository is handling query for user entity
 type UserRepository struct {
 	Conn *gorm.DB
 }
 
-// URepository to get user table connection
+// URepository -> user repository instance to get user table connection
 func URepository() UserRepository {
 	return UserRepository{Conn: db.GetDB().Table("users")}
 }
