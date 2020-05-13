@@ -74,30 +74,34 @@ make lint
 
 ```bash
 .
+├── src
+│   ├── app                               # application configuration
+│   ├── controllers                       # all controller in here
+│   ├── database                          # contain entity, migation and database instance
+│   │   ├── entity
+│   │   ├── migration
+│   │   └── connection.go
+│   ├── middlewares                       # all middleware configuration
+│   ├── repository                        # repository (handler query database)
+│   ├── routes                            # all routes which is application need
+│   ├── services                          # contain all business logic
+│   ├── utils                             # utility application
+│   ├── validation                        # validation request schema
+│   └── main.go                           # main project
+├── package                               # contain all third party configuration
+├── tests                                 # contain all integration testing file
+├── .env                                  # environment variable
+├── .env.example                          # environment variable example
 ├── air.conf                              # air configuration (like nodemon.json)
 ├── docker-compose.production.yml         # docker compose for production image
 ├── docker-compose.yml                    # docker compose for local image
 ├── Dockerfile                            # build app image
 ├── go.mod                                # go mod
 ├── go.sum                                # go sum
+├── ignore_test.yml                       # ignoring file/folder from coverage testing
 ├── LICENSE                               # license for this boilerplate
 ├── Makefile                              # contain all command to run project
-├── README.md                             # you read this file
-├── src
-│   ├── app                               # application configuration
-│   ├── controllers                       # all controller in here
-│   ├── database                          # contain entity, migation and database instance
-│   │   ├── connection.go
-│   │   ├── entity
-│   │   └── migration
-│   ├── main.go                           # main project
-│   ├── middlewares                       # all middleware configuration
-│   ├── repository                        # repository (handler query database)
-│   ├── routes                            # all routes which is application need
-│   ├── services                          # contain all business logic
-│   ├── utils                             # utility application
-│   └── validation                        # validation request schema
-└── __tests__                             # contain all integration testing file
+└── README.md                             # you read this file
 ```
 
 ## Stay in touch
@@ -106,4 +110,4 @@ make lint
 
 ## License
 
-Golang-Example is [MIT](LICENSE).
+golang-example is [MIT](LICENSE).
