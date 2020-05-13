@@ -3,32 +3,32 @@ package services
 import (
 	"github.com/saefullohmaslul/golang-example/src/database/entity"
 	"github.com/saefullohmaslul/golang-example/src/middlewares/exception"
-	"github.com/saefullohmaslul/golang-example/src/repository"
+	"github.com/saefullohmaslul/golang-example/src/repositories"
 )
 
 // UserService -> the propose of user service is handling business logic application
 type UserService struct {
-	UserRepository repository.UserRepository
+	UserRepository repositories.UserRepository
 }
 
 // UService -> user service instance
 func UService() UserService {
 	return UserService{
-		UserRepository: repository.URepository(),
+		UserRepository: repositories.URepository(),
 	}
 }
 
 // GetUsers -> get users service logic
-func (s *UserService) GetUsers() []repository.GetUser {
+func (s *UserService) GetUsers() []repositories.GetUser {
 	users := s.UserRepository.GetUsers()
 	return users
 }
 
 // GetUser -> get user service logic
-func (s *UserService) GetUser(id int64) repository.GetUser {
+func (s *UserService) GetUser(id int64) repositories.GetUser {
 	user := s.UserRepository.GetUser(id)
 
-	if (user == repository.GetUser{}) {
+	if (user == repositories.GetUser{}) {
 		exception.Empty("User not found", "User with this ID not enough", "USER_NOT_FOUND")
 	}
 
@@ -36,9 +36,9 @@ func (s *UserService) GetUser(id int64) repository.GetUser {
 }
 
 // CreateUser -> create user service logic
-func (s *UserService) CreateUser(user entity.User) repository.GetUser {
+func (s *UserService) CreateUser(user entity.User) repositories.GetUser {
 	userExist := s.UserRepository.UserExist(
-		repository.UserExistParams{Email: user.Email},
+		repositories.UserExistParams{Email: user.Email},
 	)
 
 	if (userExist != entity.User{}) {
@@ -50,8 +50,8 @@ func (s *UserService) CreateUser(user entity.User) repository.GetUser {
 }
 
 // UpdateUser -> update user service logic
-func (s *UserService) UpdateUser(id uint, user entity.User) repository.GetUser {
-	userExist := s.UserRepository.UserExist(repository.UserExistParams{ID: id})
+func (s *UserService) UpdateUser(id uint, user entity.User) repositories.GetUser {
+	userExist := s.UserRepository.UserExist(repositories.UserExistParams{ID: id})
 	if (userExist == entity.User{}) {
 		exception.BadRequest("User with this id not exist", "USER_NOT_FOUND")
 	}
@@ -61,8 +61,8 @@ func (s *UserService) UpdateUser(id uint, user entity.User) repository.GetUser {
 }
 
 // DeleteUser -> delete user service logic
-func (s *UserService) DeleteUser(id uint) repository.GetUser {
-	userExist := s.UserRepository.UserExist(repository.UserExistParams{ID: id})
+func (s *UserService) DeleteUser(id uint) repositories.GetUser {
+	userExist := s.UserRepository.UserExist(repositories.UserExistParams{ID: id})
 	if (userExist == entity.User{}) {
 		exception.BadRequest("User with this id not exist", "USER_NOT_FOUND")
 	}

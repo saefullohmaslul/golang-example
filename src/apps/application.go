@@ -1,4 +1,4 @@
-package app
+package apps
 
 import (
 	"net/http"
@@ -6,9 +6,9 @@ import (
 	"github.com/gin-gonic/gin"
 	db "github.com/saefullohmaslul/golang-example/src/database"
 	"github.com/saefullohmaslul/golang-example/src/database/migration"
+	"github.com/saefullohmaslul/golang-example/src/jobs"
 	"github.com/saefullohmaslul/golang-example/src/middlewares/exception"
 	"github.com/saefullohmaslul/golang-example/src/routes"
-	"github.com/saefullohmaslul/golang-example/src/runner"
 )
 
 // Application -> application instance
@@ -20,7 +20,7 @@ func (a Application) CreateApp(r *gin.Engine) {
 	r.Use(exception.Recovery(exception.ErrorHandler))
 	configureAppDB()
 	configureAPIEndpoint(r)
-	runner.PubSubRunner()
+	jobs.PubSubConsume()
 }
 
 // CreateTest -> method to create gin application with environment test
@@ -28,7 +28,7 @@ func (a Application) CreateTest(r *gin.Engine) {
 	r.Use(exception.Recovery(exception.ErrorHandler))
 	configureTestDB()
 	configureAPIEndpoint(r)
-	runner.PubSubRunner()
+	jobs.PubSubConsume()
 }
 
 /**

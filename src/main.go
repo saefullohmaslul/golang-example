@@ -7,7 +7,7 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"github.com/joho/godotenv"
 	"github.com/jpoles1/gopherbadger/logging"
-	"github.com/saefullohmaslul/golang-example/src/app"
+	"github.com/saefullohmaslul/golang-example/src/apps"
 )
 
 /**
@@ -24,7 +24,7 @@ func main() {
 	 * create application instance
 	 * and configure with gin engine
 	 */
-	app := new(app.Application)
+	app := new(apps.Application)
 	app.CreateApp(r)
 
 	/**

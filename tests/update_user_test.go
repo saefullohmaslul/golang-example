@@ -9,23 +9,23 @@ import (
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
-	"github.com/saefullohmaslul/golang-example/src/app"
+	"github.com/saefullohmaslul/golang-example/src/apps"
 	db "github.com/saefullohmaslul/golang-example/src/database"
 	"github.com/saefullohmaslul/golang-example/src/database/entity"
 	"github.com/saefullohmaslul/golang-example/src/middlewares/exception"
-	"github.com/saefullohmaslul/golang-example/src/repository"
+	"github.com/saefullohmaslul/golang-example/src/repositories"
 	"github.com/saefullohmaslul/golang-example/src/utils"
 	"github.com/stretchr/testify/assert"
 )
 
 type updateUserSuccess struct {
 	utils.Response
-	Result repository.GetUser `json:"result"`
+	Result repositories.GetUser `json:"result"`
 }
 
 func initTestUpdateUser(id string, body map[string]interface{}) (*httptest.ResponseRecorder, *gin.Engine) {
 	r := gin.Default()
-	app := new(app.Application)
+	app := new(apps.Application)
 	app.CreateTest(r)
 
 	w := httptest.NewRecorder()
@@ -33,7 +33,7 @@ func initTestUpdateUser(id string, body map[string]interface{}) (*httptest.Respo
 	req, _ := http.NewRequest(http.MethodPatch, "/user/"+id, strings.NewReader(string(b)))
 	req.Header.Set("Content-Type", "application/json")
 
-	userRepository := repository.UserRepository{Conn: db.GetDB().Table("users")}
+	userRepository := repositories.UserRepository{Conn: db.GetDB().Table("users")}
 	userRepository.CreateUser(entity.User{
 		ID:       1,
 		Address:  "Jakarta",

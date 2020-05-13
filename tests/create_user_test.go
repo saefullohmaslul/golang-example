@@ -9,22 +9,22 @@ import (
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
-	"github.com/saefullohmaslul/golang-example/src/app"
+	"github.com/saefullohmaslul/golang-example/src/apps"
 	db "github.com/saefullohmaslul/golang-example/src/database"
 	"github.com/saefullohmaslul/golang-example/src/middlewares/exception"
-	"github.com/saefullohmaslul/golang-example/src/repository"
+	"github.com/saefullohmaslul/golang-example/src/repositories"
 	"github.com/saefullohmaslul/golang-example/src/utils"
 	"github.com/stretchr/testify/assert"
 )
 
 type createUserSuccess struct {
 	utils.Response
-	Result repository.GetUser `json:"result"`
+	Result repositories.GetUser `json:"result"`
 }
 
 func initTestCreateUser(body map[string]interface{}) (*httptest.ResponseRecorder, *gin.Engine) {
 	r := gin.Default()
-	app := new(app.Application)
+	app := new(apps.Application)
 	app.CreateTest(r)
 
 	w := httptest.NewRecorder()

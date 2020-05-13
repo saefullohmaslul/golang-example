@@ -75,18 +75,18 @@ make lint
 ```bash
 .
 ├── src
-│   ├── app                               # application configuration
+│   ├── apps                              # application configuration
 │   ├── controllers                       # all controller in here
 │   ├── database                          # contain entity, migation and database instance
 │   │   ├── entity
 │   │   ├── migration
 │   │   └── connection.go
 │   ├── middlewares                       # all middleware configuration
-│   ├── repository                        # repository (handler query database)
+│   ├── repositories                      # repository (handler query database)
 │   ├── routes                            # all routes which is application need
 │   ├── services                          # contain all business logic
 │   ├── utils                             # utility application
-│   ├── validation                        # validation request schema
+│   ├── validations                       # validations request schema
 │   └── main.go                           # main project
 ├── package                               # contain all third party configuration
 ├── tests                                 # contain all integration testing file

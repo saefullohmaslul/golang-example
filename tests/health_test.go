@@ -7,13 +7,13 @@ import (
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
-	"github.com/saefullohmaslul/golang-example/src/app"
+	"github.com/saefullohmaslul/golang-example/src/apps"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestCreateApp(t *testing.T) {
 	r := gin.Default()
-	app := new(app.Application)
+	app := new(apps.Application)
 	app.CreateTest(r)
 
 	w := httptest.NewRecorder()
@@ -26,7 +26,7 @@ func TestCreateApp(t *testing.T) {
 
 func TestDecodeMap(t *testing.T) {
 	r := gin.Default()
-	app := new(app.Application)
+	app := new(apps.Application)
 	app.CreateTest(r)
 
 	w := httptest.NewRecorder()

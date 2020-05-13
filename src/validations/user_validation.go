@@ -1,4 +1,4 @@
-package validation
+package validations
 
 import (
 	"github.com/gin-gonic/gin"
@@ -6,7 +6,7 @@ import (
 	"github.com/saefullohmaslul/golang-example/src/middlewares/exception"
 )
 
-// CreateUserSchema -> create user schema validation
+// CreateUserSchema -> create user schema validations
 type CreateUserSchema struct {
 	Name     string `validate:"required"`
 	Email    string `validate:"required,email"`
@@ -15,7 +15,7 @@ type CreateUserSchema struct {
 	Address  string
 }
 
-// CreateUser -> validation to create user
+// CreateUser -> validations to create user
 func CreateUser(c *gin.Context) {
 	var user CreateUserSchema
 	if err := c.ShouldBindBodyWith(&user, binding.JSON); err != nil {
@@ -32,12 +32,12 @@ func CreateUser(c *gin.Context) {
 	Validate(userValidate)
 }
 
-// GetUserParamSchema -> check schema param validation
+// GetUserParamSchema -> check schema param validations
 type GetUserParamSchema struct {
 	ID uint `uri:"id" binding:"required"`
 }
 
-// GetUser -> validation to get user by id
+// GetUser -> validations to get user by id
 func GetUser(c *gin.Context) {
 	param := GetUserParamSchema{}
 	if err := c.ShouldBindUri(&param); err != nil {
@@ -45,7 +45,7 @@ func GetUser(c *gin.Context) {
 	}
 }
 
-// UpdateUserSchema -> update user schema validation
+// UpdateUserSchema -> update user schema validations
 type UpdateUserSchema struct {
 	Name    string
 	Email   string `validate:"omitempty,email"`
@@ -53,7 +53,7 @@ type UpdateUserSchema struct {
 	Address string
 }
 
-// UpdateUser -> validation to update user by id with body
+// UpdateUser -> validations to update user by id with body
 func UpdateUser(c *gin.Context) {
 	param := GetUserParamSchema{}
 	if err := c.ShouldBindUri(&param); err != nil {
@@ -74,7 +74,7 @@ func UpdateUser(c *gin.Context) {
 	Validate(userValidate)
 }
 
-// DeleteUser -> validation to delete user by id
+// DeleteUser -> validations to delete user by id
 func DeleteUser(c *gin.Context) {
 	param := GetUserParamSchema{}
 	if err := c.ShouldBindUri(&param); err != nil {
