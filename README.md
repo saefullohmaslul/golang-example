@@ -7,7 +7,7 @@
 <p align="center">
   <a href="https://github.com/saefullohmaslul/golang-example/actions?query=workflow%3Alint" target="_blank"><img src="https://github.com/saefullohmaslul/golang-example/workflows/lint/badge.svg?branch=master" alt="build" /></a>
   <a href="https://github.com/saefullohmaslul/golang-example/actions?query=workflow%3Atest" target="_blank"><img src="https://github.com/saefullohmaslul/golang-example/workflows/test/badge.svg?branch=master" alt="license" /></a>
-  <a href="https://codecov.io/gh/saefullohmaslul/golang-example/tree/master/src" target="_blank"><img src="https://codecov.io/gh/saefullohmaslul/golang-example/branch/master/graph/badge.svg" alt="license" /></a>
+  <a href="https://codecov.io/gh/saefullohmaslul/golang-example/tree/master" target="_blank"><img src="https://codecov.io/gh/saefullohmaslul/golang-example/branch/master/graph/badge.svg" alt="license" /></a>
   <a href="https://goreportcard.com/report/github.com/saefullohmaslul/golang-example" target="_blank"><img src="https://goreportcard.com/badge/github.com/saefullohmaslul/golang-example" alt="license" /></a>
   <a href="https://github.com/saefullohmaslul/golang-example/actions?query=workflow%3Abuild" target="_blank"><img src="https://github.com/saefullohmaslul/golang-example/workflows/build/badge.svg?branch=master" alt="license" /></a>
   <a href="https://opensource.org/licenses/MIT" target="_blank"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="license" /></a>
