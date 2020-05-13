@@ -8,6 +8,7 @@ import (
 	"testing"
 
 	"github.com/gin-gonic/gin"
+	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"github.com/saefullohmaslul/golang-example/src/app"
 	db "github.com/saefullohmaslul/golang-example/src/database"
 	"github.com/saefullohmaslul/golang-example/src/database/entity"
@@ -42,7 +43,7 @@ func initTestUpdateUser(id string, body map[string]interface{}) (*httptest.Respo
 	req, _ := http.NewRequest(http.MethodPatch, "/user/"+id, strings.NewReader(string(b)))
 	req.Header.Set("Content-Type", "application/json")
 
-	userRepository := repository.UserRepository{}
+	userRepository := repository.UserRepository{Conn: db.GetDB().Table("users")}
 	userRepository.CreateUser(entity.User{
 		ID:       1,
 		Address:  "Jakarta",

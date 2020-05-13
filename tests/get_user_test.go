@@ -42,7 +42,7 @@ func initTestGetUser(id string) (*httptest.ResponseRecorder, *gin.Engine) {
 	app := new(app.Application)
 	app.CreateTest(r)
 
-	userRepository := repository.UserRepository{}
+	userRepository := repository.UserRepository{Conn: db.GetDB().Table("users")}
 	userRepository.CreateUser(entity.User{
 		ID:       1,
 		Address:  "Jakarta",
