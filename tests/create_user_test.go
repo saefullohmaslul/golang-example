@@ -46,7 +46,7 @@ func TestCreateUserSuccess(t *testing.T) {
 	w, _ := initTestCreateUser(body)
 
 	actual := createUserSuccess{}
-	if err := json.Unmarshal([]byte(w.Body.String()), &actual); err != nil {
+	if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
 		panic(err)
 	}
 
@@ -74,7 +74,7 @@ func TestCreateUserExist(t *testing.T) {
 	r.ServeHTTP(w, req)
 
 	actual := exception.Exception{}
-	if err := json.Unmarshal([]byte(w.Body.String()), &actual); err != nil {
+	if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
 		panic(err)
 	}
 
@@ -96,7 +96,7 @@ func TestCreateUserInvalidBodyName(t *testing.T) {
 	w, _ := initTestCreateUser(body)
 
 	actual := exception.Exception{}
-	if err := json.Unmarshal([]byte(w.Body.String()), &actual); err != nil {
+	if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
 		panic(err)
 	}
 
@@ -118,7 +118,7 @@ func TestCreateUserInvalidBodyEmail(t *testing.T) {
 	w, _ := initTestCreateUser(body)
 
 	actual := exception.Exception{}
-	if err := json.Unmarshal([]byte(w.Body.String()), &actual); err != nil {
+	if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
 		panic(err)
 	}
 
@@ -139,7 +139,7 @@ func TestCreateUserInvalidBodyPassword(t *testing.T) {
 	w, _ := initTestCreateUser(body)
 
 	actual := exception.Exception{}
-	if err := json.Unmarshal([]byte(w.Body.String()), &actual); err != nil {
+	if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
 		panic(err)
 	}
 

@@ -53,7 +53,7 @@ func TestDeleteUserSuccess(t *testing.T) {
 	fmt.Println(w.Body.String())
 
 	actual := deleteUserSuccess{}
-	if err := json.Unmarshal([]byte(w.Body.String()), &actual); err != nil {
+	if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
 		panic(err)
 	}
 
@@ -68,7 +68,7 @@ func TestDeleteUserNotExist(t *testing.T) {
 	w, _ := initTestDeleteUser("2")
 
 	actual := exception.Exception{}
-	if err := json.Unmarshal([]byte(w.Body.String()), &actual); err != nil {
+	if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
 		panic(err)
 	}
 
@@ -85,7 +85,7 @@ func TestDeleteUserInvalidBodyParam(t *testing.T) {
 	w, _ := initTestDeleteUser("x")
 
 	actual := exception.Exception{}
-	if err := json.Unmarshal([]byte(w.Body.String()), &actual); err != nil {
+	if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
 		panic(err)
 	}
 

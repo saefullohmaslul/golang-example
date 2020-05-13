@@ -56,7 +56,7 @@ func TestGetUsersSuccess(t *testing.T) {
 	defer db.DropAllTable()
 	w, _ := initTestGetUsers()
 	actual := getUsers{}
-	if err := json.Unmarshal([]byte(w.Body.String()), &actual); err != nil {
+	if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
 		panic(err)
 	}
 

@@ -31,10 +31,8 @@ func TestConsume(t *testing.T) {
 	go kafka.Consume([]string{"test_topic"}, signals)
 	timeout := time.After(2 * time.Second)
 	for {
-		select {
-		case <-timeout:
-			signals <- os.Interrupt
-			return
-		}
+		<-timeout
+		signals <- os.Interrupt
+		return
 	}
 }

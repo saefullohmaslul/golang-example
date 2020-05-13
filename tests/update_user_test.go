@@ -23,16 +23,6 @@ type updateUserSuccess struct {
 	Result repository.GetUser `json:"result"`
 }
 
-type updateUserEmpty struct {
-	utils.Response
-	Errors updateUserErrorMessage `json:"errors"`
-}
-
-type updateUserErrorMessage struct {
-	Message string `json:"message"`
-	Flag    string `json:"flag"`
-}
-
 func initTestUpdateUser(id string, body map[string]interface{}) (*httptest.ResponseRecorder, *gin.Engine) {
 	r := gin.Default()
 	app := new(app.Application)
@@ -65,7 +55,7 @@ func TestUpdateUserSuccess(t *testing.T) {
 	w, _ := initTestUpdateUser("1", body)
 
 	actual := updateUserSuccess{}
-	if err := json.Unmarshal([]byte(w.Body.String()), &actual); err != nil {
+	if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
 		panic(err)
 	}
 
@@ -83,7 +73,7 @@ func TestUpdateUserNotExist(t *testing.T) {
 	w, _ := initTestUpdateUser("2", body)
 
 	actual := exception.Exception{}
-	if err := json.Unmarshal([]byte(w.Body.String()), &actual); err != nil {
+	if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
 		panic(err)
 	}
 
@@ -103,7 +93,7 @@ func TestUpdateUserInvalidBodyEmail(t *testing.T) {
 	w, _ := initTestUpdateUser("1", body)
 
 	actual := exception.Exception{}
-	if err := json.Unmarshal([]byte(w.Body.String()), &actual); err != nil {
+	if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
 		panic(err)
 	}
 
@@ -122,7 +112,7 @@ func TestUpdateUserInvalidBodyAge(t *testing.T) {
 	w, _ := initTestUpdateUser("1", body)
 
 	actual := exception.Exception{}
-	if err := json.Unmarshal([]byte(w.Body.String()), &actual); err != nil {
+	if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
 		panic(err)
 	}
 
@@ -141,7 +131,7 @@ func TestUpdateUserInvalidBodyParam(t *testing.T) {
 	w, _ := initTestUpdateUser("x", body)
 
 	actual := exception.Exception{}
-	if err := json.Unmarshal([]byte(w.Body.String()), &actual); err != nil {
+	if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
 		panic(err)
 	}
 
