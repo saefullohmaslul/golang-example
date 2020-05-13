@@ -1,0 +1,5 @@
+files:
+  package/kafka/kafka_pub_sub.go
+  src/app/application.go
+  src/runner/
+  src/database/connection.go

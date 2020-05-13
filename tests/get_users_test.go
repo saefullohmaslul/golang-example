@@ -21,7 +21,7 @@ func initTestGetUsers() (*httptest.ResponseRecorder, *gin.Engine) {
 	app := new(app.Application)
 	app.CreateTest(r)
 
-	userRepository := repository.UserRepository{}
+	userRepository := repository.UserRepository{Conn: db.GetDB().Table("users")}
 	userRepository.CreateUser(entity.User{
 		ID:       1,
 		Address:  "Jakarta",
@@ -56,7 +56,7 @@ func TestGetUsersSuccess(t *testing.T) {
 	defer db.DropAllTable()
 	w, _ := initTestGetUsers()
 	actual := getUsers{}
-	if err := json.Unmarshal([]byte(w.Body.String()), &actual); err != nil {
+	if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
 		panic(err)
 	}
 

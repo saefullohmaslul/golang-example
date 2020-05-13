@@ -18,16 +18,16 @@ type Application struct {
 // CreateApp -> method to create gin application
 func (a Application) CreateApp(r *gin.Engine) {
 	r.Use(exception.Recovery(exception.ErrorHandler))
-	configureAPIEndpoint(r)
 	configureAppDB()
+	configureAPIEndpoint(r)
 	runner.PubSubRunner()
 }
 
 // CreateTest -> method to create gin application with environment test
 func (a Application) CreateTest(r *gin.Engine) {
 	r.Use(exception.Recovery(exception.ErrorHandler))
-	configureAPIEndpoint(r)
 	configureTestDB()
+	configureAPIEndpoint(r)
 	runner.PubSubRunner()
 }
 

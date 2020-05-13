@@ -10,7 +10,7 @@ import (
 
 // Router middleware to handler routes
 func Router(g *gin.RouterGroup) {
-	controller := controllers.UserController{}
+	controller := controllers.UController()
 	{
 		g.GET("/users", controller.GetUsers)
 		g.GET("/user/:id", validation.GetUser, controller.GetUser)

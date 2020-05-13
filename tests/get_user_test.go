@@ -42,7 +42,7 @@ func initTestGetUser(id string) (*httptest.ResponseRecorder, *gin.Engine) {
 	app := new(app.Application)
 	app.CreateTest(r)
 
-	userRepository := repository.UserRepository{}
+	userRepository := repository.UserRepository{Conn: db.GetDB().Table("users")}
 	userRepository.CreateUser(entity.User{
 		ID:       1,
 		Address:  "Jakarta",
@@ -64,7 +64,7 @@ func TestGetUserSuccess(t *testing.T) {
 	defer db.DropAllTable()
 	w, _ := initTestGetUser("1")
 	actual := getUser{}
-	if err := json.Unmarshal([]byte(w.Body.String()), &actual); err != nil {
+	if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
 		panic(err)
 	}
 
@@ -78,7 +78,7 @@ func TestGetUserNotFound(t *testing.T) {
 	defer db.DropAllTable()
 	w, _ := initTestGetUser("2")
 	actual := getUserEmpty{}
-	if err := json.Unmarshal([]byte(w.Body.String()), &actual); err != nil {
+	if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
 		panic(err)
 	}
 
@@ -93,7 +93,7 @@ func TestGetUserErrorParamID(t *testing.T) {
 	defer db.DropAllTable()
 	w, _ := initTestGetUser("c")
 	actual := getUserError{}
-	if err := json.Unmarshal([]byte(w.Body.String()), &actual); err != nil {
+	if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
 		panic(err)
 	}
 

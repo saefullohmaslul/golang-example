@@ -1,18 +1,17 @@
-package tests
+package kafka
 
 import (
 	"fmt"
 	"testing"
 
 	"github.com/Shopify/sarama/mocks"
-	"github.com/saefullohmaslul/golang-example/package/kafka"
 )
 
 func TestSendMessage(t *testing.T) {
 	t.Run("Send message OK", func(t *testing.T) {
 		mockedProducer := mocks.NewSyncProducer(t, nil)
 		mockedProducer.ExpectSendMessageAndSucceed()
-		kafka := &kafka.Producer{
+		kafka := &Producer{
 			Producer: mockedProducer,
 		}
 
@@ -27,7 +26,7 @@ func TestSendMessage(t *testing.T) {
 	t.Run("Send message NOK", func(t *testing.T) {
 		mockedProducer := mocks.NewSyncProducer(t, nil)
 		mockedProducer.ExpectSendMessageAndFail(fmt.Errorf("Error"))
-		kafka := &kafka.Producer{
+		kafka := &Producer{
 			Producer: mockedProducer,
 		}
 

@@ -6,16 +6,14 @@ import (
 	"github.com/saefullohmaslul/golang-example/src/database/entity"
 )
 
-// UserRepository -> the propose of user repository
-// is handling query for user entity
+// UserRepository -> the propose of user repository is handling query for user entity
 type UserRepository struct {
+	Conn *gorm.DB
 }
 
-/**
- * get database instance with custom table name
- */
-func query() *gorm.DB {
-	return db.GetDB().Table("users")
+// URepository -> user repository instance to get user table connection
+func URepository() UserRepository {
+	return UserRepository{Conn: db.GetDB().Table("users")}
 }
 
 // GetUser -> get user struct format
@@ -27,16 +25,16 @@ type GetUser struct {
 }
 
 // GetUsers -> method to get all users in database
-func (u *UserRepository) GetUsers() []GetUser {
+func (r *UserRepository) GetUsers() []GetUser {
 	users := []GetUser{}
-	query().Select("name, email, address, age").Find(&users)
+	r.Conn.Select("name, email, address, age").Find(&users)
 	return users
 }
 
 // GetUser -> method to get specific user by id
-func (u *UserRepository) GetUser(id int64) GetUser {
+func (r *UserRepository) GetUser(id int64) GetUser {
 	user := GetUser{}
-	query().Select("name, email, address, age").Where("id = ?", id).First(&user)
+	r.Conn.Select("name, email, address, age").Where("id = ?", id).First(&user)
 	return user
 }
 
@@ -47,36 +45,36 @@ type UserExistParams struct {
 }
 
 // UserExist -> method to check if user already exist in database by email or id
-func (u *UserRepository) UserExist(param UserExistParams) entity.User {
+func (r *UserRepository) UserExist(param UserExistParams) entity.User {
 	user := entity.User{}
 	if param.ID == 0 {
-		query().Select("email").Where(&entity.User{Email: param.Email}).First(&user)
+		r.Conn.Select("email").Where(&entity.User{Email: param.Email}).First(&user)
 	} else {
-		query().Select("id").Where(&entity.User{ID: param.ID}).First(&user)
+		r.Conn.Select("id").Where(&entity.User{ID: param.ID}).First(&user)
 	}
 	return user
 }
 
 // CreateUser -> method to add user in database
-func (u *UserRepository) CreateUser(user entity.User) GetUser {
-	query().Create(&user)
+func (r *UserRepository) CreateUser(user entity.User) GetUser {
+	r.Conn.Create(&user)
 	userCreated := GetUser{}
-	query().Select("name, email, address, age").Where("id = ?", user.ID).First(&userCreated)
+	r.Conn.Select("name, email, address, age").Where("id = ?", user.ID).First(&userCreated)
 	return userCreated
 }
 
 // UpdateUser -> method to update user by id
-func (u *UserRepository) UpdateUser(id uint, update entity.User) GetUser {
-	query().Where("id = ?", id).Updates(update)
+func (r *UserRepository) UpdateUser(id uint, update entity.User) GetUser {
+	r.Conn.Where("id = ?", id).Updates(update)
 	userUpdated := GetUser{}
-	query().Select("name, email, address, age").Where("id = ?", id).First(&userUpdated)
+	r.Conn.Select("name, email, address, age").Where("id = ?", id).First(&userUpdated)
 	return userUpdated
 }
 
 // DeleteUser -> method to delete user by id
-func (u *UserRepository) DeleteUser(id uint) GetUser {
+func (r *UserRepository) DeleteUser(id uint) GetUser {
 	deletedUser := GetUser{}
-	query().Select("name, email, address, age").Where("id = ?", id).First(&deletedUser)
-	query().Where("id = ?", id).Delete(entity.User{})
+	r.Conn.Select("name, email, address, age").Where("id = ?", id).First(&deletedUser)
+	r.Conn.Where("id = ?", id).Delete(entity.User{})
 	return deletedUser
 }

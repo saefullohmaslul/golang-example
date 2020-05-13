@@ -37,8 +37,13 @@ jobs:
 
       - name: Calc coverage
         run: |
-          go test ./__tests__/ -v -coverpkg=./... -covermode=count -coverprofile=coverage.txt.tmp
-          cat coverage.txt.tmp | grep -v "app/application.go" | grep -v "database/" | grep -v "package/" > coverage.txt
+          go test ./... -coverprofile=coverage_unit.out
+          go test ./tests -coverpkg=./... -coverprofile=coverage_int.out
+          grep 'mode' coverage_unit.out > coverage.out.tmp
+          grep 'github' coverage_unit.out >> coverage.out.tmp
+          grep 'github' coverage_int.out >> coverage.out.tmp
+          grep -A10 'files:' ignore_test.yml | grep -v "files:" | sed 's/ //g' > coverage.out.list
+          grep -v -F -f coverage.out.list coverage.out.tmp > coverage.txt
 
       - name: Upload coverage report to CodeCov
         uses: codecov/codecov-action@v1

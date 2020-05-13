@@ -1,4 +1,4 @@
-package tests
+package kafka
 
 import (
 	"os"
@@ -7,7 +7,6 @@ import (
 
 	"github.com/Shopify/sarama"
 	"github.com/Shopify/sarama/mocks"
-	"github.com/saefullohmaslul/golang-example/package/kafka"
 )
 
 func TestConsume(t *testing.T) {
@@ -22,7 +21,7 @@ func TestConsume(t *testing.T) {
 		"test_topic": {0},
 	})
 
-	kafka := &kafka.Consumer{
+	kafka := &Consumer{
 		Consumer: consumers,
 	}
 
@@ -32,10 +31,8 @@ func TestConsume(t *testing.T) {
 	go kafka.Consume([]string{"test_topic"}, signals)
 	timeout := time.After(2 * time.Second)
 	for {
-		select {
-		case <-timeout:
-			signals <- os.Interrupt
-			return
-		}
+		<-timeout
+		signals <- os.Interrupt
+		return
 	}
 }
