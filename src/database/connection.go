@@ -47,7 +47,7 @@ func AppConnection() {
 
 // TestConnection -> method to create connection for application testing
 func TestConnection() {
-	if err := godotenv.Load("../.env"); err != nil {
+	if err := godotenv.Load("../.env.test"); err != nil {
 		logging.Error("ENV", err)
 	}
 	Connection()

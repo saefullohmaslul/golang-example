@@ -46,6 +46,21 @@ services:
     networks:
       - golang_example_development
 
+  postgres_test:
+    image: postgres:11
+    container_name: golang_example_db_test
+    volumes:
+      - golang_example:/var/libs/postgresql/data
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=developer
+      - POSTGRES_DB=golang_example_db_test
+      - POSTGRES_PORT=5433
+    ports:
+      - 5433:5432
+    networks:
+      - golang_example_development
+
   zookeeper:
     image: bitnami/zookeeper:latest
     ports:
