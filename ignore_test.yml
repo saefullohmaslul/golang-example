@@ -3,3 +3,5 @@ files:
   src/apps/application.go
   src/jobs/
   src/database/connection.go
+  src/helpers/
+  src/database/migration/
