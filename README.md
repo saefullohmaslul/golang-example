@@ -90,10 +90,13 @@ make seed
 ├── src
 │   ├── apps                              # application configuration
 │   ├── controllers                       # all controller in here
-│   ├── database                          # contain entity, migation and database instance
+│   ├── database                          # contain entity, migation, seed and database instance
 │   │   ├── entity
 │   │   ├── migration
+│   │   ├── seed
 │   │   └── connection.go
+│   ├── jobs                              # contain all job runner
+│   ├── helpers                           # helpers function
 │   ├── middlewares                       # all middleware configuration
 │   ├── repositories                      # repository (handler query database)
 │   ├── routes                            # all routes which is application need
@@ -105,6 +108,7 @@ make seed
 ├── tests                                 # contain all integration testing file
 ├── .env                                  # environment variable
 ├── .env.example                          # environment variable example
+├── .env.test                             # environment variable for testing
 ├── air.conf                              # air configuration (like nodemon.json)
 ├── docker-compose.production.yml         # docker compose for production image
 ├── docker-compose.yml                    # docker compose for local image
