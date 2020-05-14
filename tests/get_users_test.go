@@ -52,16 +52,18 @@ type getUsers struct {
 	Result []repositories.GetUser `json:"result"`
 }
 
-func TestGetUsersSuccess(t *testing.T) {
-	defer db.DropAllTable()
-	w, _ := initTestGetUsers()
-	actual := getUsers{}
-	if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
-		panic(err)
-	}
+func TestGetUsers(t *testing.T) {
+	t.Run("it should return success", func(t *testing.T) {
+		defer db.DropAllTable()
+		w, _ := initTestGetUsers()
+		actual := getUsers{}
+		if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
+			panic(err)
+		}
 
-	assert.Equal(t, http.StatusOK, w.Code)
-	assert.Equal(t, "Success get all users", actual.Message)
-	assert.Equal(t, http.StatusOK, actual.Status)
-	assert.NotEmpty(t, actual.Result)
+		assert.Equal(t, http.StatusOK, w.Code)
+		assert.Equal(t, "Success get all users", actual.Message)
+		assert.Equal(t, http.StatusOK, actual.Status)
+		assert.NotEmpty(t, actual.Result)
+	})
 }

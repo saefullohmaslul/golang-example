@@ -47,97 +47,99 @@ func initTestUpdateUser(id string, body map[string]interface{}) (*httptest.Respo
 	return w, r
 }
 
-func TestUpdateUserSuccess(t *testing.T) {
-	defer db.DropAllTable()
-	body := map[string]interface{}{
-		"age": 35,
-	}
-	w, _ := initTestUpdateUser("1", body)
+func TestUpdateUser(t *testing.T) {
+	t.Run("it should return success", func(t *testing.T) {
+		defer db.DropAllTable()
+		body := map[string]interface{}{
+			"age": 35,
+		}
+		w, _ := initTestUpdateUser("1", body)
 
-	actual := updateUserSuccess{}
-	if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
-		panic(err)
-	}
+		actual := updateUserSuccess{}
+		if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
+			panic(err)
+		}
 
-	assert.Equal(t, http.StatusOK, w.Code)
-	assert.Equal(t, "Success update user", actual.Message)
-	assert.Equal(t, http.StatusOK, actual.Status)
-	assert.NotEmpty(t, actual.Result)
-}
+		assert.Equal(t, http.StatusOK, w.Code)
+		assert.Equal(t, "Success update user", actual.Message)
+		assert.Equal(t, http.StatusOK, actual.Status)
+		assert.NotEmpty(t, actual.Result)
+	})
 
-func TestUpdateUserNotExist(t *testing.T) {
-	defer db.DropAllTable()
-	body := map[string]interface{}{
-		"age": 35,
-	}
-	w, _ := initTestUpdateUser("2", body)
+	t.Run("it should return user not exist", func(t *testing.T) {
+		defer db.DropAllTable()
+		body := map[string]interface{}{
+			"age": 35,
+		}
+		w, _ := initTestUpdateUser("2", body)
 
-	actual := exception.Exception{}
-	if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
-		panic(err)
-	}
+		actual := exception.Exception{}
+		if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
+			panic(err)
+		}
 
-	assert.Equal(t, http.StatusBadRequest, w.Code)
-	assert.Equal(t, http.StatusBadRequest, actual.Status)
-	assert.Equal(t, "BAD_REQUEST", actual.Flag)
-	assert.NotEmpty(t, actual.Errors)
-	assert.Equal(t, "USER_NOT_FOUND", actual.Errors.Flag)
-	assert.Equal(t, "User with this id not exist", actual.Errors.Message)
-}
+		assert.Equal(t, http.StatusBadRequest, w.Code)
+		assert.Equal(t, http.StatusBadRequest, actual.Status)
+		assert.Equal(t, "BAD_REQUEST", actual.Flag)
+		assert.NotEmpty(t, actual.Errors)
+		assert.Equal(t, "USER_NOT_FOUND", actual.Errors.Flag)
+		assert.Equal(t, "User with this id not exist", actual.Errors.Message)
+	})
 
-func TestUpdateUserInvalidBodyEmail(t *testing.T) {
-	defer db.DropAllTable()
-	body := map[string]interface{}{
-		"email": "bukanatemaildotcom",
-	}
-	w, _ := initTestUpdateUser("1", body)
+	t.Run("it should return invalid body with invalid email format", func(t *testing.T) {
+		defer db.DropAllTable()
+		body := map[string]interface{}{
+			"email": "bukanatemaildotcom",
+		}
+		w, _ := initTestUpdateUser("1", body)
 
-	actual := exception.Exception{}
-	if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
-		panic(err)
-	}
+		actual := exception.Exception{}
+		if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
+			panic(err)
+		}
 
-	assert.Equal(t, http.StatusBadRequest, w.Code)
-	assert.Equal(t, "BAD_REQUEST", actual.Flag)
-	assert.NotEmpty(t, actual.Errors)
-	assert.Equal(t, "INVALID_BODY", actual.Errors.Flag)
-	assert.NotEmpty(t, actual.Errors.Message)
-}
+		assert.Equal(t, http.StatusBadRequest, w.Code)
+		assert.Equal(t, "BAD_REQUEST", actual.Flag)
+		assert.NotEmpty(t, actual.Errors)
+		assert.Equal(t, "INVALID_BODY", actual.Errors.Flag)
+		assert.NotEmpty(t, actual.Errors.Message)
+	})
 
-func TestUpdateUserInvalidBodyAge(t *testing.T) {
-	defer db.DropAllTable()
-	body := map[string]interface{}{
-		"age": "36th",
-	}
-	w, _ := initTestUpdateUser("1", body)
+	t.Run("it should return invalid body with invalid age format", func(t *testing.T) {
+		defer db.DropAllTable()
+		body := map[string]interface{}{
+			"age": "36th",
+		}
+		w, _ := initTestUpdateUser("1", body)
 
-	actual := exception.Exception{}
-	if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
-		panic(err)
-	}
+		actual := exception.Exception{}
+		if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
+			panic(err)
+		}
 
-	assert.Equal(t, http.StatusBadRequest, w.Code)
-	assert.Equal(t, "BAD_REQUEST", actual.Flag)
-	assert.NotEmpty(t, actual.Errors)
-	assert.Equal(t, "INVALID_BODY", actual.Errors.Flag)
-	assert.NotEmpty(t, actual.Errors.Message)
-}
+		assert.Equal(t, http.StatusBadRequest, w.Code)
+		assert.Equal(t, "BAD_REQUEST", actual.Flag)
+		assert.NotEmpty(t, actual.Errors)
+		assert.Equal(t, "INVALID_BODY", actual.Errors.Flag)
+		assert.NotEmpty(t, actual.Errors.Message)
+	})
 
-func TestUpdateUserInvalidBodyParam(t *testing.T) {
-	defer db.DropAllTable()
-	body := map[string]interface{}{
-		"age": 10,
-	}
-	w, _ := initTestUpdateUser("x", body)
+	t.Run("it should return invalid body with invalid param uri", func(t *testing.T) {
+		defer db.DropAllTable()
+		body := map[string]interface{}{
+			"age": 10,
+		}
+		w, _ := initTestUpdateUser("x", body)
 
-	actual := exception.Exception{}
-	if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
-		panic(err)
-	}
+		actual := exception.Exception{}
+		if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
+			panic(err)
+		}
 
-	assert.Equal(t, http.StatusBadRequest, w.Code)
-	assert.Equal(t, "BAD_REQUEST", actual.Flag)
-	assert.NotEmpty(t, actual.Errors)
-	assert.Equal(t, "INVALID_BODY", actual.Errors.Flag)
-	assert.NotEmpty(t, actual.Errors.Message)
+		assert.Equal(t, http.StatusBadRequest, w.Code)
+		assert.Equal(t, "BAD_REQUEST", actual.Flag)
+		assert.NotEmpty(t, actual.Errors)
+		assert.Equal(t, "INVALID_BODY", actual.Errors.Flag)
+		assert.NotEmpty(t, actual.Errors.Message)
+	})
 }

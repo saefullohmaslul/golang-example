@@ -60,46 +60,48 @@ func initTestGetUser(id string) (*httptest.ResponseRecorder, *gin.Engine) {
 	return w, r
 }
 
-func TestGetUserSuccess(t *testing.T) {
-	defer db.DropAllTable()
-	w, _ := initTestGetUser("1")
-	actual := getUser{}
-	if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
-		panic(err)
-	}
+func TestGetUser(t *testing.T) {
+	t.Run("it should return success", func(t *testing.T) {
+		defer db.DropAllTable()
+		w, _ := initTestGetUser("1")
+		actual := getUser{}
+		if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
+			panic(err)
+		}
 
-	assert.Equal(t, http.StatusOK, w.Code)
-	assert.Equal(t, "Success get user", actual.Message)
-	assert.Equal(t, http.StatusOK, actual.Status)
-	assert.NotEmpty(t, actual.Result)
-}
+		assert.Equal(t, http.StatusOK, w.Code)
+		assert.Equal(t, "Success get user", actual.Message)
+		assert.Equal(t, http.StatusOK, actual.Status)
+		assert.NotEmpty(t, actual.Result)
+	})
 
-func TestGetUserNotFound(t *testing.T) {
-	defer db.DropAllTable()
-	w, _ := initTestGetUser("2")
-	actual := getUserEmpty{}
-	if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
-		panic(err)
-	}
+	t.Run("it shoould return user not found", func(t *testing.T) {
+		defer db.DropAllTable()
+		w, _ := initTestGetUser("2")
+		actual := getUserEmpty{}
+		if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
+			panic(err)
+		}
 
-	assert.Equal(t, http.StatusOK, w.Code)
-	assert.Equal(t, "User not found", actual.Message)
-	assert.Equal(t, http.StatusOK, actual.Status)
-	assert.Equal(t, "User with this ID not enough", actual.Errors.Message)
-	assert.Equal(t, "USER_NOT_FOUND", actual.Errors.Flag)
-}
+		assert.Equal(t, http.StatusOK, w.Code)
+		assert.Equal(t, "User not found", actual.Message)
+		assert.Equal(t, http.StatusOK, actual.Status)
+		assert.Equal(t, "User with this ID not enough", actual.Errors.Message)
+		assert.Equal(t, "USER_NOT_FOUND", actual.Errors.Flag)
+	})
 
-func TestGetUserErrorParamID(t *testing.T) {
-	defer db.DropAllTable()
-	w, _ := initTestGetUser("c")
-	actual := getUserError{}
-	if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
-		panic(err)
-	}
+	t.Run("it should return invalid body with invalid param uri", func(t *testing.T) {
+		defer db.DropAllTable()
+		w, _ := initTestGetUser("c")
+		actual := getUserError{}
+		if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
+			panic(err)
+		}
 
-	assert.Equal(t, http.StatusBadRequest, w.Code)
-	assert.Equal(t, "Param must be of type integer, required", actual.Errors.Message)
-	assert.Equal(t, http.StatusBadRequest, actual.Status)
-	assert.Equal(t, "INVALID_BODY", actual.Errors.Flag)
-	assert.Equal(t, "BAD_REQUEST", actual.Flag)
+		assert.Equal(t, http.StatusBadRequest, w.Code)
+		assert.Equal(t, "Param must be of type integer, required", actual.Errors.Message)
+		assert.Equal(t, http.StatusBadRequest, actual.Status)
+		assert.Equal(t, "INVALID_BODY", actual.Errors.Flag)
+		assert.Equal(t, "BAD_REQUEST", actual.Flag)
+	})
 }

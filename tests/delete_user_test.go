@@ -46,52 +46,54 @@ func initTestDeleteUser(id string) (*httptest.ResponseRecorder, *gin.Engine) {
 	return w, r
 }
 
-func TestDeleteUserSuccess(t *testing.T) {
-	defer db.DropAllTable()
-	w, _ := initTestDeleteUser("1")
+func TestDeleteUser(t *testing.T) {
+	t.Run("it should return success", func(t *testing.T) {
+		defer db.DropAllTable()
+		w, _ := initTestDeleteUser("1")
 
-	fmt.Println(w.Body.String())
+		fmt.Println(w.Body.String())
 
-	actual := deleteUserSuccess{}
-	if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
-		panic(err)
-	}
+		actual := deleteUserSuccess{}
+		if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
+			panic(err)
+		}
 
-	assert.Equal(t, http.StatusOK, w.Code)
-	assert.Equal(t, "Success delete user", actual.Message)
-	assert.Equal(t, http.StatusOK, actual.Status)
-	assert.NotEmpty(t, actual.Result)
-}
+		assert.Equal(t, http.StatusOK, w.Code)
+		assert.Equal(t, "Success delete user", actual.Message)
+		assert.Equal(t, http.StatusOK, actual.Status)
+		assert.NotEmpty(t, actual.Result)
+	})
 
-func TestDeleteUserNotExist(t *testing.T) {
-	defer db.DropAllTable()
-	w, _ := initTestDeleteUser("2")
+	t.Run("it should return user not found", func(t *testing.T) {
+		defer db.DropAllTable()
+		w, _ := initTestDeleteUser("2")
 
-	actual := exception.Exception{}
-	if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
-		panic(err)
-	}
+		actual := exception.Exception{}
+		if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
+			panic(err)
+		}
 
-	assert.Equal(t, http.StatusBadRequest, w.Code)
-	assert.Equal(t, http.StatusBadRequest, actual.Status)
-	assert.Equal(t, "BAD_REQUEST", actual.Flag)
-	assert.NotEmpty(t, actual.Errors)
-	assert.Equal(t, "USER_NOT_FOUND", actual.Errors.Flag)
-	assert.Equal(t, "User with this id not exist", actual.Errors.Message)
-}
+		assert.Equal(t, http.StatusBadRequest, w.Code)
+		assert.Equal(t, http.StatusBadRequest, actual.Status)
+		assert.Equal(t, "BAD_REQUEST", actual.Flag)
+		assert.NotEmpty(t, actual.Errors)
+		assert.Equal(t, "USER_NOT_FOUND", actual.Errors.Flag)
+		assert.Equal(t, "User with this id not exist", actual.Errors.Message)
+	})
 
-func TestDeleteUserInvalidBodyParam(t *testing.T) {
-	defer db.DropAllTable()
-	w, _ := initTestDeleteUser("x")
+	t.Run("it should return invalid param uri with invalid id format", func(t *testing.T) {
+		defer db.DropAllTable()
+		w, _ := initTestDeleteUser("x")
 
-	actual := exception.Exception{}
-	if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
-		panic(err)
-	}
+		actual := exception.Exception{}
+		if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
+			panic(err)
+		}
 
-	assert.Equal(t, http.StatusBadRequest, w.Code)
-	assert.Equal(t, "BAD_REQUEST", actual.Flag)
-	assert.NotEmpty(t, actual.Errors)
-	assert.Equal(t, "INVALID_BODY", actual.Errors.Flag)
-	assert.NotEmpty(t, actual.Errors.Message)
+		assert.Equal(t, http.StatusBadRequest, w.Code)
+		assert.Equal(t, "BAD_REQUEST", actual.Flag)
+		assert.NotEmpty(t, actual.Errors)
+		assert.Equal(t, "INVALID_BODY", actual.Errors.Flag)
+		assert.NotEmpty(t, actual.Errors.Message)
+	})
 }

@@ -36,117 +36,119 @@ func initTestCreateUser(body map[string]interface{}) (*httptest.ResponseRecorder
 	return w, r
 }
 
-func TestCreateUserSuccess(t *testing.T) {
-	defer db.DropAllTable()
-	body := map[string]interface{}{
-		"name":     "User Test",
-		"email":    "user@email.com",
-		"password": "123456",
-	}
-	w, _ := initTestCreateUser(body)
+func TestCreateUser(t *testing.T) {
+	t.Run("it should return success", func(t *testing.T) {
+		defer db.DropAllTable()
+		body := map[string]interface{}{
+			"name":     "User Test",
+			"email":    "user@email.com",
+			"password": "123456",
+		}
+		w, _ := initTestCreateUser(body)
 
-	actual := createUserSuccess{}
-	if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
-		panic(err)
-	}
+		actual := createUserSuccess{}
+		if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
+			panic(err)
+		}
 
-	assert.Equal(t, http.StatusOK, w.Code)
-	assert.Equal(t, "Success create user", actual.Message)
-	assert.Equal(t, http.StatusOK, actual.Status)
-	assert.NotEmpty(t, actual.Result)
-}
+		assert.Equal(t, http.StatusOK, w.Code)
+		assert.Equal(t, "Success create user", actual.Message)
+		assert.Equal(t, http.StatusOK, actual.Status)
+		assert.NotEmpty(t, actual.Result)
+	})
 
-func TestCreateUserExist(t *testing.T) {
-	defer db.DropAllTable()
-	body := map[string]interface{}{
-		"name":     "User Test",
-		"email":    "user@email.com",
-		"password": "123456",
-	}
-	_, r := initTestCreateUser(body)
+	t.Run("it should return user already exist", func(t *testing.T) {
+		defer db.DropAllTable()
+		body := map[string]interface{}{
+			"name":     "User Test",
+			"email":    "user@email.com",
+			"password": "123456",
+		}
+		_, r := initTestCreateUser(body)
 
-	w := httptest.NewRecorder()
-	b, _ := json.Marshal(body)
+		w := httptest.NewRecorder()
+		b, _ := json.Marshal(body)
 
-	req, _ := http.NewRequest(http.MethodPost, "/user", strings.NewReader(string(b)))
-	req.Header.Set("Content-Type", "application/json")
+		req, _ := http.NewRequest(http.MethodPost, "/user", strings.NewReader(string(b)))
+		req.Header.Set("Content-Type", "application/json")
 
-	r.ServeHTTP(w, req)
+		r.ServeHTTP(w, req)
 
-	actual := exception.Exception{}
-	if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
-		panic(err)
-	}
+		actual := exception.Exception{}
+		if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
+			panic(err)
+		}
 
-	assert.Equal(t, http.StatusBadRequest, w.Code)
-	assert.Equal(t, http.StatusBadRequest, actual.Status)
-	assert.Equal(t, actual.Flag, "BAD_REQUEST")
-	assert.NotEmpty(t, actual.Errors)
-	assert.Equal(t, "User with this email already exist", actual.Errors.Message)
-	assert.Equal(t, "USER_ALREADY_EXIST", actual.Errors.Flag)
-}
+		assert.Equal(t, http.StatusBadRequest, w.Code)
+		assert.Equal(t, http.StatusBadRequest, actual.Status)
+		assert.Equal(t, actual.Flag, "BAD_REQUEST")
+		assert.NotEmpty(t, actual.Errors)
+		assert.Equal(t, "User with this email already exist", actual.Errors.Message)
+		assert.Equal(t, "USER_ALREADY_EXIST", actual.Errors.Flag)
+	})
 
-func TestCreateUserInvalidBodyName(t *testing.T) {
-	defer db.DropAllTable()
-	body := map[string]interface{}{
-		"name":     123,
-		"email":    "user@email.com",
-		"password": "123456",
-	}
-	w, _ := initTestCreateUser(body)
+	t.Run("it should return invalid body with invalid name format", func(t *testing.T) {
+		defer db.DropAllTable()
+		body := map[string]interface{}{
+			"name":     123,
+			"email":    "user@email.com",
+			"password": "123456",
+		}
+		w, _ := initTestCreateUser(body)
 
-	actual := exception.Exception{}
-	if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
-		panic(err)
-	}
+		actual := exception.Exception{}
+		if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
+			panic(err)
+		}
 
-	assert.Equal(t, http.StatusBadRequest, w.Code)
-	assert.Equal(t, http.StatusBadRequest, actual.Status)
-	assert.Equal(t, actual.Flag, "BAD_REQUEST")
-	assert.NotEmpty(t, actual.Errors)
-	assert.NotEmpty(t, actual.Errors.Message)
-	assert.Equal(t, "INVALID_BODY", actual.Errors.Flag)
-}
+		assert.Equal(t, http.StatusBadRequest, w.Code)
+		assert.Equal(t, http.StatusBadRequest, actual.Status)
+		assert.Equal(t, actual.Flag, "BAD_REQUEST")
+		assert.NotEmpty(t, actual.Errors)
+		assert.NotEmpty(t, actual.Errors.Message)
+		assert.Equal(t, "INVALID_BODY", actual.Errors.Flag)
+	})
 
-func TestCreateUserInvalidBodyEmail(t *testing.T) {
-	defer db.DropAllTable()
-	body := map[string]interface{}{
-		"name":     "User Test",
-		"email":    "useremail.com",
-		"password": "123456",
-	}
-	w, _ := initTestCreateUser(body)
+	t.Run("it should return invalid body with invalid email format", func(t *testing.T) {
+		defer db.DropAllTable()
+		body := map[string]interface{}{
+			"name":     "User Test",
+			"email":    "useremail.com",
+			"password": "123456",
+		}
+		w, _ := initTestCreateUser(body)
 
-	actual := exception.Exception{}
-	if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
-		panic(err)
-	}
+		actual := exception.Exception{}
+		if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
+			panic(err)
+		}
 
-	assert.Equal(t, http.StatusBadRequest, w.Code)
-	assert.Equal(t, http.StatusBadRequest, actual.Status)
-	assert.Equal(t, actual.Flag, "BAD_REQUEST")
-	assert.NotEmpty(t, actual.Errors)
-	assert.NotEmpty(t, actual.Errors.Message)
-	assert.Equal(t, "INVALID_BODY", actual.Errors.Flag)
-}
+		assert.Equal(t, http.StatusBadRequest, w.Code)
+		assert.Equal(t, http.StatusBadRequest, actual.Status)
+		assert.Equal(t, actual.Flag, "BAD_REQUEST")
+		assert.NotEmpty(t, actual.Errors)
+		assert.NotEmpty(t, actual.Errors.Message)
+		assert.Equal(t, "INVALID_BODY", actual.Errors.Flag)
+	})
 
-func TestCreateUserInvalidBodyPassword(t *testing.T) {
-	defer db.DropAllTable()
-	body := map[string]interface{}{
-		"name":  "User Test",
-		"email": "user@email.com",
-	}
-	w, _ := initTestCreateUser(body)
+	t.Run("it should return invalid body with invalid password format", func(t *testing.T) {
+		defer db.DropAllTable()
+		body := map[string]interface{}{
+			"name":  "User Test",
+			"email": "user@email.com",
+		}
+		w, _ := initTestCreateUser(body)
 
-	actual := exception.Exception{}
-	if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
-		panic(err)
-	}
+		actual := exception.Exception{}
+		if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
+			panic(err)
+		}
 
-	assert.Equal(t, http.StatusBadRequest, w.Code)
-	assert.Equal(t, http.StatusBadRequest, actual.Status)
-	assert.Equal(t, actual.Flag, "BAD_REQUEST")
-	assert.NotEmpty(t, actual.Errors)
-	assert.NotEmpty(t, actual.Errors.Message)
-	assert.Equal(t, "INVALID_BODY", actual.Errors.Flag)
+		assert.Equal(t, http.StatusBadRequest, w.Code)
+		assert.Equal(t, http.StatusBadRequest, actual.Status)
+		assert.Equal(t, actual.Flag, "BAD_REQUEST")
+		assert.NotEmpty(t, actual.Errors)
+		assert.NotEmpty(t, actual.Errors.Message)
+		assert.Equal(t, "INVALID_BODY", actual.Errors.Flag)
+	})
 }
