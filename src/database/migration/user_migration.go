@@ -5,7 +5,7 @@ import (
 	"github.com/saefullohmaslul/golang-example/src/database/entity"
 )
 
-// Migrate -> execution migration based on the table
-func Migrate(conn *gorm.DB) {
-	conn.AutoMigrate(entity.User{})
+// CreateUser is create user tabel for migration
+func CreateUser(conn *gorm.DB) {
+	conn.CreateTable(&entity.User{})
 }

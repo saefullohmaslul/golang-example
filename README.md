@@ -70,6 +70,19 @@ make test
 make lint
 ```
 
+## Run migration
+
+```bash
+make migrate
+```
+
+## Run seeder
+
+```bash
+# running migration required
+make seed
+```
+
 ## Project structure
 
 ```bash

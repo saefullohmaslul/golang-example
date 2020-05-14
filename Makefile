@@ -49,3 +49,9 @@ test-int:
 
 lint:
 	@golangci-lint -E bodyclose,misspell,gocyclo,dupl,gofmt,golint,unconvert,goimports,depguard,gocritic,funlen,interfacer run
+
+seed:
+	@go run src/helpers/seeder/seeder.go
+
+migrate:
+	@go run src/helpers/migrate/migration.go

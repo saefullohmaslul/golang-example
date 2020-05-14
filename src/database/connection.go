@@ -29,6 +29,14 @@ func Connection() {
 	}
 }
 
+// SeedConnection is method to create connection for seeder
+func SeedConnection() {
+	if err := godotenv.Load(); err != nil {
+		logging.Error("ENV", err)
+	}
+	Connection()
+}
+
 // AppConnection -> method to create connection for application
 func AppConnection() {
 	if err := godotenv.Load(); err != nil {

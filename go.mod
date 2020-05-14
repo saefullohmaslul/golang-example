@@ -4,6 +4,7 @@ go 1.14
 
 require (
 	github.com/Shopify/sarama v1.26.3
+	github.com/bxcodec/faker v2.0.1+incompatible
 	github.com/fatih/color v1.9.0 // indirect
 	github.com/gin-gonic/gin v1.6.3
 	github.com/go-playground/validator/v10 v10.2.0
