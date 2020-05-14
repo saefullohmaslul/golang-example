@@ -4,25 +4,17 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/saefullohmaslul/golang-example/src/middlewares/exception"
+	"github.com/saefullohmaslul/golang-example/src/validations/schemas"
 )
-
-// CreateUserSchema -> create user schema validations
-type CreateUserSchema struct {
-	Name     string `validate:"required"`
-	Email    string `validate:"required,email"`
-	Password string `validate:"required"`
-	Age      int64
-	Address  string
-}
 
 // CreateUser -> validations to create user
 func CreateUser(c *gin.Context) {
-	var user CreateUserSchema
+	var user schemas.CreateUser
 	if err := c.ShouldBindBodyWith(&user, binding.JSON); err != nil {
 		exception.BadRequest(err.Error(), "INVALID_BODY")
 	}
 
-	userValidate := &CreateUserSchema{
+	userValidate := &schemas.CreateUser{
 		Name:     user.Name,
 		Password: user.Password,
 		Address:  user.Address,
@@ -32,40 +24,27 @@ func CreateUser(c *gin.Context) {
 	Validate(userValidate)
 }
 
-// GetUserParamSchema -> check schema param validations
-type GetUserParamSchema struct {
-	ID uint `uri:"id" binding:"required"`
-}
-
 // GetUser -> validations to get user by id
 func GetUser(c *gin.Context) {
-	param := GetUserParamSchema{}
+	param := schemas.UserID{}
 	if err := c.ShouldBindUri(&param); err != nil {
 		exception.BadRequest("Param must be of type integer, required", "INVALID_BODY")
 	}
-}
-
-// UpdateUserSchema -> update user schema validations
-type UpdateUserSchema struct {
-	Name    string
-	Email   string `validate:"omitempty,email"`
-	Age     int64  `validate:"omitempty,numeric,gt=0"`
-	Address string
 }
 
 // UpdateUser -> validations to update user by id with body
 func UpdateUser(c *gin.Context) {
-	param := GetUserParamSchema{}
+	param := schemas.UserID{}
 	if err := c.ShouldBindUri(&param); err != nil {
 		exception.BadRequest("Param must be of type integer, required", "INVALID_BODY")
 	}
 
-	var user UpdateUserSchema
+	var user schemas.UpdateUser
 	if err := c.ShouldBindBodyWith(&user, binding.JSON); err != nil {
 		exception.BadRequest(err.Error(), "INVALID_BODY")
 	}
 
-	userValidate := &UpdateUserSchema{
+	userValidate := &schemas.UpdateUser{
 		Name:    user.Name,
 		Address: user.Address,
 		Age:     user.Age,
@@ -76,7 +55,7 @@ func UpdateUser(c *gin.Context) {
 
 // DeleteUser -> validations to delete user by id
 func DeleteUser(c *gin.Context) {
-	param := GetUserParamSchema{}
+	param := schemas.UserID{}
 	if err := c.ShouldBindUri(&param); err != nil {
 		exception.BadRequest("Param must be of type integer, required", "INVALID_BODY")
 	}

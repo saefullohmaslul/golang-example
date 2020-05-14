@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin/binding"
 	"github.com/saefullohmaslul/golang-example/src/database/entity"
 	"github.com/saefullohmaslul/golang-example/src/services"
-	"github.com/saefullohmaslul/golang-example/src/validations"
+	"github.com/saefullohmaslul/golang-example/src/validations/schemas"
 )
 
 // UserController -> the propose of user controller
@@ -39,7 +39,7 @@ func (u *UserController) GetUsers(c *gin.Context) {
 // GetUser -> get user by id routes
 // GET /user/:id
 func (u *UserController) GetUser(c *gin.Context) {
-	param := validations.GetUserParamSchema{}
+	param := schemas.UserID{}
 	_ = c.ShouldBindUri(&param)
 
 	user := u.Service.GetUser(int64(param.ID))
@@ -68,7 +68,7 @@ func (u *UserController) CreateUser(c *gin.Context) {
 // PATCH /user/:id
 func (u *UserController) UpdateUser(c *gin.Context) {
 	user := entity.User{}
-	param := validations.GetUserParamSchema{}
+	param := schemas.UserID{}
 	_ = c.ShouldBindUri(&param)
 	_ = c.ShouldBindBodyWith(&user, binding.JSON)
 
@@ -83,7 +83,7 @@ func (u *UserController) UpdateUser(c *gin.Context) {
 // DeleteUser -> delete user routes by id
 // DELETE /user/:id
 func (u *UserController) DeleteUser(c *gin.Context) {
-	param := validations.GetUserParamSchema{}
+	param := schemas.UserID{}
 	_ = c.ShouldBindUri(&param)
 
 	data := u.Service.DeleteUser(param.ID)
