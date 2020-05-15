@@ -14,13 +14,13 @@ import (
 	"github.com/saefullohmaslul/golang-example/src/database/entity"
 	"github.com/saefullohmaslul/golang-example/src/middlewares/exception"
 	"github.com/saefullohmaslul/golang-example/src/repositories"
-	"github.com/saefullohmaslul/golang-example/src/utils"
 	"github.com/saefullohmaslul/golang-example/src/utils/flag"
+	"github.com/saefullohmaslul/golang-example/src/utils/response"
 	"github.com/stretchr/testify/assert"
 )
 
 type updateUserSuccess struct {
-	utils.Response
+	response.Success
 	Result repositories.GetUser `json:"result"`
 }
 

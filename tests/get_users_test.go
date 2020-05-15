@@ -12,8 +12,8 @@ import (
 	db "github.com/saefullohmaslul/golang-example/src/database"
 	"github.com/saefullohmaslul/golang-example/src/database/entity"
 	"github.com/saefullohmaslul/golang-example/src/repositories"
-	"github.com/saefullohmaslul/golang-example/src/utils"
 	"github.com/saefullohmaslul/golang-example/src/utils/flag"
+	"github.com/saefullohmaslul/golang-example/src/utils/response"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -49,7 +49,7 @@ func initTestGetUsers() (*httptest.ResponseRecorder, *gin.Engine) {
 }
 
 type getUsers struct {
-	utils.Response
+	response.Success
 	Result []repositories.GetUser `json:"result"`
 }
 
