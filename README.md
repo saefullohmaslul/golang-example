@@ -104,6 +104,7 @@ make seed
 │   ├── utils                             # utility application
 │   ├── validations                       # validations request schema
 │   └── main.go                           # main project
+├── coverage                              # output coverage test
 ├── package                               # contain all third party configuration
 ├── tests                                 # contain all integration testing file
 ├── .env                                  # environment variable

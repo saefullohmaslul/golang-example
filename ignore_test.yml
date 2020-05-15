@@ -1,4 +1,4 @@
-files:
+ignore:
   package/kafka/kafka_pub_sub.go
   src/apps/application.go
   src/jobs/
