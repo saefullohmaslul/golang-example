@@ -15,6 +15,7 @@ import (
 	"github.com/saefullohmaslul/golang-example/src/middlewares/exception"
 	"github.com/saefullohmaslul/golang-example/src/repositories"
 	"github.com/saefullohmaslul/golang-example/src/utils"
+	"github.com/saefullohmaslul/golang-example/src/utils/flag"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -61,7 +62,7 @@ func TestUpdateUser(t *testing.T) {
 		}
 
 		assert.Equal(t, http.StatusOK, w.Code)
-		assert.Equal(t, "Success update user", actual.Message)
+		assert.Equal(t, flag.UpdateUserSuccess.Message, actual.Message)
 		assert.Equal(t, http.StatusOK, actual.Status)
 		assert.NotEmpty(t, actual.Result)
 	})
@@ -80,10 +81,10 @@ func TestUpdateUser(t *testing.T) {
 
 		assert.Equal(t, http.StatusBadRequest, w.Code)
 		assert.Equal(t, http.StatusBadRequest, actual.Status)
-		assert.Equal(t, "BAD_REQUEST", actual.Flag)
+		assert.Equal(t, flag.UpdateUserNotExist.Flag, actual.Flag)
 		assert.NotEmpty(t, actual.Errors)
-		assert.Equal(t, "USER_NOT_FOUND", actual.Errors.Flag)
-		assert.Equal(t, "User with this id not exist", actual.Errors.Message)
+		assert.Equal(t, flag.UpdateUserNotExist.Error.Flag, actual.Errors.Flag)
+		assert.Equal(t, flag.UpdateUserNotExist.Error.Message, actual.Errors.Message)
 	})
 
 	t.Run("it should return invalid body with invalid email format", func(t *testing.T) {
@@ -99,9 +100,9 @@ func TestUpdateUser(t *testing.T) {
 		}
 
 		assert.Equal(t, http.StatusBadRequest, w.Code)
-		assert.Equal(t, "BAD_REQUEST", actual.Flag)
+		assert.Equal(t, flag.UpdateUserInvalidBody.Flag, actual.Flag)
 		assert.NotEmpty(t, actual.Errors)
-		assert.Equal(t, "INVALID_BODY", actual.Errors.Flag)
+		assert.Equal(t, flag.UpdateUserInvalidBody.Error.Flag, actual.Errors.Flag)
 		assert.NotEmpty(t, actual.Errors.Message)
 	})
 
@@ -118,9 +119,9 @@ func TestUpdateUser(t *testing.T) {
 		}
 
 		assert.Equal(t, http.StatusBadRequest, w.Code)
-		assert.Equal(t, "BAD_REQUEST", actual.Flag)
+		assert.Equal(t, flag.UpdateUserInvalidBody.Flag, actual.Flag)
 		assert.NotEmpty(t, actual.Errors)
-		assert.Equal(t, "INVALID_BODY", actual.Errors.Flag)
+		assert.Equal(t, flag.UpdateUserInvalidBody.Error.Flag, actual.Errors.Flag)
 		assert.NotEmpty(t, actual.Errors.Message)
 	})
 
@@ -137,9 +138,9 @@ func TestUpdateUser(t *testing.T) {
 		}
 
 		assert.Equal(t, http.StatusBadRequest, w.Code)
-		assert.Equal(t, "BAD_REQUEST", actual.Flag)
+		assert.Equal(t, flag.UpdateUserInvlidParamURI.Flag, actual.Flag)
 		assert.NotEmpty(t, actual.Errors)
-		assert.Equal(t, "INVALID_BODY", actual.Errors.Flag)
-		assert.NotEmpty(t, actual.Errors.Message)
+		assert.Equal(t, flag.UpdateUserInvlidParamURI.Error.Flag, actual.Errors.Flag)
+		assert.Equal(t, flag.UpdateUserInvlidParamURI.Error.Message, actual.Errors.Message)
 	})
 }

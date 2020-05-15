@@ -13,6 +13,7 @@ import (
 	"github.com/saefullohmaslul/golang-example/src/database/entity"
 	"github.com/saefullohmaslul/golang-example/src/repositories"
 	"github.com/saefullohmaslul/golang-example/src/utils"
+	"github.com/saefullohmaslul/golang-example/src/utils/flag"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -62,7 +63,7 @@ func TestGetUsers(t *testing.T) {
 		}
 
 		assert.Equal(t, http.StatusOK, w.Code)
-		assert.Equal(t, "Success get all users", actual.Message)
+		assert.Equal(t, flag.GetUsersSuccess.Message, actual.Message)
 		assert.Equal(t, http.StatusOK, actual.Status)
 		assert.NotEmpty(t, actual.Result)
 	})

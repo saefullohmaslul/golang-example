@@ -13,6 +13,7 @@ import (
 	"github.com/saefullohmaslul/golang-example/src/database/entity"
 	"github.com/saefullohmaslul/golang-example/src/repositories"
 	"github.com/saefullohmaslul/golang-example/src/utils"
+	"github.com/saefullohmaslul/golang-example/src/utils/flag"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -70,7 +71,7 @@ func TestGetUser(t *testing.T) {
 		}
 
 		assert.Equal(t, http.StatusOK, w.Code)
-		assert.Equal(t, "Success get user", actual.Message)
+		assert.Equal(t, flag.GetUserSuccess.Message, actual.Message)
 		assert.Equal(t, http.StatusOK, actual.Status)
 		assert.NotEmpty(t, actual.Result)
 	})
@@ -84,10 +85,10 @@ func TestGetUser(t *testing.T) {
 		}
 
 		assert.Equal(t, http.StatusOK, w.Code)
-		assert.Equal(t, "User not found", actual.Message)
+		assert.Equal(t, flag.GetUserNotFound.Message, actual.Message)
 		assert.Equal(t, http.StatusOK, actual.Status)
-		assert.Equal(t, "User with this ID not enough", actual.Errors.Message)
-		assert.Equal(t, "USER_NOT_FOUND", actual.Errors.Flag)
+		assert.Equal(t, flag.GetUserNotFound.Error.Message, actual.Errors.Message)
+		assert.Equal(t, flag.GetUserNotFound.Error.Flag, actual.Errors.Flag)
 	})
 
 	t.Run("it should return invalid body with invalid param uri", func(t *testing.T) {
@@ -99,9 +100,9 @@ func TestGetUser(t *testing.T) {
 		}
 
 		assert.Equal(t, http.StatusBadRequest, w.Code)
-		assert.Equal(t, "Param must be of type integer, required", actual.Errors.Message)
+		assert.Equal(t, flag.GetUserInvalidParamID.Error.Message, actual.Errors.Message)
 		assert.Equal(t, http.StatusBadRequest, actual.Status)
-		assert.Equal(t, "INVALID_BODY", actual.Errors.Flag)
-		assert.Equal(t, "BAD_REQUEST", actual.Flag)
+		assert.Equal(t, flag.GetUserInvalidParamID.Error.Flag, actual.Errors.Flag)
+		assert.Equal(t, flag.GetUserInvalidParamID.Flag, actual.Flag)
 	})
 }

@@ -14,6 +14,7 @@ import (
 	"github.com/saefullohmaslul/golang-example/src/middlewares/exception"
 	"github.com/saefullohmaslul/golang-example/src/repositories"
 	"github.com/saefullohmaslul/golang-example/src/utils"
+	"github.com/saefullohmaslul/golang-example/src/utils/flag"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -52,7 +53,7 @@ func TestCreateUser(t *testing.T) {
 		}
 
 		assert.Equal(t, http.StatusOK, w.Code)
-		assert.Equal(t, "Success create user", actual.Message)
+		assert.Equal(t, flag.CreateUserSuccess.Message, actual.Message)
 		assert.Equal(t, http.StatusOK, actual.Status)
 		assert.NotEmpty(t, actual.Result)
 	})
@@ -81,10 +82,10 @@ func TestCreateUser(t *testing.T) {
 
 		assert.Equal(t, http.StatusBadRequest, w.Code)
 		assert.Equal(t, http.StatusBadRequest, actual.Status)
-		assert.Equal(t, actual.Flag, "BAD_REQUEST")
+		assert.Equal(t, actual.Flag, flag.CreateUserAlreadyExist.Flag)
 		assert.NotEmpty(t, actual.Errors)
-		assert.Equal(t, "User with this email already exist", actual.Errors.Message)
-		assert.Equal(t, "USER_ALREADY_EXIST", actual.Errors.Flag)
+		assert.Equal(t, flag.CreateUserAlreadyExist.Error.Message, actual.Errors.Message)
+		assert.Equal(t, flag.CreateUserAlreadyExist.Error.Flag, actual.Errors.Flag)
 	})
 
 	t.Run("it should return invalid body with invalid name format", func(t *testing.T) {
@@ -103,10 +104,10 @@ func TestCreateUser(t *testing.T) {
 
 		assert.Equal(t, http.StatusBadRequest, w.Code)
 		assert.Equal(t, http.StatusBadRequest, actual.Status)
-		assert.Equal(t, actual.Flag, "BAD_REQUEST")
+		assert.Equal(t, actual.Flag, flag.CreateUserInvalidBody.Flag)
 		assert.NotEmpty(t, actual.Errors)
 		assert.NotEmpty(t, actual.Errors.Message)
-		assert.Equal(t, "INVALID_BODY", actual.Errors.Flag)
+		assert.Equal(t, flag.CreateUserInvalidBody.Error.Flag, actual.Errors.Flag)
 	})
 
 	t.Run("it should return invalid body with invalid email format", func(t *testing.T) {
@@ -125,10 +126,10 @@ func TestCreateUser(t *testing.T) {
 
 		assert.Equal(t, http.StatusBadRequest, w.Code)
 		assert.Equal(t, http.StatusBadRequest, actual.Status)
-		assert.Equal(t, actual.Flag, "BAD_REQUEST")
+		assert.Equal(t, actual.Flag, flag.CreateUserInvalidBody.Flag)
 		assert.NotEmpty(t, actual.Errors)
 		assert.NotEmpty(t, actual.Errors.Message)
-		assert.Equal(t, "INVALID_BODY", actual.Errors.Flag)
+		assert.Equal(t, flag.CreateUserInvalidBody.Error.Flag, actual.Errors.Flag)
 	})
 
 	t.Run("it should return invalid body with invalid password format", func(t *testing.T) {
@@ -146,9 +147,9 @@ func TestCreateUser(t *testing.T) {
 
 		assert.Equal(t, http.StatusBadRequest, w.Code)
 		assert.Equal(t, http.StatusBadRequest, actual.Status)
-		assert.Equal(t, actual.Flag, "BAD_REQUEST")
+		assert.Equal(t, actual.Flag, flag.CreateUserInvalidBody.Flag)
 		assert.NotEmpty(t, actual.Errors)
 		assert.NotEmpty(t, actual.Errors.Message)
-		assert.Equal(t, "INVALID_BODY", actual.Errors.Flag)
+		assert.Equal(t, flag.CreateUserInvalidBody.Error.Flag, actual.Errors.Flag)
 	})
 }

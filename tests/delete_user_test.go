@@ -15,6 +15,7 @@ import (
 	"github.com/saefullohmaslul/golang-example/src/middlewares/exception"
 	"github.com/saefullohmaslul/golang-example/src/repositories"
 	"github.com/saefullohmaslul/golang-example/src/utils"
+	"github.com/saefullohmaslul/golang-example/src/utils/flag"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -59,7 +60,7 @@ func TestDeleteUser(t *testing.T) {
 		}
 
 		assert.Equal(t, http.StatusOK, w.Code)
-		assert.Equal(t, "Success delete user", actual.Message)
+		assert.Equal(t, flag.DeleteUserSuccess.Message, actual.Message)
 		assert.Equal(t, http.StatusOK, actual.Status)
 		assert.NotEmpty(t, actual.Result)
 	})
@@ -75,10 +76,10 @@ func TestDeleteUser(t *testing.T) {
 
 		assert.Equal(t, http.StatusBadRequest, w.Code)
 		assert.Equal(t, http.StatusBadRequest, actual.Status)
-		assert.Equal(t, "BAD_REQUEST", actual.Flag)
+		assert.Equal(t, flag.DeleteUserNotExist.Flag, actual.Flag)
 		assert.NotEmpty(t, actual.Errors)
-		assert.Equal(t, "USER_NOT_FOUND", actual.Errors.Flag)
-		assert.Equal(t, "User with this id not exist", actual.Errors.Message)
+		assert.Equal(t, flag.DeleteUserNotExist.Error.Flag, actual.Errors.Flag)
+		assert.Equal(t, flag.DeleteUserNotExist.Error.Message, actual.Errors.Message)
 	})
 
 	t.Run("it should return invalid param uri with invalid id format", func(t *testing.T) {
@@ -91,9 +92,9 @@ func TestDeleteUser(t *testing.T) {
 		}
 
 		assert.Equal(t, http.StatusBadRequest, w.Code)
-		assert.Equal(t, "BAD_REQUEST", actual.Flag)
+		assert.Equal(t, flag.DeleteUserInvalidParamURI.Flag, actual.Flag)
 		assert.NotEmpty(t, actual.Errors)
-		assert.Equal(t, "INVALID_BODY", actual.Errors.Flag)
-		assert.NotEmpty(t, actual.Errors.Message)
+		assert.Equal(t, flag.DeleteUserInvalidParamURI.Error.Flag, actual.Errors.Flag)
+		assert.Equal(t, flag.DeleteUserInvalidParamURI.Error.Message, actual.Errors.Message)
 	})
 }

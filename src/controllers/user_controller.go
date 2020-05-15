@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin/binding"
 	"github.com/saefullohmaslul/golang-example/src/database/entity"
 	"github.com/saefullohmaslul/golang-example/src/services"
+	"github.com/saefullohmaslul/golang-example/src/utils/flag"
 	"github.com/saefullohmaslul/golang-example/src/validations/schemas"
 )
 
@@ -31,7 +32,7 @@ func (u *UserController) GetUsers(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"status":  http.StatusOK,
-		"message": "Success get all users",
+		"message": flag.GetUsersSuccess.Message,
 		"result":  users,
 	})
 }
@@ -45,7 +46,7 @@ func (u *UserController) GetUser(c *gin.Context) {
 	user := u.Service.GetUser(int64(param.ID))
 	c.JSON(http.StatusOK, gin.H{
 		"status":  http.StatusOK,
-		"message": "Success get user",
+		"message": flag.GetUserSuccess.Message,
 		"result":  user,
 	})
 }
@@ -59,7 +60,7 @@ func (u *UserController) CreateUser(c *gin.Context) {
 	data := u.Service.CreateUser(user)
 	c.JSON(http.StatusOK, gin.H{
 		"status":  http.StatusOK,
-		"message": "Success create user",
+		"message": flag.CreateUserSuccess.Message,
 		"result":  data,
 	})
 }
@@ -75,7 +76,7 @@ func (u *UserController) UpdateUser(c *gin.Context) {
 	data := u.Service.UpdateUser(param.ID, user)
 	c.JSON(http.StatusOK, gin.H{
 		"status":  http.StatusOK,
-		"message": "Success update user",
+		"message": flag.UpdateUserSuccess.Message,
 		"result":  data,
 	})
 }
@@ -89,7 +90,7 @@ func (u *UserController) DeleteUser(c *gin.Context) {
 	data := u.Service.DeleteUser(param.ID)
 	c.JSON(http.StatusOK, gin.H{
 		"status":  http.StatusOK,
-		"message": "Success delete user",
+		"message": flag.DeleteUserSuccess.Message,
 		"result":  data,
 	})
 }

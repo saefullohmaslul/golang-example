@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/saefullohmaslul/golang-example/src/middlewares/exception"
+	"github.com/saefullohmaslul/golang-example/src/utils/flag"
 	"github.com/saefullohmaslul/golang-example/src/validations/schemas"
 )
 
@@ -11,7 +12,7 @@ import (
 func CreateUser(c *gin.Context) {
 	var user schemas.CreateUser
 	if err := c.ShouldBindBodyWith(&user, binding.JSON); err != nil {
-		exception.BadRequest(err.Error(), "INVALID_BODY")
+		exception.BadRequest(err.Error(), flag.CreateUserInvalidBody.Error.Flag)
 	}
 
 	userValidate := &schemas.CreateUser{
@@ -28,7 +29,10 @@ func CreateUser(c *gin.Context) {
 func GetUser(c *gin.Context) {
 	param := schemas.UserID{}
 	if err := c.ShouldBindUri(&param); err != nil {
-		exception.BadRequest("Param must be of type integer, required", "INVALID_BODY")
+		exception.BadRequest(
+			flag.GetUserInvalidParamID.Error.Message,
+			flag.GetUserInvalidParamID.Error.Flag,
+		)
 	}
 }
 
@@ -36,12 +40,15 @@ func GetUser(c *gin.Context) {
 func UpdateUser(c *gin.Context) {
 	param := schemas.UserID{}
 	if err := c.ShouldBindUri(&param); err != nil {
-		exception.BadRequest("Param must be of type integer, required", "INVALID_BODY")
+		exception.BadRequest(
+			flag.UpdateUserInvlidParamURI.Error.Message,
+			flag.UpdateUserInvlidParamURI.Error.Flag,
+		)
 	}
 
 	var user schemas.UpdateUser
 	if err := c.ShouldBindBodyWith(&user, binding.JSON); err != nil {
-		exception.BadRequest(err.Error(), "INVALID_BODY")
+		exception.BadRequest(err.Error(), flag.UpdateUserInvalidBody.Error.Flag)
 	}
 
 	userValidate := &schemas.UpdateUser{
@@ -57,6 +64,9 @@ func UpdateUser(c *gin.Context) {
 func DeleteUser(c *gin.Context) {
 	param := schemas.UserID{}
 	if err := c.ShouldBindUri(&param); err != nil {
-		exception.BadRequest("Param must be of type integer, required", "INVALID_BODY")
+		exception.BadRequest(
+			flag.DeleteUserInvalidParamURI.Error.Message,
+			flag.DeleteUserInvalidParamURI.Error.Flag,
+		)
 	}
 }
