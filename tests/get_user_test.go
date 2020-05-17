@@ -17,27 +17,6 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-type getUser struct {
-	response.Success
-	Result repositories.GetUser `json:"result"`
-}
-
-type getUserEmpty struct {
-	response.Success
-	Errors getUserErrorMessage `json:"errors"`
-}
-
-type getUserError struct {
-	Status int                 `json:"status"`
-	Flag   string              `json:"flag"`
-	Errors getUserErrorMessage `json:"errors"`
-}
-
-type getUserErrorMessage struct {
-	Message string `json:"message"`
-	Flag    string `json:"flag"`
-}
-
 func initTestGetUser(id string) (*httptest.ResponseRecorder, *gin.Engine) {
 	r := gin.Default()
 	app := new(apps.Application)
@@ -65,44 +44,45 @@ func TestGetUser(t *testing.T) {
 	t.Run("it should return success", func(t *testing.T) {
 		defer db.DropAllTable()
 		w, _ := initTestGetUser("1")
-		actual := getUser{}
+		actual := response.Response{}
 		if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
 			panic(err)
 		}
 
 		assert.Equal(t, http.StatusOK, w.Code)
-		assert.Equal(t, flag.GetUserSuccess.Message, actual.Message)
 		assert.Equal(t, http.StatusOK, actual.Status)
-		assert.NotEmpty(t, actual.Result)
+		assert.Equal(t, flag.GetUserSuccess.Message, actual.Message)
+		assert.NotEmpty(t, actual.Data)
+		assert.Empty(t, actual.Errors)
 	})
 
-	t.Run("it shoould return user not found", func(t *testing.T) {
+	t.Run("it should return user not found", func(t *testing.T) {
 		defer db.DropAllTable()
 		w, _ := initTestGetUser("2")
-		actual := getUserEmpty{}
+		actual := response.Response{}
 		if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
 			panic(err)
 		}
 
-		assert.Equal(t, http.StatusOK, w.Code)
-		assert.Equal(t, flag.GetUserNotFound.Message, actual.Message)
-		assert.Equal(t, http.StatusOK, actual.Status)
-		assert.Equal(t, flag.GetUserNotFound.Error.Message, actual.Errors.Message)
-		assert.Equal(t, flag.GetUserNotFound.Error.Flag, actual.Errors.Flag)
+		assert.Equal(t, http.StatusNotFound, w.Code)
+		assert.Equal(t, http.StatusNotFound, actual.Status)
+		assert.Equal(t, "User not found", actual.Message)
+		assert.Equal(t, "User with this ID not found", actual.Errors[0].Message)
+		assert.Equal(t, "USER_NOT_FOUND", actual.Errors[0].Flag)
 	})
 
 	t.Run("it should return invalid body with invalid param uri", func(t *testing.T) {
 		defer db.DropAllTable()
 		w, _ := initTestGetUser("c")
-		actual := getUserError{}
+		actual := response.Response{}
 		if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
 			panic(err)
 		}
 
 		assert.Equal(t, http.StatusBadRequest, w.Code)
-		assert.Equal(t, flag.GetUserInvalidParamID.Error.Message, actual.Errors.Message)
 		assert.Equal(t, http.StatusBadRequest, actual.Status)
-		assert.Equal(t, flag.GetUserInvalidParamID.Error.Flag, actual.Errors.Flag)
-		assert.Equal(t, flag.GetUserInvalidParamID.Flag, actual.Flag)
+		assert.Equal(t, "Validation error", actual.Message)
+		assert.Equal(t, "Param must be of type integer, required", actual.Errors[0].Message)
+		assert.Equal(t, "INVALID_BODY", actual.Errors[0].Flag)
 	})
 }

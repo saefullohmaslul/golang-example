@@ -2,6 +2,7 @@ package tests
 
 import (
 	"encoding/json"
+	"github.com/saefullohmaslul/golang-example/src/utils/response"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -13,7 +14,6 @@ import (
 	"github.com/saefullohmaslul/golang-example/src/database/entity"
 	"github.com/saefullohmaslul/golang-example/src/repositories"
 	"github.com/saefullohmaslul/golang-example/src/utils/flag"
-	"github.com/saefullohmaslul/golang-example/src/utils/response"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -48,23 +48,19 @@ func initTestGetUsers() (*httptest.ResponseRecorder, *gin.Engine) {
 	return w, r
 }
 
-type getUsers struct {
-	response.Success
-	Result []repositories.GetUser `json:"result"`
-}
-
 func TestGetUsers(t *testing.T) {
 	t.Run("it should return success", func(t *testing.T) {
 		defer db.DropAllTable()
 		w, _ := initTestGetUsers()
-		actual := getUsers{}
+		actual := response.Response{}
 		if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
 			panic(err)
 		}
 
 		assert.Equal(t, http.StatusOK, w.Code)
-		assert.Equal(t, flag.GetUsersSuccess.Message, actual.Message)
 		assert.Equal(t, http.StatusOK, actual.Status)
-		assert.NotEmpty(t, actual.Result)
+		assert.Equal(t, flag.GetUsersSuccess.Message, actual.Message)
+		assert.NotEmpty(t, actual.Data)
+		assert.Empty(t, actual.Errors)
 	})
 }

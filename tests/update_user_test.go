@@ -9,20 +9,15 @@ import (
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
+	"github.com/stretchr/testify/assert"
+
 	"github.com/saefullohmaslul/golang-example/src/apps"
 	db "github.com/saefullohmaslul/golang-example/src/database"
 	"github.com/saefullohmaslul/golang-example/src/database/entity"
-	"github.com/saefullohmaslul/golang-example/src/middlewares/exception"
 	"github.com/saefullohmaslul/golang-example/src/repositories"
 	"github.com/saefullohmaslul/golang-example/src/utils/flag"
 	"github.com/saefullohmaslul/golang-example/src/utils/response"
-	"github.com/stretchr/testify/assert"
 )
-
-type updateUserSuccess struct {
-	response.Success
-	Result repositories.GetUser `json:"result"`
-}
 
 func initTestUpdateUser(id string, body map[string]interface{}) (*httptest.ResponseRecorder, *gin.Engine) {
 	r := gin.Default()
@@ -56,7 +51,7 @@ func TestUpdateUser(t *testing.T) {
 		}
 		w, _ := initTestUpdateUser("1", body)
 
-		actual := updateUserSuccess{}
+		actual := response.Response{}
 		if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
 			panic(err)
 		}
@@ -64,7 +59,8 @@ func TestUpdateUser(t *testing.T) {
 		assert.Equal(t, http.StatusOK, w.Code)
 		assert.Equal(t, flag.UpdateUserSuccess.Message, actual.Message)
 		assert.Equal(t, http.StatusOK, actual.Status)
-		assert.NotEmpty(t, actual.Result)
+		assert.NotEmpty(t, actual.Data)
+		assert.Empty(t, actual.Errors)
 	})
 
 	t.Run("it should return user not exist", func(t *testing.T) {
@@ -74,17 +70,16 @@ func TestUpdateUser(t *testing.T) {
 		}
 		w, _ := initTestUpdateUser("2", body)
 
-		actual := exception.Exception{}
+		actual := response.Response{}
 		if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
 			panic(err)
 		}
 
-		assert.Equal(t, http.StatusBadRequest, w.Code)
-		assert.Equal(t, http.StatusBadRequest, actual.Status)
-		assert.Equal(t, flag.UpdateUserNotExist.Flag, actual.Flag)
-		assert.NotEmpty(t, actual.Errors)
-		assert.Equal(t, flag.UpdateUserNotExist.Error.Flag, actual.Errors.Flag)
-		assert.Equal(t, flag.UpdateUserNotExist.Error.Message, actual.Errors.Message)
+		assert.Equal(t, http.StatusNotFound, w.Code)
+		assert.Equal(t, http.StatusNotFound, actual.Status)
+		assert.Equal(t, "User not exist", actual.Message)
+		assert.Equal(t, "USER_NOT_FOUND", actual.Errors[0].Flag)
+		assert.Equal(t, "User with this ID not found", actual.Errors[0].Message)
 	})
 
 	t.Run("it should return invalid body with invalid email format", func(t *testing.T) {
@@ -94,16 +89,16 @@ func TestUpdateUser(t *testing.T) {
 		}
 		w, _ := initTestUpdateUser("1", body)
 
-		actual := exception.Exception{}
+		actual := response.Response{}
 		if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
 			panic(err)
 		}
 
 		assert.Equal(t, http.StatusBadRequest, w.Code)
-		assert.Equal(t, flag.UpdateUserInvalidBody.Flag, actual.Flag)
-		assert.NotEmpty(t, actual.Errors)
-		assert.Equal(t, flag.UpdateUserInvalidBody.Error.Flag, actual.Errors.Flag)
-		assert.NotEmpty(t, actual.Errors.Message)
+		assert.Equal(t, http.StatusBadRequest, actual.Status)
+		assert.Equal(t, "INVALID_BODY", actual.Errors[0].Flag)
+		assert.NotEmpty(t, actual.Errors[0].Message)
+		assert.Equal(t, "Validation error", actual.Message)
 	})
 
 	t.Run("it should return invalid body with invalid age format", func(t *testing.T) {
@@ -113,16 +108,16 @@ func TestUpdateUser(t *testing.T) {
 		}
 		w, _ := initTestUpdateUser("1", body)
 
-		actual := exception.Exception{}
+		actual := response.Response{}
 		if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
 			panic(err)
 		}
 
 		assert.Equal(t, http.StatusBadRequest, w.Code)
-		assert.Equal(t, flag.UpdateUserInvalidBody.Flag, actual.Flag)
-		assert.NotEmpty(t, actual.Errors)
-		assert.Equal(t, flag.UpdateUserInvalidBody.Error.Flag, actual.Errors.Flag)
-		assert.NotEmpty(t, actual.Errors.Message)
+		assert.Equal(t, http.StatusBadRequest, actual.Status)
+		assert.Equal(t, "INVALID_BODY", actual.Errors[0].Flag)
+		assert.NotEmpty(t, actual.Errors[0].Message)
+		assert.Equal(t, "Validation error", actual.Message)
 	})
 
 	t.Run("it should return invalid body with invalid param uri", func(t *testing.T) {
@@ -132,15 +127,15 @@ func TestUpdateUser(t *testing.T) {
 		}
 		w, _ := initTestUpdateUser("x", body)
 
-		actual := exception.Exception{}
+		actual := response.Response{}
 		if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
 			panic(err)
 		}
 
 		assert.Equal(t, http.StatusBadRequest, w.Code)
-		assert.Equal(t, flag.UpdateUserInvlidParamURI.Flag, actual.Flag)
-		assert.NotEmpty(t, actual.Errors)
-		assert.Equal(t, flag.UpdateUserInvlidParamURI.Error.Flag, actual.Errors.Flag)
-		assert.Equal(t, flag.UpdateUserInvlidParamURI.Error.Message, actual.Errors.Message)
+		assert.Equal(t, http.StatusBadRequest, actual.Status)
+		assert.Equal(t, "Validation error", actual.Message)
+		assert.Equal(t, "INVALID_BODY", actual.Errors[0].Flag)
+		assert.NotEmpty(t, actual.Errors[0].Message)
 	})
 }
