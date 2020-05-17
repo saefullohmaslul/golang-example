@@ -2,33 +2,35 @@ package exception
 
 import "net/http"
 
-// Empty -> response for empty result
-func Empty(msg string, message string, flag string) {
-	errors := map[string]interface{}{
-		"message": message, "flag": flag,
-	}
-
+// NotFound -> response empty data
+func NotFound(message string, errors []map[string]interface{}) {
 	response := map[string]interface{}{
-		"status":  http.StatusOK,
-		"message": msg,
+		"status":  http.StatusNotFound,
+		"message": message,
+		"data":    nil,
 		"errors":  errors,
 	}
-
 	panic(response)
 }
 
 // BadRequest -> response for bad request
-func BadRequest(message string, flag string) {
-	errors := map[string]interface{}{
-		"message": message, "flag": flag,
-	}
-
+func BadRequest(message string, errors []map[string]interface{}) {
 	response := map[string]interface{}{
-		"status": http.StatusBadRequest,
-		"flag":   "BAD_REQUEST",
-		"errors": errors,
+		"status":  http.StatusBadRequest,
+		"message": message,
+		"data":    nil,
+		"errors":  errors,
 	}
+	panic(response)
+}
 
+func Conflict(message string, errors []map[string]interface{}) {
+	response := map[string]interface{}{
+		"status":  http.StatusConflict,
+		"message": message,
+		"data":    nil,
+		"errors":  errors,
+	}
 	panic(response)
 }
 
@@ -39,9 +41,10 @@ func InternalServerError(message string, flag string) {
 	}
 
 	response := map[string]interface{}{
-		"status": http.StatusInternalServerError,
-		"flag":   "INTERNAL_SERVER_ERROR",
-		"errors": errors,
+		"message": message,
+		"data":    nil,
+		"status":  http.StatusInternalServerError,
+		"errors":  errors,
 	}
 
 	panic(response)

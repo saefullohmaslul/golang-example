@@ -33,7 +33,8 @@ func (u *UserController) GetUsers(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"status":  http.StatusOK,
 		"message": flag.GetUsersSuccess.Message,
-		"result":  users,
+		"data":    users,
+		"error":   nil,
 	})
 }
 
@@ -47,7 +48,8 @@ func (u *UserController) GetUser(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"status":  http.StatusOK,
 		"message": flag.GetUserSuccess.Message,
-		"result":  user,
+		"data":    user,
+		"error":   nil,
 	})
 }
 
@@ -61,7 +63,8 @@ func (u *UserController) CreateUser(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"status":  http.StatusOK,
 		"message": flag.CreateUserSuccess.Message,
-		"result":  data,
+		"data":    data,
+		"error":   nil,
 	})
 }
 
@@ -77,7 +80,8 @@ func (u *UserController) UpdateUser(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"status":  http.StatusOK,
 		"message": flag.UpdateUserSuccess.Message,
-		"result":  data,
+		"data":    data,
+		"error":   nil,
 	})
 }
 
@@ -91,6 +95,7 @@ func (u *UserController) DeleteUser(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"status":  http.StatusOK,
 		"message": flag.DeleteUserSuccess.Message,
-		"result":  data,
+		"data":    data,
+		"error":   nil,
 	})
 }

@@ -1,6 +1,7 @@
 package exception
 
 import (
+	"github.com/saefullohmaslul/golang-example/src/utils/response"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -9,37 +10,20 @@ import (
 
 // ErrorHandler -> handling error middleware
 func ErrorHandler(c *gin.Context, err interface{}) {
-	res := Exception{}
+	res := response.Response{}
 
 	/**
-	 * checking error formating
+	 * checking error formatting
 	 * if error format does not match then
 	 * an error has occurred to the code
 	 */
 	if err := mapstructure.Decode(err, &res); err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
-			"status": http.StatusInternalServerError,
-			"flag":   "INTERNAL_SERVER_ERROR",
-			"errors": map[string]interface{}{
-				"message": "An error occurred on our server", "flag": "ERROR_MAP_TO_STRUCT",
-			},
-		})
-
-		/**
-		 * you can send error to stack driver in here
-		 */
-		return
-	}
-
-	/**
-	 * format if status 200 and result is empty
-	 */
-	if res.Status == 200 {
-		c.AbortWithStatusJSON(res.Status, gin.H{
-			"status":  res.Status,
+			"status":  http.StatusInternalServerError,
 			"message": res.Message,
-			"errors": map[string]interface{}{
-				"message": res.Errors.Message, "flag": res.Errors.Flag,
+			"data":    nil,
+			"errors": []map[string]interface{}{
+				{"message": "An error occurred on our server", "flag": "ERROR_MAP_TO_STRUCT"},
 			},
 		})
 
@@ -53,11 +37,10 @@ func ErrorHandler(c *gin.Context, err interface{}) {
 	 * format error result
 	 */
 	c.AbortWithStatusJSON(res.Status, gin.H{
-		"status": res.Status,
-		"flag":   res.Flag,
-		"errors": map[string]interface{}{
-			"message": res.Errors.Message, "flag": res.Errors.Flag,
-		},
+		"status":  res.Status,
+		"message": res.Message,
+		"data":    nil,
+		"errors":  res.Errors,
 	})
 
 	/**

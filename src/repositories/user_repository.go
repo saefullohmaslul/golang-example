@@ -4,6 +4,7 @@ import (
 	"github.com/jinzhu/gorm"
 	db "github.com/saefullohmaslul/golang-example/src/database"
 	"github.com/saefullohmaslul/golang-example/src/database/entity"
+	"time"
 )
 
 // UserRepository -> the propose of user repository is handling query for user entity
@@ -18,15 +19,16 @@ func URepository() UserRepository {
 
 // GetUser -> get user struct format
 type GetUser struct {
-	Name    string `json:"name"`
-	Email   string `json:"email"`
-	Age     int64  `json:"age"`
-	Address string `json:"address"`
+	Name      string     `json:"name,omitempty"`
+	Email     string     `json:"email,omitempty"`
+	Age       int64      `json:"age,omitempty"`
+	Address   string     `json:"address,omitempty"`
+	DeletedAt *time.Time `json:"deleted_at,omitempty"`
 }
 
 // GetUsers -> method to get all users in database
 func (r *UserRepository) GetUsers() []GetUser {
-	users := []GetUser{}
+	var users []GetUser
 	r.Conn.Select("name, email, address, age").Find(&users)
 	return users
 }
