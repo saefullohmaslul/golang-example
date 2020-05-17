@@ -35,17 +35,12 @@ func Conflict(message string, errors []map[string]interface{}) {
 }
 
 // InternalServerError -> response for internal server error
-func InternalServerError(message string, flag string) {
-	errors := map[string]interface{}{
-		"message": message, "flag": flag,
-	}
-
+func InternalServerError(message string, errors []map[string]interface{}) {
 	response := map[string]interface{}{
 		"message": message,
 		"data":    nil,
 		"status":  http.StatusInternalServerError,
 		"errors":  errors,
 	}
-
 	panic(response)
 }

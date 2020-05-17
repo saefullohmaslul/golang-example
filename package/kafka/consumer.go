@@ -49,9 +49,7 @@ func consumeMessage(consumer sarama.Consumer, topic string, partition int32, c c
 	}
 
 	defer func() {
-		if err := msg.Close(); err != nil {
-			logrus.Errorf("Unable to close partition %v: %v", partition, err)
-		}
+		_ = msg.Close()
 	}()
 
 	for {

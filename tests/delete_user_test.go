@@ -2,7 +2,6 @@ package tests
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -46,8 +45,6 @@ func TestDeleteUser(t *testing.T) {
 	t.Run("it should return success", func(t *testing.T) {
 		defer db.DropAllTable()
 		w, _ := initTestDeleteUser("1")
-
-		fmt.Println(w.Body.String())
 
 		actual := response.Response{}
 		if err := json.Unmarshal(w.Body.Bytes(), &actual); err != nil {
