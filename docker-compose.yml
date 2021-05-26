@@ -1,0 +1,48 @@
+version: "3.8"
+
+services:
+  app:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    command: sh -c "make dev"
+    depends_on:
+      - app_migration
+    restart: on-failure
+    volumes:
+      - type: bind
+        source: .
+        target: /app
+    env_file:
+      - .env
+    ports:
+      - ${PORT}:${PORT}
+
+  app_migration:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    command: sh -c "make migrate"
+    depends_on:
+      - postgres
+    restart: on-failure
+    env_file:
+      - .env
+
+  postgres:
+    image: postgres:11
+    restart: on-failure
+    ports:
+      - "1324:5432"
+    volumes:
+      - type: volume
+        source: postgres_volume
+        target: /var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_PORT=${DB_PORT}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
+
+volumes:
+  postgres_volume:
