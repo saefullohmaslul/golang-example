@@ -3,8 +3,10 @@ package main
 import (
 	"net/http"
 	"restapi/src/controllers"
+	"restapi/src/middlewares"
 	"restapi/src/models"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
 	"github.com/sarulabs/di"
 )
@@ -20,12 +22,16 @@ func NewService(ioc di.Container) *Service {
 }
 
 func (s *Service) NewRoute(e *echo.Echo) {
+	e.Validator = middlewares.NewValidator(validator.New())
+	e.HTTPErrorHandler = middlewares.ErrorHandler
+
 	g := e.Group("")
 
 	s.HealthRoute(g)
 	s.NotFoundRoute(g)
 
-	g.GET("/account/:account_number", s.controller.Account.CheckSaldo)
+	g.GET("/account/:account_number", s.controller.Account.CheckBalance)
+	g.POST("/account/:from_account_number/transfer", s.controller.Account.Transfer)
 }
 
 func (*Service) HealthRoute(g *echo.Group) {

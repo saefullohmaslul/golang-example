@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"net/http"
+	"restapi/src/constants"
 	"restapi/src/models"
 	"restapi/src/services"
 	"strconv"
@@ -11,7 +12,8 @@ import (
 )
 
 type AccountController interface {
-	CheckSaldo(echo.Context) error
+	CheckBalance(echo.Context) error
+	Transfer(echo.Context) error
 }
 
 type AccountControllerImpl struct {
@@ -24,21 +26,50 @@ func NewAccountController(ioc di.Container) AccountController {
 	}
 }
 
-func (ctl *AccountControllerImpl) CheckSaldo(c echo.Context) error {
+func (ctl *AccountControllerImpl) CheckBalance(c echo.Context) error {
 	var (
-		res           models.GenericRes
 		accountNumber int64
+		err           error
+		data          models.CheckBalanceAccount
 	)
 
-	if accountNumber, res.Error = strconv.ParseInt(c.Param("account_number"), 10, 64); res.Error != nil {
-		res.Code = http.StatusBadRequest
-		res.Message = res.Error.(error).Error()
-		return c.JSON(res.Code, res)
+	if accountNumber, err = strconv.ParseInt(c.Param("account_number"), 10, 64); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	if res = ctl.service.Account.CheckSaldo(accountNumber); res.Error != nil {
-		return c.JSON(http.StatusBadRequest, res)
+	if data, err = ctl.service.Account.CheckBalance(&accountNumber); err != nil {
+		return err
 	}
 
-	return c.JSON(res.Code, res)
+	return c.JSON(http.StatusOK, models.GenericRes{
+		Code:    http.StatusOK,
+		Message: constants.SUCCESS_CHECK_BALANCE,
+		Data:    data,
+	})
+}
+
+func (ctl *AccountControllerImpl) Transfer(c echo.Context) error {
+	var (
+		err error
+	)
+
+	bodies := new(models.TransferBalance)
+
+	if bodies.FromAccountNumber, err = strconv.ParseInt(c.Param("from_account_number"), 10, 64); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+
+	if err = c.Bind(bodies); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+
+	if err = c.Validate(bodies); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+
+	if err = ctl.service.Account.Transfer(bodies); err != nil {
+		return err
+	}
+
+	return c.NoContent(http.StatusCreated)
 }

@@ -6,11 +6,13 @@ import (
 	"restapi/src/models"
 	"restapi/src/repositories"
 
+	"github.com/labstack/echo/v4"
 	"github.com/sarulabs/di"
 )
 
 type AccountService interface {
-	CheckSaldo(int64) models.GenericRes
+	CheckBalance(*int64) (models.CheckBalanceAccount, error)
+	Transfer(*models.TransferBalance) error
 }
 
 type AccountServiceImpl struct {
@@ -23,16 +25,42 @@ func NewAccountService(ioc di.Container) AccountService {
 	}
 }
 
-func (s *AccountServiceImpl) CheckSaldo(accountNumber int64) (res models.GenericRes) {
-	res.Data, res.Error = s.repository.Account.CheckSaldo(accountNumber)
+func (s *AccountServiceImpl) CheckBalance(accountNumber *int64) (data models.CheckBalanceAccount, err error) {
+	data, err = s.repository.Account.CheckBalance(accountNumber)
 
-	if res.Data.(models.CheckSaldoAccount).AccountNumber == 0 {
-		res.Code = http.StatusNotFound
-		res.Message = constants.ACCOUNT_NOT_FOUND
+	if data.AccountNumber == 0 {
+		err = echo.NewHTTPError(http.StatusNotFound, constants.ACCOUNT_NOT_FOUND)
+		return
+	}
+	return
+}
+
+func (s *AccountServiceImpl) Transfer(bodies *models.TransferBalance) (err error) {
+	var (
+		accounts []models.Account
+		account  models.Account
+	)
+
+	if accounts, err = s.repository.Account.GetAccountByPks(
+		[]*int64{&bodies.FromAccountNumber, &bodies.ToAccountNumber},
+	); err != nil {
 		return
 	}
 
-	res.Code = http.StatusOK
-	res.Message = constants.SUCCESS_CHECK_BALANCE
+	if len(accounts) < 2 {
+		err = echo.NewHTTPError(http.StatusNotFound, constants.ACCOUNT_NOT_FOUND)
+		return
+	}
+
+	if account, err = s.repository.Account.CheckInsufficientBalance(&bodies.FromAccountNumber, &bodies.Amount); err != nil {
+		return
+	}
+
+	if account.AccountNumber == 0 {
+		err = echo.NewHTTPError(http.StatusBadRequest, constants.INSUFFICIENT_BALANCE)
+		return
+	}
+
+	err = s.repository.Account.TransferBalance(bodies)
 	return
 }
