@@ -1,21 +1,22 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
-	"os"
+	"restapi/src/controllers"
 	"restapi/src/models"
-	"restapi/src/utils/database"
 
-	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
-	"gorm.io/gorm"
+	"github.com/sarulabs/di"
 )
 
-type Service struct{}
+type Service struct {
+	controller *controllers.Controller
+}
 
-func NewService() *Service {
-	return &Service{}
+func NewService(ioc di.Container) *Service {
+	return &Service{
+		controller: ioc.Get("controller").(*controllers.Controller),
+	}
 }
 
 func (s *Service) NewRoute(e *echo.Echo) {
@@ -23,6 +24,8 @@ func (s *Service) NewRoute(e *echo.Echo) {
 
 	s.HealthRoute(g)
 	s.NotFoundRoute(g)
+
+	g.GET("/account/:account_number", s.controller.Account.CheckSaldo)
 }
 
 func (*Service) HealthRoute(g *echo.Group) {
@@ -45,20 +48,4 @@ func (*Service) NotFoundRoute(g *echo.Group) {
 			})
 		})
 	}
-}
-
-func (*Service) CreateConnection() (*gorm.DB, error) {
-	godotenv.Load(".env")
-
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local&sslmode=%s",
-		os.Getenv("DB_USER"),
-		os.Getenv("DB_PASS"),
-		os.Getenv("DB_HOST"),
-		os.Getenv("DB_PORT"),
-		os.Getenv("DB_NAME"),
-		os.Getenv("DB_SSL"),
-	)
-
-	connection, err := database.Create(dsn)
-	return connection, err
 }
