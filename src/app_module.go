@@ -4,7 +4,7 @@ import (
 	"restapi/src/controllers"
 	"restapi/src/repositories"
 	"restapi/src/services"
-	"restapi/src/utils/database"
+	"restapi/src/utils/databases"
 
 	"github.com/labstack/echo/v4"
 	"github.com/sarulabs/di"
@@ -26,7 +26,7 @@ func (m *Module) NewIOC() di.Container {
 	builder.Add(di.Def{
 		Name: "database",
 		Build: func(ctn di.Container) (interface{}, error) {
-			db, err := database.Create()
+			db, err := databases.Create()
 			return db, err
 		},
 	})

@@ -13,3 +13,9 @@ migrate:
 
 migrate-undo:
 	sql-migrate down
+
+test:
+	mkdir -p coverage
+	go test -v -coverprofile ./coverage/cover.out ./...
+	go tool cover -html=./coverage/cover.out -o ./coverage/cover.html
+	open ./coverage/cover.html
