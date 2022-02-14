@@ -1,8 +1,8 @@
 package repositories
 
 import (
+	"restapi/src/lib"
 	"restapi/src/models"
-	"restapi/src/utils/databases"
 
 	"gorm.io/gorm"
 )
@@ -15,10 +15,10 @@ type AccountRepository interface {
 }
 
 type AccountRepositoryImpl struct {
-	databases.Database
+	lib.Database
 }
 
-func NewAccountReposiory(db databases.Database) AccountRepository {
+func NewAccountReposiory(db lib.Database) AccountRepository {
 	return &AccountRepositoryImpl{
 		Database: db,
 	}

@@ -10,7 +10,6 @@ import (
 	"restapi/src/repositories"
 	"restapi/src/routes"
 	"restapi/src/services"
-	"restapi/src/utils/databases"
 	"time"
 
 	"github.com/go-playground/validator/v10"
@@ -22,7 +21,6 @@ var Module = fx.Options(
 	controllers.Module,
 	services.Module,
 	repositories.Module,
-	databases.Module,
 	lib.Module,
 	fx.Invoke(bootstrap),
 )
@@ -31,7 +29,7 @@ func bootstrap(
 	lifecycle fx.Lifecycle,
 	echoHandler lib.EchoHandler,
 	routes routes.Routes,
-	database databases.Database,
+	database lib.Database,
 ) {
 	conn, _ := database.DB.DB()
 	lifecycle.Append(
