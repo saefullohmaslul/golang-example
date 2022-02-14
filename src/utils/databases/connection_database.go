@@ -3,14 +3,17 @@ package databases
 import (
 	"fmt"
 	"os"
-	"time"
 
 	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
-func Create() (*gorm.DB, error) {
+type Database struct {
+	*gorm.DB
+}
+
+func NewDatabase() Database {
 	var (
 		connection *gorm.DB
 		err        error
@@ -27,14 +30,12 @@ func Create() (*gorm.DB, error) {
 		os.Getenv("DB_SSL"),
 	)
 
-	if connection, err = gorm.Open(postgres.Open(dsn), &gorm.Config{}); err != nil {
-		return connection, err
+	connection, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	if err != nil {
+		fmt.Println(err)
 	}
 
-	sqlDB, err := connection.DB()
-	sqlDB.SetMaxIdleConns(10)
-	sqlDB.SetMaxOpenConns(100)
-	sqlDB.SetConnMaxLifetime(time.Hour)
-
-	return connection, err
+	return Database{
+		DB: connection,
+	}
 }

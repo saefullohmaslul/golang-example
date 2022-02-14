@@ -1,13 +1,9 @@
 package services
 
-import "github.com/sarulabs/di"
+import (
+	"go.uber.org/fx"
+)
 
-type Service struct {
-	Account AccountService
-}
-
-func NewService(ioc di.Container) *Service {
-	return &Service{
-		Account: NewAccountService(ioc),
-	}
-}
+var Module = fx.Options(
+	fx.Provide(NewAccountService),
+)

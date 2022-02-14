@@ -1,13 +1,9 @@
 package controllers
 
-import "github.com/sarulabs/di"
+import (
+	"go.uber.org/fx"
+)
 
-type Controller struct {
-	Account AccountController
-}
-
-func NewController(ioc di.Container) *Controller {
-	return &Controller{
-		Account: NewAccountController(ioc),
-	}
-}
+var Module = fx.Options(
+	fx.Provide(NewAccountController),
+)

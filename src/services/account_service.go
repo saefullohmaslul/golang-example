@@ -7,7 +7,6 @@ import (
 	"restapi/src/repositories"
 
 	"github.com/labstack/echo/v4"
-	"github.com/sarulabs/di"
 )
 
 type AccountService interface {
@@ -16,17 +15,17 @@ type AccountService interface {
 }
 
 type AccountServiceImpl struct {
-	repository *repositories.Repository
+	repository repositories.AccountRepository
 }
 
-func NewAccountService(ioc di.Container) AccountService {
+func NewAccountService(repository repositories.AccountRepository) AccountService {
 	return &AccountServiceImpl{
-		repository: ioc.Get("repository").(*repositories.Repository),
+		repository: repository,
 	}
 }
 
 func (s *AccountServiceImpl) CheckBalance(accountNumber *int64) (data models.CheckBalanceAccount, err error) {
-	data, err = s.repository.Account.CheckBalance(accountNumber)
+	data, err = s.repository.CheckBalance(accountNumber)
 
 	if data.AccountNumber == 0 {
 		err = echo.NewHTTPError(http.StatusNotFound, constants.ACCOUNT_NOT_FOUND)
@@ -41,7 +40,7 @@ func (s *AccountServiceImpl) Transfer(bodies *models.TransferBalance) (err error
 		account  models.Account
 	)
 
-	if accounts, err = s.repository.Account.GetAccountByPks(
+	if accounts, err = s.repository.GetAccountByPks(
 		[]*int64{&bodies.FromAccountNumber, &bodies.ToAccountNumber},
 	); err != nil {
 		return
@@ -52,7 +51,7 @@ func (s *AccountServiceImpl) Transfer(bodies *models.TransferBalance) (err error
 		return
 	}
 
-	if account, err = s.repository.Account.CheckInsufficientBalance(&bodies.FromAccountNumber, &bodies.Amount); err != nil {
+	if account, err = s.repository.CheckInsufficientBalance(&bodies.FromAccountNumber, &bodies.Amount); err != nil {
 		return
 	}
 
@@ -61,6 +60,6 @@ func (s *AccountServiceImpl) Transfer(bodies *models.TransferBalance) (err error
 		return
 	}
 
-	err = s.repository.Account.TransferBalance(bodies)
+	err = s.repository.TransferBalance(bodies)
 	return
 }

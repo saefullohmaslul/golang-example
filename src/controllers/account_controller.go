@@ -8,7 +8,6 @@ import (
 	"strconv"
 
 	"github.com/labstack/echo/v4"
-	"github.com/sarulabs/di"
 )
 
 type AccountController interface {
@@ -17,12 +16,12 @@ type AccountController interface {
 }
 
 type AccountControllerImpl struct {
-	service *services.Service
+	service services.AccountService
 }
 
-func NewAccountController(ioc di.Container) AccountController {
+func NewAccountController(service services.AccountService) AccountController {
 	return &AccountControllerImpl{
-		service: ioc.Get("service").(*services.Service),
+		service: service,
 	}
 }
 
@@ -37,7 +36,7 @@ func (ctl *AccountControllerImpl) CheckBalance(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	if data, err = ctl.service.Account.CheckBalance(&accountNumber); err != nil {
+	if data, err = ctl.service.CheckBalance(&accountNumber); err != nil {
 		return err
 	}
 
@@ -67,7 +66,7 @@ func (ctl *AccountControllerImpl) Transfer(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	if err = ctl.service.Account.Transfer(bodies); err != nil {
+	if err = ctl.service.Transfer(bodies); err != nil {
 		return err
 	}
 

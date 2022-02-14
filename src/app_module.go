@@ -1,56 +1,67 @@
 package main
 
 import (
+	"context"
+	"fmt"
+	"os"
 	"restapi/src/controllers"
+	"restapi/src/lib"
+	"restapi/src/middlewares"
 	"restapi/src/repositories"
+	"restapi/src/routes"
 	"restapi/src/services"
 	"restapi/src/utils/databases"
+	"time"
 
-	"github.com/labstack/echo/v4"
-	"github.com/sarulabs/di"
+	"github.com/go-playground/validator/v10"
+	"go.uber.org/fx"
 )
 
-type Module struct {
-}
+var Module = fx.Options(
+	routes.Module,
+	controllers.Module,
+	services.Module,
+	repositories.Module,
+	databases.Module,
+	lib.Module,
+	fx.Invoke(bootstrap),
+)
 
-func (m *Module) New(e *echo.Echo) {
-	ioc := m.NewIOC()
+func bootstrap(
+	lifecycle fx.Lifecycle,
+	echoHandler lib.EchoHandler,
+	routes routes.Routes,
+	database databases.Database,
+) {
+	conn, _ := database.DB.DB()
+	lifecycle.Append(
+		fx.Hook{
+			OnStart: func(context.Context) error {
+				conn.SetMaxIdleConns(10)
+				conn.SetMaxOpenConns(100)
+				conn.SetConnMaxLifetime(time.Hour)
 
-	s := NewService(ioc)
+				go func() {
+					port, found := os.LookupEnv("PORT")
 
-	s.NewRoute(e)
-}
+					if !found {
+						port = "1323"
+					}
 
-func (m *Module) NewIOC() di.Container {
-	builder, _ := di.NewBuilder()
-	builder.Add(di.Def{
-		Name: "database",
-		Build: func(ctn di.Container) (interface{}, error) {
-			db, err := databases.Create()
-			return db, err
+					echoHandler.Echo.Validator = middlewares.NewValidator(validator.New())
+					echoHandler.Echo.HTTPErrorHandler = middlewares.ErrorHandler
+
+					routes.Setup()
+
+					echoHandler.Echo.Logger.Fatal(
+						echoHandler.Echo.Start(fmt.Sprintf(":%s", port)),
+					)
+				}()
+				return nil
+			},
+			OnStop: func(context.Context) error {
+				return conn.Close()
+			},
 		},
-	})
-
-	builder.Add(di.Def{
-		Name: "repository",
-		Build: func(ctn di.Container) (interface{}, error) {
-			return repositories.NewRepository(builder.Build()), nil
-		},
-	})
-
-	builder.Add(di.Def{
-		Name: "service",
-		Build: func(ctn di.Container) (interface{}, error) {
-			return services.NewService(builder.Build()), nil
-		},
-	})
-
-	builder.Add(di.Def{
-		Name: "controller",
-		Build: func(ctn di.Container) (interface{}, error) {
-			return controllers.NewController(builder.Build()), nil
-		},
-	})
-
-	return builder.Build()
+	)
 }
