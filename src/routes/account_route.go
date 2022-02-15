@@ -7,7 +7,7 @@ import (
 
 type AccountRouter struct {
 	echoHandler lib.EchoHandler
-	handler     controllers.AccountController
+	handler     controllers.Controller
 }
 
 func (r *AccountRouter) Setup() {
@@ -19,7 +19,7 @@ func (r *AccountRouter) Setup() {
 }
 
 func NewAccountRouter(
-	handler controllers.AccountController,
+	handler controllers.Controller,
 	echoHandler lib.EchoHandler,
 ) AccountRouter {
 	return AccountRouter{

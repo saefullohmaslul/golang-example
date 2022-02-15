@@ -4,28 +4,12 @@ import (
 	"net/http"
 	"restapi/src/constants"
 	"restapi/src/models"
-	"restapi/src/services"
 	"strconv"
 
 	"github.com/labstack/echo/v4"
 )
 
-type AccountController interface {
-	CheckBalance(echo.Context) error
-	Transfer(echo.Context) error
-}
-
-type AccountControllerImpl struct {
-	service services.Service
-}
-
-func NewAccountController(service services.Service) AccountController {
-	return &AccountControllerImpl{
-		service: service,
-	}
-}
-
-func (ctl *AccountControllerImpl) CheckBalance(c echo.Context) error {
+func (ctl *ControllerImpl) CheckBalance(c echo.Context) error {
 	var (
 		accountNumber int64
 		err           error
@@ -47,7 +31,7 @@ func (ctl *AccountControllerImpl) CheckBalance(c echo.Context) error {
 	})
 }
 
-func (ctl *AccountControllerImpl) Transfer(c echo.Context) error {
+func (ctl *ControllerImpl) Transfer(c echo.Context) error {
 	var (
 		err error
 	)
