@@ -4,27 +4,11 @@ import (
 	"net/http"
 	"restapi/src/constants"
 	"restapi/src/models"
-	"restapi/src/repositories"
 
 	"github.com/labstack/echo/v4"
 )
 
-type AccountService interface {
-	CheckBalance(*int64) (models.CheckBalanceAccount, error)
-	Transfer(*models.TransferBalance) error
-}
-
-type AccountServiceImpl struct {
-	repository repositories.AccountRepository
-}
-
-func NewAccountService(repository repositories.AccountRepository) AccountService {
-	return &AccountServiceImpl{
-		repository: repository,
-	}
-}
-
-func (s *AccountServiceImpl) CheckBalance(accountNumber *int64) (data models.CheckBalanceAccount, err error) {
+func (s *ServiceImpl) CheckBalance(accountNumber *int64) (data models.CheckBalanceAccount, err error) {
 	data, err = s.repository.CheckBalance(accountNumber)
 
 	if data.AccountNumber == 0 {
@@ -34,7 +18,7 @@ func (s *AccountServiceImpl) CheckBalance(accountNumber *int64) (data models.Che
 	return
 }
 
-func (s *AccountServiceImpl) Transfer(bodies *models.TransferBalance) (err error) {
+func (s *ServiceImpl) Transfer(bodies *models.TransferBalance) (err error) {
 	var (
 		accounts []models.Account
 		account  models.Account

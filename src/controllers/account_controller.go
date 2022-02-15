@@ -16,10 +16,10 @@ type AccountController interface {
 }
 
 type AccountControllerImpl struct {
-	service services.AccountService
+	service services.Service
 }
 
-func NewAccountController(service services.AccountService) AccountController {
+func NewAccountController(service services.Service) AccountController {
 	return &AccountControllerImpl{
 		service: service,
 	}

@@ -13,9 +13,7 @@ var Module = fx.Options(
 
 type Routes []Route
 
-func NewRoutes(
-	accountRouter AccountRouter,
-) Routes {
+func NewRoutes(accountRouter AccountRouter) Routes {
 	return Routes{
 		&accountRouter,
 	}
