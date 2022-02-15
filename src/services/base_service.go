@@ -17,10 +17,10 @@ type Service interface {
 }
 
 type ServiceImpl struct {
-	repository repositories.AccountRepository
+	repository repositories.Repository
 }
 
-func NewService(repository repositories.AccountRepository) Service {
+func NewService(repository repositories.Repository) Service {
 	return &ServiceImpl{
 		repository: repository,
 	}
