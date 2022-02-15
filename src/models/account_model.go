@@ -17,3 +17,8 @@ type TransferBalance struct {
 	Amount            int64 `json:"amount" validate:"required,number"`
 	FromAccountNumber int64 `json:"from_account_number" validate:"required,number"`
 }
+
+type UpdateBalance struct {
+	Amount        int64
+	AccountNumber int64
+}

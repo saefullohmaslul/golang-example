@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"restapi/src/constants"
 	"restapi/src/models"
+	"restapi/src/repositories"
 
 	"github.com/labstack/echo/v4"
 )
@@ -44,6 +45,23 @@ func (s *ServiceImpl) Transfer(bodies *models.TransferBalance) (err error) {
 		return
 	}
 
-	err = s.repository.TransferBalance(bodies)
-	return
+	return s.TransferBalance(bodies)
+}
+
+func (s *ServiceImpl) TransferBalance(bodies *models.TransferBalance) (err error) {
+	return s.repository.WithTransaction(func(r repositories.Repository) error {
+		if err = r.UpdateBalance(&models.UpdateBalance{
+			AccountNumber: bodies.ToAccountNumber,
+			Amount:        bodies.Amount,
+		}); err != nil {
+			return err
+		}
+
+		err = r.UpdateBalance(&models.UpdateBalance{
+			AccountNumber: bodies.FromAccountNumber,
+			Amount:        -bodies.Amount,
+		})
+
+		return err
+	})
 }

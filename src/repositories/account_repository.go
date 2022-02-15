@@ -2,8 +2,6 @@ package repositories
 
 import (
 	"restapi/src/models"
-
-	"gorm.io/gorm"
 )
 
 func (r *RepositoryImpl) CheckBalance(accountNumber *int64) (data models.CheckBalanceAccount, err error) {
@@ -25,22 +23,11 @@ func (r *RepositoryImpl) CheckInsufficientBalance(accountNumber, amount *int64) 
 	return
 }
 
-func (r *RepositoryImpl) TransferBalance(bodies *models.TransferBalance) error {
-	return r.DB.Transaction(func(tx *gorm.DB) (err error) {
-		if err = tx.Exec(`
-			UPDATE accounts SET balance = ((SELECT balance FROM accounts WHERE account_number = ?) + ?) WHERE account_number = ?;`,
-			bodies.ToAccountNumber, bodies.Amount, bodies.ToAccountNumber,
-		).Error; err != nil {
-			return err
-		}
+func (r *RepositoryImpl) UpdateBalance(params *models.UpdateBalance) (err error) {
+	err = r.DB.Exec(`
+		UPDATE accounts SET balance = ((SELECT balance FROM accounts WHERE account_number = ?) + ?) WHERE account_number = ?;`,
+		params.AccountNumber, params.Amount, params.AccountNumber,
+	).Error
 
-		if err = tx.Exec(`
-			UPDATE accounts SET balance = ((SELECT balance FROM accounts WHERE account_number = ?) - ?) WHERE account_number = ?;`,
-			bodies.FromAccountNumber, bodies.Amount, bodies.FromAccountNumber,
-		).Error; err != nil {
-			return err
-		}
-
-		return nil
-	})
+	return
 }
