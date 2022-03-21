@@ -1,15 +1,29 @@
-package controllers
+package accounts
 
 import (
 	"net/http"
-	"restapi/src/constants"
 	"restapi/src/models"
 	"strconv"
 
 	"github.com/labstack/echo/v4"
 )
 
-func (ctl *ControllerImpl) CheckBalance(c echo.Context) error {
+type AccountRest interface {
+	CheckBalance(echo.Context) error
+	Transfer(echo.Context) error
+}
+
+type AccountRestImpl struct {
+	service AccountService
+}
+
+func NewAccountRest(service AccountService) AccountRest {
+	return &AccountRestImpl{
+		service: service,
+	}
+}
+
+func (ctl *AccountRestImpl) CheckBalance(c echo.Context) error {
 	var (
 		accountNumber int64
 		err           error
@@ -26,12 +40,12 @@ func (ctl *ControllerImpl) CheckBalance(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, models.GenericRes{
 		Code:    http.StatusOK,
-		Message: constants.SUCCESS_CHECK_BALANCE,
+		Message: SUCCESS_CHECK_BALANCE,
 		Data:    data,
 	})
 }
 
-func (ctl *ControllerImpl) Transfer(c echo.Context) error {
+func (ctl *AccountRestImpl) Transfer(c echo.Context) error {
 	var (
 		err error
 	)

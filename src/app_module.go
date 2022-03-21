@@ -4,12 +4,10 @@ import (
 	"context"
 	"fmt"
 	"os"
-	"restapi/src/controllers"
+	"restapi/src/domains/accounts"
 	"restapi/src/lib"
 	"restapi/src/middlewares"
 	"restapi/src/repositories"
-	"restapi/src/routes"
-	"restapi/src/services"
 	"time"
 
 	"github.com/go-playground/validator/v10"
@@ -17,9 +15,7 @@ import (
 )
 
 var Module = fx.Options(
-	routes.Module,
-	controllers.Module,
-	services.Module,
+	accounts.Module,
 	repositories.Module,
 	lib.Module,
 	fx.Invoke(bootstrap),
@@ -28,8 +24,8 @@ var Module = fx.Options(
 func bootstrap(
 	lifecycle fx.Lifecycle,
 	echoHandler lib.EchoHandler,
-	routes routes.Routes,
 	database lib.Database,
+	accounts accounts.AccountRoute,
 ) {
 	conn, _ := database.DB.DB()
 	lifecycle.Append(
@@ -49,7 +45,7 @@ func bootstrap(
 					echoHandler.Echo.Validator = middlewares.NewValidator(validator.New())
 					echoHandler.Echo.HTTPErrorHandler = middlewares.ErrorHandler
 
-					routes.Setup()
+					accounts.Setup()
 
 					echoHandler.Echo.Logger.Fatal(
 						echoHandler.Echo.Start(fmt.Sprintf(":%s", port)),

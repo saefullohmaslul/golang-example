@@ -1,4 +1,4 @@
-package constants
+package accounts
 
 var (
 	SUCCESS_CHECK_BALANCE = "Success check balance."
