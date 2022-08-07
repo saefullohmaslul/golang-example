@@ -1,8 +1,8 @@
 package repositories
 
 import (
-	"restapi/src/lib"
-	"restapi/src/models"
+	"restapi/internal/lib"
+	"restapi/internal/models"
 
 	"go.uber.org/fx"
 	"gorm.io/gorm"

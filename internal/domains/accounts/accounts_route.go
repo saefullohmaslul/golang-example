@@ -1,6 +1,6 @@
 package accounts
 
-import "restapi/src/lib"
+import "restapi/internal/lib"
 
 type AccountRoute interface {
 	Setup()

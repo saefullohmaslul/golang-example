@@ -1,7 +1,7 @@
 package repositories
 
 import (
-	"restapi/src/models"
+	"restapi/internal/models"
 )
 
 func (r *RepositoryImpl) CheckBalance(accountNumber *int64) (data models.CheckBalanceAccount, err error) {
