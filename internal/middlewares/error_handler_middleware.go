@@ -2,7 +2,7 @@ package middlewares
 
 import (
 	"net/http"
-	"restapi/src/models"
+	"restapi/internal/models"
 
 	"github.com/labstack/echo/v4"
 )

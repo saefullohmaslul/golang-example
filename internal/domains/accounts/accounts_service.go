@@ -2,8 +2,8 @@ package accounts
 
 import (
 	"net/http"
-	"restapi/src/models"
-	"restapi/src/repositories"
+	"restapi/internal/models"
+	"restapi/internal/repositories"
 
 	"github.com/labstack/echo/v4"
 )

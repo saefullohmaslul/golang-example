@@ -2,7 +2,7 @@ package accounts
 
 import (
 	"net/http"
-	"restapi/src/models"
+	"restapi/internal/models"
 	"strconv"
 
 	"github.com/labstack/echo/v4"
