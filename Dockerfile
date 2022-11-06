@@ -1,9 +1,9 @@
 # development
-FROM golang:1.14-alpine AS dev
+FROM golang:1.18-alpine AS dev
 
 RUN apk add --no-cache make git gcc libc-dev
-RUN go get -u github.com/cosmtrek/air
-RUN go get -v github.com/rubenv/sql-migrate/...
+RUN go install github.com/cosmtrek/air@latest
+RUN go install github.com/rubenv/sql-migrate/...@latest
 RUN mkdir -p /app
 
 WORKDIR /app

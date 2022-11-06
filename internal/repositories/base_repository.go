@@ -32,7 +32,8 @@ func NewReposiory(db lib.Database) Repository {
 
 func (r *RepositoryImpl) WithTransaction(f func(r Repository) error) error {
 	return r.DB.Transaction(func(tx *gorm.DB) error {
-		repo := NewReposiory(lib.Database{DB: tx})
-		return f(repo)
+		repo := *r
+		repo.Database = lib.Database{DB: tx}
+		return f(&repo)
 	})
 }
