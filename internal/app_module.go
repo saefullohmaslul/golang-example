@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"restapi/internal/domains/accounts"
+	"restapi/internal/domains/email"
 	"restapi/internal/interfaces"
 	"restapi/internal/lib"
 	"restapi/internal/middlewares"
@@ -17,6 +18,7 @@ import (
 
 var Module = fx.Options(
 	accounts.Module,
+	email.Module,
 	repositories.Module,
 	lib.Module,
 	fx.Invoke(bootstrap),

@@ -10,12 +10,14 @@ import (
 )
 
 type AccountServiceImpl struct {
-	repository repositories.Repository
+	repository   repositories.Repository
+	emailService interfaces.EmailService
 }
 
-func NewAccountService(repository repositories.Repository) interfaces.AccountService {
+func NewAccountService(repository repositories.Repository, emailService interfaces.EmailService) interfaces.AccountService {
 	return &AccountServiceImpl{
-		repository: repository,
+		repository:   repository,
+		emailService: emailService,
 	}
 }
 
@@ -71,6 +73,12 @@ func (s *AccountServiceImpl) TransferBalance(bodies *models.TransferBalance) (er
 			AccountNumber: bodies.FromAccountNumber,
 			Amount:        -bodies.Amount,
 		})
+
+		if err != nil {
+			return err
+		}
+
+		err = s.emailService.SendNotificationTransfer()
 
 		return err
 	})
