@@ -1,17 +1,16 @@
 package accounts
 
-import "restapi/internal/lib"
-
-type AccountRoute interface {
-	Setup()
-}
+import (
+	"restapi/internal/interfaces"
+	"restapi/internal/lib"
+)
 
 type AccountRouteImpl struct {
 	echo lib.EchoHandler
-	rest AccountRest
+	rest interfaces.AccountRest
 }
 
-func NewAccountRoute(echo lib.EchoHandler, rest AccountRest) AccountRoute {
+func NewAccountRoute(echo lib.EchoHandler, rest interfaces.AccountRest) interfaces.AccountRoute {
 	return &AccountRouteImpl{
 		echo: echo,
 		rest: rest,

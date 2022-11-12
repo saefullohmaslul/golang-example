@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"restapi/internal/domains/accounts"
+	"restapi/internal/interfaces"
 	"restapi/internal/lib"
 	"restapi/internal/middlewares"
 	"restapi/internal/repositories"
@@ -25,7 +26,7 @@ func bootstrap(
 	lifecycle fx.Lifecycle,
 	echoHandler lib.EchoHandler,
 	database lib.Database,
-	accounts accounts.AccountRoute,
+	accounts interfaces.AccountRoute,
 ) {
 	conn, _ := database.DB.DB()
 	lifecycle.Append(

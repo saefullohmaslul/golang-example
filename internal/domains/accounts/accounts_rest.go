@@ -2,22 +2,18 @@ package accounts
 
 import (
 	"net/http"
+	"restapi/internal/interfaces"
 	"restapi/internal/models"
 	"strconv"
 
 	"github.com/labstack/echo/v4"
 )
 
-type AccountRest interface {
-	CheckBalance(echo.Context) error
-	Transfer(echo.Context) error
-}
-
 type AccountRestImpl struct {
-	service AccountService
+	service interfaces.AccountService
 }
 
-func NewAccountRest(service AccountService) AccountRest {
+func NewAccountRest(service interfaces.AccountService) interfaces.AccountRest {
 	return &AccountRestImpl{
 		service: service,
 	}

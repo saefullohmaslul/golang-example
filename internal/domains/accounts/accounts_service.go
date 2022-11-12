@@ -2,22 +2,18 @@ package accounts
 
 import (
 	"net/http"
+	"restapi/internal/interfaces"
 	"restapi/internal/models"
 	"restapi/internal/repositories"
 
 	"github.com/labstack/echo/v4"
 )
 
-type AccountService interface {
-	CheckBalance(*int64) (models.CheckBalanceAccount, error)
-	Transfer(*models.TransferBalance) error
-}
-
 type AccountServiceImpl struct {
 	repository repositories.Repository
 }
 
-func NewAccountService(repository repositories.Repository) AccountService {
+func NewAccountService(repository repositories.Repository) interfaces.AccountService {
 	return &AccountServiceImpl{
 		repository: repository,
 	}
