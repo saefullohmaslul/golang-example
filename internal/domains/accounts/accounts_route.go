@@ -22,6 +22,6 @@ func (r *AccountRouteImpl) Setup() {
 	account := r.echo.Echo.Group("/account")
 	{
 		account.GET("/:account_number", r.rest.CheckBalance)
-		account.POST("/account/:from_account_number/transfer", r.rest.Transfer)
+		account.POST("/:from_account_number/transfer", r.rest.Transfer)
 	}
 }
