@@ -1,7 +1,14 @@
 package email
 
-import "go.uber.org/fx"
+import (
+	"restapi/internal/interfaces"
+
+	"go.uber.org/fx"
+)
 
 var Module = fx.Options(
 	fx.Provide(NewEmailService),
+	fx.Invoke(func(accountService interfaces.AccountService, emailService interfaces.EmailService) {
+		emailService.SetAccountService(accountService)
+	}),
 )
