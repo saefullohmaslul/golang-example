@@ -4,25 +4,25 @@ import (
 	"net/http"
 	"restapi/internal/interfaces"
 	"restapi/internal/models"
-	"restapi/internal/repositories"
 
 	"github.com/labstack/echo/v4"
+	"gorm.io/gorm"
 )
 
 type AccountServiceImpl struct {
-	repository   repositories.Repository
-	emailService interfaces.EmailService
+	accountRepository interfaces.AccountRepository
+	emailService      interfaces.EmailService
 }
 
-func NewAccountService(repository repositories.Repository, emailService interfaces.EmailService) interfaces.AccountService {
+func NewAccountService(accountRepository interfaces.AccountRepository, emailService interfaces.EmailService) interfaces.AccountService {
 	return &AccountServiceImpl{
-		repository:   repository,
-		emailService: emailService,
+		accountRepository: accountRepository,
+		emailService:      emailService,
 	}
 }
 
 func (s *AccountServiceImpl) CheckBalance(accountNumber *int64) (data models.CheckBalanceAccount, err error) {
-	data, err = s.repository.CheckBalance(accountNumber)
+	data, err = s.accountRepository.CheckBalance(accountNumber)
 
 	if data.AccountNumber == 0 {
 		err = echo.NewHTTPError(http.StatusNotFound, ACCOUNT_NOT_FOUND)
@@ -37,7 +37,7 @@ func (s *AccountServiceImpl) Transfer(bodies *models.TransferBalance) (err error
 		account  models.Account
 	)
 
-	if accounts, err = s.repository.GetAccountByPks(
+	if accounts, err = s.accountRepository.GetAccountByPks(
 		[]*int64{&bodies.FromAccountNumber, &bodies.ToAccountNumber},
 	); err != nil {
 		return
@@ -48,7 +48,7 @@ func (s *AccountServiceImpl) Transfer(bodies *models.TransferBalance) (err error
 		return
 	}
 
-	if account, err = s.repository.CheckInsufficientBalance(&bodies.FromAccountNumber, &bodies.Amount); err != nil {
+	if account, err = s.accountRepository.CheckInsufficientBalance(&bodies.FromAccountNumber, &bodies.Amount); err != nil {
 		return
 	}
 
@@ -61,15 +61,15 @@ func (s *AccountServiceImpl) Transfer(bodies *models.TransferBalance) (err error
 }
 
 func (s *AccountServiceImpl) TransferBalance(bodies *models.TransferBalance) (err error) {
-	return s.repository.WithTransaction(func(r repositories.Repository) error {
-		if err = r.UpdateBalance(&models.UpdateBalance{
+	return s.accountRepository.Transaction(func(tx *gorm.DB) error {
+		if err = s.accountRepository.UseTransaction(tx).UpdateBalance(&models.UpdateBalance{
 			AccountNumber: bodies.ToAccountNumber,
 			Amount:        bodies.Amount,
 		}); err != nil {
 			return err
 		}
 
-		err = r.UpdateBalance(&models.UpdateBalance{
+		err = s.accountRepository.UseTransaction(tx).UpdateBalance(&models.UpdateBalance{
 			AccountNumber: bodies.FromAccountNumber,
 			Amount:        -bodies.Amount,
 		})
@@ -79,7 +79,7 @@ func (s *AccountServiceImpl) TransferBalance(bodies *models.TransferBalance) (er
 		}
 
 		err = s.emailService.SendNotificationTransfer()
-
 		return err
 	})
+
 }

@@ -9,7 +9,6 @@ import (
 	"restapi/internal/interfaces"
 	"restapi/internal/lib"
 	"restapi/internal/middlewares"
-	"restapi/internal/repositories"
 	"time"
 
 	"github.com/go-playground/validator/v10"
@@ -19,7 +18,6 @@ import (
 var Module = fx.Options(
 	accounts.Module,
 	email.Module,
-	repositories.Module,
 	lib.Module,
 	fx.Invoke(bootstrap),
 )

@@ -4,6 +4,7 @@ import (
 	"restapi/internal/models"
 
 	"github.com/labstack/echo/v4"
+	"gorm.io/gorm"
 )
 
 type AccountRest interface {
@@ -18,4 +19,14 @@ type AccountService interface {
 
 type AccountRoute interface {
 	Setup()
+}
+
+type AccountRepository interface {
+	Repository
+
+	UseTransaction(tx *gorm.DB) AccountRepository
+	CheckBalance(*int64) (models.CheckBalanceAccount, error)
+	GetAccountByPks([]*int64) ([]models.Account, error)
+	CheckInsufficientBalance(*int64, *int64) (models.Account, error)
+	UpdateBalance(params *models.UpdateBalance) (err error)
 }

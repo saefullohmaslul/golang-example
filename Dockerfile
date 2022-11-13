@@ -1,5 +1,5 @@
 # development
-FROM golang:1.18-alpine AS dev
+FROM golang:1.19-alpine AS dev
 
 RUN apk add --no-cache make git gcc libc-dev
 RUN go install github.com/cosmtrek/air@latest
