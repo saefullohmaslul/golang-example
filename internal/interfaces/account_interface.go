@@ -15,7 +15,7 @@ type AccountRest interface {
 
 type AccountService interface {
 	CheckBalance(ctx context.Context, accountNumber int64) (data models.CheckBalanceAccount, err error)
-	Transfer(*models.TransferBalance) error
+	Transfer(ctx context.Context, bodies *models.TransferBalance) (err error)
 }
 
 type AccountRoute interface {
@@ -27,7 +27,7 @@ type AccountRepository interface {
 
 	UseTransaction(tx *gorm.DB) AccountRepository
 	CheckBalance(ctx context.Context, accountNumber int64) (data models.CheckBalanceAccount, err error)
-	GetAccountByPks([]*int64) ([]models.Account, error)
-	CheckInsufficientBalance(*int64, *int64) (models.Account, error)
-	UpdateBalance(params *models.UpdateBalance) (err error)
+	GetAccountByPks(ctx context.Context, accountPks []int64) ([]models.Account, error)
+	CheckInsufficientBalance(ctx context.Context, accountNumber, amount int64) (data models.Account, err error)
+	UpdateBalance(ctx context.Context, params *models.UpdateBalance) (err error)
 }

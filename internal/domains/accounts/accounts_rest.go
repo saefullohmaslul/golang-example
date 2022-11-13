@@ -45,6 +45,7 @@ func (ctl *AccountRestImpl) CheckBalance(c echo.Context) error {
 func (ctl *AccountRestImpl) Transfer(c echo.Context) error {
 	var (
 		err error
+		ctx = c.Request().Context()
 	)
 
 	bodies := new(models.TransferBalance)
@@ -61,7 +62,7 @@ func (ctl *AccountRestImpl) Transfer(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	if err = ctl.service.Transfer(bodies); err != nil {
+	if err = ctl.service.Transfer(ctx, bodies); err != nil {
 		return err
 	}
 

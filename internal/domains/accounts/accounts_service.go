@@ -32,15 +32,13 @@ func (s *AccountServiceImpl) CheckBalance(ctx context.Context, accountNumber int
 	return
 }
 
-func (s *AccountServiceImpl) Transfer(bodies *models.TransferBalance) (err error) {
+func (s *AccountServiceImpl) Transfer(ctx context.Context, params *models.TransferBalance) (err error) {
 	var (
 		accounts []models.Account
 		account  models.Account
 	)
 
-	if accounts, err = s.accountRepository.GetAccountByPks(
-		[]*int64{&bodies.FromAccountNumber, &bodies.ToAccountNumber},
-	); err != nil {
+	if accounts, err = s.accountRepository.GetAccountByPks(ctx, []int64{params.FromAccountNumber, params.ToAccountNumber}); err != nil {
 		return
 	}
 
@@ -49,7 +47,7 @@ func (s *AccountServiceImpl) Transfer(bodies *models.TransferBalance) (err error
 		return
 	}
 
-	if account, err = s.accountRepository.CheckInsufficientBalance(&bodies.FromAccountNumber, &bodies.Amount); err != nil {
+	if account, err = s.accountRepository.CheckInsufficientBalance(ctx, params.FromAccountNumber, params.Amount); err != nil {
 		return
 	}
 
@@ -58,21 +56,21 @@ func (s *AccountServiceImpl) Transfer(bodies *models.TransferBalance) (err error
 		return
 	}
 
-	return s.TransferBalance(bodies)
+	return s.transferBalance(ctx, params)
 }
 
-func (s *AccountServiceImpl) TransferBalance(bodies *models.TransferBalance) (err error) {
+func (s *AccountServiceImpl) transferBalance(ctx context.Context, params *models.TransferBalance) (err error) {
 	return s.accountRepository.Transaction(func(tx *gorm.DB) error {
-		if err = s.accountRepository.UseTransaction(tx).UpdateBalance(&models.UpdateBalance{
-			AccountNumber: bodies.ToAccountNumber,
-			Amount:        bodies.Amount,
+		if err = s.accountRepository.UseTransaction(tx).UpdateBalance(ctx, &models.UpdateBalance{
+			AccountNumber: params.ToAccountNumber,
+			Amount:        params.Amount,
 		}); err != nil {
 			return err
 		}
 
-		err = s.accountRepository.UseTransaction(tx).UpdateBalance(&models.UpdateBalance{
-			AccountNumber: bodies.FromAccountNumber,
-			Amount:        -bodies.Amount,
+		err = s.accountRepository.UseTransaction(tx).UpdateBalance(ctx, &models.UpdateBalance{
+			AccountNumber: params.FromAccountNumber,
+			Amount:        -params.Amount,
 		})
 
 		if err != nil {

@@ -30,7 +30,7 @@ func (r *accountRepositoryImpl) CheckBalance(ctx context.Context, accountNumber 
 		Joins("LEFT JOIN customers c ON c.customer_number = a.customer_number").
 		Select(
 			"account_number",
-			"customers.name AS customer_name",
+			"c.name AS customer_name",
 			"balance",
 		).
 		Where("account_number = ?", accountNumber).
@@ -41,21 +41,34 @@ func (r *accountRepositoryImpl) CheckBalance(ctx context.Context, accountNumber 
 	return
 }
 
-func (r *accountRepositoryImpl) GetAccountByPks(accountNumbers []*int64) (data []models.Account, err error) {
-	err = r.DB.Raw(`SELECT * FROM accounts WHERE account_number IN ?;`, accountNumbers).Scan(&data).Error
+func (r *accountRepositoryImpl) GetAccountByPks(ctx context.Context, accountNumbers []int64) (data []models.Account, err error) {
+	err = r.DB.Table("accounts").
+		Select("account_number", "customer_number", "balance").
+		Where("account_number IN (?)", accountNumbers).
+		Find(&data).
+		WithContext(ctx).
+		Error
+
 	return
 }
 
-func (r *accountRepositoryImpl) CheckInsufficientBalance(accountNumber, amount *int64) (data models.Account, err error) {
-	err = r.DB.Raw(`SELECT * FROM accounts WHERE account_number = ? AND balance >= ?`, accountNumber, amount).Scan(&data).Error
+func (r *accountRepositoryImpl) CheckInsufficientBalance(ctx context.Context, accountNumber, amount int64) (data models.Account, err error) {
+	err = r.DB.Table("accounts").
+		Select("account_number", "customer_number", "balance").
+		Where("account_number = ? AND balance >= ?", accountNumber, amount).
+		Find(&data).
+		WithContext(ctx).
+		Error
+
 	return
 }
 
-func (r *accountRepositoryImpl) UpdateBalance(params *models.UpdateBalance) (err error) {
-	err = r.DB.Exec(`
-		UPDATE accounts SET balance = ((SELECT balance FROM accounts WHERE account_number = ?) + ?) WHERE account_number = ?;`,
-		params.AccountNumber, params.Amount, params.AccountNumber,
-	).Error
+func (r *accountRepositoryImpl) UpdateBalance(ctx context.Context, params *models.UpdateBalance) (err error) {
+	err = r.DB.Table("accounts").
+		Where("account_number = ?", params.AccountNumber).
+		Update("balance", r.DB.Table("accounts").Select("SUM(balance + ?)", params.Amount).Where("account_number = ?", params.AccountNumber).WithContext(ctx)).
+		WithContext(ctx).
+		Error
 
 	return
 }
