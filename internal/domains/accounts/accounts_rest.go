@@ -24,13 +24,14 @@ func (ctl *AccountRestImpl) CheckBalance(c echo.Context) error {
 		accountNumber int64
 		err           error
 		data          models.CheckBalanceAccount
+		ctx           = c.Request().Context()
 	)
 
 	if accountNumber, err = strconv.ParseInt(c.Param("account_number"), 10, 64); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	if data, err = ctl.service.CheckBalance(&accountNumber); err != nil {
+	if data, err = ctl.service.CheckBalance(ctx, accountNumber); err != nil {
 		return err
 	}
 

@@ -1,6 +1,7 @@
 package accounts
 
 import (
+	"context"
 	"net/http"
 	"restapi/internal/interfaces"
 	"restapi/internal/models"
@@ -21,8 +22,8 @@ func NewAccountService(accountRepository interfaces.AccountRepository, emailServ
 	}
 }
 
-func (s *AccountServiceImpl) CheckBalance(accountNumber *int64) (data models.CheckBalanceAccount, err error) {
-	data, err = s.accountRepository.CheckBalance(accountNumber)
+func (s *AccountServiceImpl) CheckBalance(ctx context.Context, accountNumber int64) (data models.CheckBalanceAccount, err error) {
+	data, err = s.accountRepository.CheckBalance(ctx, accountNumber)
 
 	if data.AccountNumber == 0 {
 		err = echo.NewHTTPError(http.StatusNotFound, ACCOUNT_NOT_FOUND)
