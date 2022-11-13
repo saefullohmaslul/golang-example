@@ -26,15 +26,6 @@
 
 1. Run all containers using `docker-compose up`.
 
-   **Notes**:
-   When running docker compose, it will create new volume(s). If change(s) are made to `package.json`, it won't be detected by the container.
-   I recommend:
-
-   - To remove the volume `docker volume prune`, or
-   - Update package manually by doing `docker exec -it <container id> sh` and `npm install`
-
-   I use the `--no-cache` flag so that new npm packages gonna be installed.
-
    **Tips**:
 
    - Use `--build` in `docker-compose` to force update the docker image created, e.g. `docker-compose up --build`

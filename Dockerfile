@@ -19,7 +19,7 @@ EXPOSE 1323
 CMD ["make", "dev"]
 
 # builder image
-FROM golang:1.14-alpine AS builder
+FROM golang:1.19-alpine AS builder
 
 RUN apk add --no-cache make
 RUN mkdir -p /app
@@ -31,7 +31,7 @@ COPY --from=dev /app ./
 RUN make build
 
 # production
-FROM golang:1.14-alpine AS prod
+FROM golang:1.19-alpine AS prod
 
 RUN apk add --no-cache make
 RUN mkdir -p /app
